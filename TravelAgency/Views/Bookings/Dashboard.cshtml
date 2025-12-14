@@ -1,0 +1,115 @@
+@model List<TravelAgency.Models.Booking>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="hero">
+    <h1>My Bookings</h1>
+    <p class="lead">Manage your travel reservations</p>
+</div>
+
+<div class="container mb-5">
+    @if (Model.Any())
+    {
+        <h3 class="mb-4">Your Bookings (@Model.Count)</h3>
+
+        @foreach (var booking in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Booking Details -->
+                        <div class="col-md-8">
+                            <h5 class="card-title text-primary">@booking.Package.Destination, @booking.Package.Country</h5>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <p><strong>Travel Dates:</strong></p>
+                                    <p>📅 @booking.Package.StartDate.ToString("MMMM dd, yyyy") - @booking.Package.EndDate.ToString("MMMM dd, yyyy")</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Package Type:</strong></p>
+                                    <p>@booking.Package.PackageType</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Booking Date:</strong></p>
+                                    <p>@booking.BookingDate.ToString("MMMM dd, yyyy")</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Price:</strong></p>
+                                    <p class="h5 text-success">${{ booking.Package.Price }}</p>
+                                </div>
+                            </div>
+
+                            <p class="text-muted small">Booking ID: #@booking.Id</p>
+                        </div>
+
+                        <!-- Status & Actions -->
+                        <div class="col-md-4 text-end">
+                            <div class="mb-3">
+                                <p><strong>Booking Status:</strong></p>
+                                <span class="badge @(booking.Status == "Confirmed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-danger") p-2">
+                                    @booking.Status
+                                </span>
+                            </div>
+
+                            <div class="mb-3">
+                                <p><strong>Payment Status:</strong></p>
+                                <span class="badge @(booking.PaymentStatus == "Completed" ? "bg-success" : "bg-warning") p-2">
+                                    @booking.PaymentStatus
+                                </span>
+                            </div>
+
+                            @if (booking.Status == "Confirmed")
+                            {
+                                <a href="/bookings/download-itinerary/@booking.Id" class="btn btn-sm btn-primary mb-2 w-100">
+                                    📄 Download Itinerary
+                                </a>
+                                <button type="button" class="btn btn-sm btn-danger w-100" onclick="cancelBooking(@booking.Id)">
+                                    ❌ Cancel Booking
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">No Bookings Yet</h4>
+            <p>You haven't booked any packages yet. Start exploring and book your next adventure!</p>
+            <hr />
+            <a href="/packages" class="btn btn-primary">Browse Packages</a>
+        </div>
+    }
+</div>
+
+<script>
+    function cancelBooking(bookingId) {
+        if (confirm('Are you sure you want to cancel this booking?')) {
+            fetch('/bookings/cancel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bookingId: bookingId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Booking cancelled successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+</script>

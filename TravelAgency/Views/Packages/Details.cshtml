@@ -1,0 +1,122 @@
+@model TravelAgency.Models.Package
+
+@{
+    ViewData["Title"] = $"{Model.Destination} - {Model.Country}";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <!-- Package Details -->
+        <div class="col-md-7">
+            <img src="@Model.ImageUrl" class="img-fluid rounded mb-4" alt="@Model.Destination" onerror="this.src='/images/placeholder.jpg'" style="height: 400px; object-fit: cover;" />
+            
+            <h1 class="mb-2">@Model.Destination, @Model.Country</h1>
+            <span class="badge bg-primary mb-3">@Model.PackageType</span>
+            
+            <p class="text-muted fs-5">📅 @Model.StartDate.ToString("MMMM dd, yyyy") - @Model.EndDate.ToString("MMMM dd, yyyy")</p>
+            
+            <hr />
+
+            <h4>About This Package</h4>
+            <p class="lead">@Model.Description</p>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6>Age Limit</h6>
+                    <p>@(Model.AgeLimit > 0 ? Model.AgeLimit + "+" : "None")</p>
+                </div>
+                <div class="col-md-6">
+                    <h6>Total Rooms</h6>
+                    <p>@Model.RoomsAvailable rooms</p>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Reviews Section -->
+            <h4 class="mt-4 mb-3">Guest Reviews (@Model.Reviews.Count)</h4>
+
+            @if (Model.Reviews.Any())
+            {
+                @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h6 class="mb-0">@review.User?.FullName</h6>
+                                <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                            </div>
+                            <div class="mb-2">
+                                @for (int i = 0; i < review.Rating; i++)
+                                {
+                                    <span style="color: #ffc107; font-size: 1.2rem;">★</span>
+                                }
+                                <span class="text-muted">@review.Rating/5</span>
+                            </div>
+                            <p class="card-text">@review.Comment</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">No reviews yet. Be the first to review this package!</p>
+            }
+        </div>
+
+        <!-- Booking Card (Sticky) -->
+        <div class="col-md-5">
+            <div class="card p-4 sticky-top" style="top: 20px;">
+                <h2 class="text-primary mb-3">${{ Model.Price }}</h2>
+
+                <div class="mb-3">
+                    <p><strong>Available Rooms:</strong></p>
+                    <p>
+                        @if (ViewBag.AvailableRooms > 0)
+                        {
+                            <span class="badge bg-success">@ViewBag.AvailableRooms available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Fully booked</span>
+                        }
+                    </p>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>Average Rating:</strong></p>
+                    <p>
+                        @if (Model.Reviews.Any())
+                        {
+                            @for (int i = 0; i < (int)ViewBag.AverageRating; i++)
+                            {
+                                <span style="color: #ffc107; font-size: 1.2rem;">★</span>
+                            }
+                            <span class="text-muted">@ViewBag.AverageRating/5 (@Model.Reviews.Count reviews)</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No ratings yet</span>
+                        }
+                    </p>
+                </div>
+
+                <hr />
+
+                @if (ViewBag.AvailableRooms > 0)
+                {
+                    <form method="post" action="/packages/book">
+                        <input type="hidden" name="packageId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success btn-lg w-100 mb-2">Book Now</button>
+                    </form>
+                }
+                else
+                {
+                    <button class="btn btn-secondary btn-lg w-100 mb-2" disabled>Fully Booked</button>
+                }
+
+                <a href="/packages" class="btn btn-outline-primary w-100">Browse More</a>
+            </div>
+        </div>
+    </div>
+</div>
