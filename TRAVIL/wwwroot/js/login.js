@@ -1,58 +1,84 @@
-﻿// Login Form JavaScript
+﻿// Login Form JavaScript - TRAVIL
 const loginApp = {
+    togglePassword: function () {
+        const field = document.getElementById('password');
+        const button = document.getElementById('togglePassword');
+        const icon = button.querySelector('i');
+
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            field.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    },
+
     init: function () {
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        // Toggle password visibility
+        const toggleBtn = document.getElementById('togglePassword');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', this.togglePassword);
+        }
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
+        // Form submission
+        const form = document.getElementById('loginForm');
+        if (form) {
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
 
-            document.getElementById('emailError').textContent = '';
-            document.getElementById('passwordError').textContent = '';
-            document.getElementById('errorAlert').classList.add('d-none');
-            document.getElementById('successAlert').classList.add('d-none');
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
 
-            document.getElementById('loginBtn').classList.add('d-none');
-            document.getElementById('loginLoader').classList.remove('d-none');
+                document.getElementById('errorAlert').classList.add('d-none');
+                document.getElementById('successAlert').classList.add('d-none');
 
-            try {
-                const response = await fetch('/api/account/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
-                        rememberMe: rememberMe
-                    })
-                });
+                document.getElementById('loginBtn').classList.add('d-none');
+                document.getElementById('loginLoader').classList.remove('d-none');
+                document.getElementById('submitBtn').disabled = true;
 
-                const data = await response.json();
+                try {
+                    const response = await fetch('/api/account/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password,
+                            rememberMe: rememberMe
+                        })
+                    });
 
-                if (data.success) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
+                    const data = await response.json();
 
-                    document.getElementById('successAlert').textContent = 'Login successful! Redirecting...';
-                    document.getElementById('successAlert').classList.remove('d-none');
+                    if (data.success) {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
 
-                    setTimeout(() => {
-                        window.location.href = '/account/dashboard';
-                    }, 1500);
-                } else {
-                    document.getElementById('errorAlert').textContent = data.message || 'Login failed. Please try again.';
+                        document.getElementById('successMessage').textContent = 'Login successful! Redirecting...';
+                        document.getElementById('successAlert').classList.remove('d-none');
+
+                        setTimeout(() => {
+                            window.location.href = '/account/dashboard';
+                        }, 1500);
+                    } else {
+                        document.getElementById('errorMessage').textContent = data.message || 'Login failed. Please try again.';
+                        document.getElementById('errorAlert').classList.remove('d-none');
+                    }
+                } catch (error) {
+                    document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
                     document.getElementById('errorAlert').classList.remove('d-none');
+                } finally {
+                    document.getElementById('loginBtn').classList.remove('d-none');
+                    document.getElementById('loginLoader').classList.add('d-none');
+                    document.getElementById('submitBtn').disabled = false;
                 }
-            } catch (error) {
-                document.getElementById('errorAlert').textContent = 'An error occurred. Please try again.';
-                document.getElementById('errorAlert').classList.remove('d-none');
-            } finally {
-                document.getElementById('loginBtn').classList.remove('d-none');
-                document.getElementById('loginLoader').classList.add('d-none');
-            }
-        });
+            });
+        }
     }
 };
 
