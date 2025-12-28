@@ -1,28 +1,53 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace TRAVEL.Services
 {
+    /// <summary>
+    /// Interface for email operations
+    /// </summary>
+    public interface IEmailService
+    {
+        Task<bool> SendEmailAsync(string recipientEmail, string subject, string body, bool isHtml = true);
+        Task<bool> SendWelcomeEmailAsync(string email, string firstName);
+        Task<bool> SendBookingConfirmationAsync(string email, string bookingReference, string destination, DateTime startDate);
+        Task<bool> SendWaitingListNotificationAsync(string email, string destination, int roomsAvailable);
+        Task<bool> SendTripReminderAsync(string email, string destination, DateTime departureDate, int daysRemaining);
+        Task<bool> SendPaymentReceiptAsync(string email, string bookingReference, decimal amount, DateTime paymentDate);
+        Task<bool> SendCancellationConfirmationAsync(string email, string bookingReference, string destination);
+    }
+
+    /// <summary>
+    /// Service for sending emails via Gmail SMTP
+    /// </summary>
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<EmailService> _logger;
 
+        /// <summary>
+        /// Constructor for EmailService
+        /// </summary>
         public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
         {
             _configuration = configuration;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Sends an email to the specified recipient
+        /// </summary>
         public async Task<bool> SendEmailAsync(string recipientEmail, string subject, string body, bool isHtml = true)
         {
             try
             {
                 var emailSettings = _configuration.GetSection("EMAIL_CONFIGURATION");
                 string host = emailSettings["HOST"];
-                int port = int.Parse(emailSettings["PORT"]);
+                int port = int.Parse(emailSettings["PORT"] ?? "587");
                 string senderEmail = emailSettings["EMAIL"];
                 string password = emailSettings["PASSWORD"];
                 bool enableSSL = bool.Parse(emailSettings["EnableSSL"] ?? "true");
@@ -32,7 +57,7 @@ namespace TRAVEL.Services
                     smtpClient.EnableSsl = enableSSL;
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = new NetworkCredential(senderEmail, password);
-                    smtpClient.Timeout = 10000; // 10 seconds timeout
+                    smtpClient.Timeout = 10000;
 
                     using (MailMessage mailMessage = new MailMessage(senderEmail, recipientEmail))
                     {
@@ -55,6 +80,9 @@ namespace TRAVEL.Services
             }
         }
 
+        /// <summary>
+        /// Sends a welcome email to a new user
+        /// </summary>
         public async Task<bool> SendWelcomeEmailAsync(string email, string firstName)
         {
             string subject = "Welcome to Travel Agency Service!";
@@ -81,6 +109,9 @@ namespace TRAVEL.Services
             return await SendEmailAsync(email, subject, body, true);
         }
 
+        /// <summary>
+        /// Sends a booking confirmation email
+        /// </summary>
         public async Task<bool> SendBookingConfirmationAsync(string email, string bookingReference, string destination, DateTime startDate)
         {
             string subject = $"Booking Confirmation - {destination}";
@@ -113,6 +144,9 @@ namespace TRAVEL.Services
             return await SendEmailAsync(email, subject, body, true);
         }
 
+        /// <summary>
+        /// Sends a waiting list notification email
+        /// </summary>
         public async Task<bool> SendWaitingListNotificationAsync(string email, string destination, int roomsAvailable)
         {
             string subject = $"Great News! Room Available - {destination}";
@@ -133,6 +167,9 @@ namespace TRAVEL.Services
             return await SendEmailAsync(email, subject, body, true);
         }
 
+        /// <summary>
+        /// Sends a trip reminder email
+        /// </summary>
         public async Task<bool> SendTripReminderAsync(string email, string destination, DateTime departureDate, int daysRemaining)
         {
             string subject = $"Trip Reminder - {destination} ({daysRemaining} days away)";
@@ -160,6 +197,9 @@ namespace TRAVEL.Services
             return await SendEmailAsync(email, subject, body, true);
         }
 
+        /// <summary>
+        /// Sends a payment receipt email
+        /// </summary>
         public async Task<bool> SendPaymentReceiptAsync(string email, string bookingReference, decimal amount, DateTime paymentDate)
         {
             string subject = $"Payment Receipt - {bookingReference}";
@@ -192,6 +232,9 @@ namespace TRAVEL.Services
             return await SendEmailAsync(email, subject, body, true);
         }
 
+        /// <summary>
+        /// Sends a cancellation confirmation email
+        /// </summary>
         public async Task<bool> SendCancellationConfirmationAsync(string email, string bookingReference, string destination)
         {
             string subject = $"Cancellation Confirmed - {destination}";

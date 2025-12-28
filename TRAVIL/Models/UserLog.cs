@@ -1,4 +1,4 @@
-﻿namespace TRAVEL.Models.TravelModels
+﻿namespace TRAVEL.Models
 {
     public class UserLog
     {
