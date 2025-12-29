@@ -1,0 +1,551 @@
+@{
+    ViewData["Title"] = "Edit Package";
+    Layout = null;
+    var packageId = ViewData["PackageId"];
+    var isEdit = packageId != null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(isEdit ? "Edit" : "Add") Package - TRAVIL Admin</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="/css/admin.css" rel="stylesheet" />
+    
+    <style>
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --sidebar-width: 280px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-midnight); color: var(--color-white); }
+
+        .page-transition {
+            position: fixed; inset: 0; background: #0d1117; z-index: 10000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .page-transition.active { opacity: 1; visibility: visible; }
+        .page-transition .loader {
+            width: 48px; height: 48px; border: 3px solid #21262d;
+            border-top-color: #d4a853; border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+        @@keyframes spin { to { transform: rotate(360deg); } }
+
+        .admin-layout { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width); background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-midnight) 100%);
+            position: fixed; height: 100vh; overflow-y: auto; z-index: 1000;
+            border-right: 1px solid var(--color-slate);
+        }
+        .sidebar-header {
+            padding: var(--space-5); border-bottom: 1px solid var(--color-slate);
+            display: flex; align-items: center; gap: var(--space-3);
+        }
+        .sidebar-header .logo {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; color: var(--color-midnight);
+        }
+        .sidebar-header h1 {
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 500;
+            color: var(--color-white); letter-spacing: 0.1em; margin-bottom: 0;
+        }
+        .sidebar-header span { font-size: 0.6875rem; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.15em; }
+
+        .nav-section { padding: var(--space-4) var(--space-3); }
+        .nav-section-title {
+            padding: 0 var(--space-3); font-size: 0.6875rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-steel); margin-bottom: var(--space-3);
+        }
+        .nav-item {
+            display: flex; align-items: center; gap: var(--space-3);
+            padding: var(--space-3) var(--space-4); color: var(--color-silver);
+            text-decoration: none; border-radius: var(--radius-md); font-size: 0.875rem;
+            font-weight: 500; transition: all var(--transition-fast);
+            margin-bottom: var(--space-1); border-left: 3px solid transparent;
+        }
+        .nav-item i { width: 20px; text-align: center; font-size: 1rem; }
+        .nav-item:hover { background: var(--color-slate); color: var(--color-white); }
+        .nav-item.active { background: var(--color-gold-muted); color: var(--color-gold); border-left-color: var(--color-gold); }
+
+        /* Main Content */
+        .main-content { flex: 1; margin-left: var(--sidebar-width); padding: var(--space-6); }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);
+        }
+        .header h2 { font-size: 1.75rem; font-weight: 600; }
+        .header .subtitle { color: var(--color-silver); font-size: 0.9375rem; margin-top: var(--space-1); }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: var(--space-2);
+            padding: var(--space-3) var(--space-5); border-radius: var(--radius-md);
+            font-size: 0.875rem; font-weight: 500; cursor: pointer;
+            transition: all var(--transition-fast); text-decoration: none; border: none;
+        }
+        .btn-primary { background: var(--color-gold); color: var(--color-midnight); }
+        .btn-primary:hover { background: var(--color-gold-dark); }
+        .btn-secondary { background: var(--color-slate); color: var(--color-white); }
+        .btn-secondary:hover { background: var(--color-steel); }
+
+        /* Form Card */
+        .form-card {
+            background: var(--color-navy); border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg); padding: var(--space-6);
+        }
+        .form-section { margin-bottom: var(--space-6); }
+        .form-section-title {
+            font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-slate);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5); }
+        .form-group { margin-bottom: var(--space-4); }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-group label {
+            display: block; font-size: 0.875rem; font-weight: 500;
+            color: var(--color-silver); margin-bottom: var(--space-2);
+        }
+        .form-control {
+            width: 100%; padding: var(--space-3) var(--space-4);
+            background: var(--color-slate); border: 1px solid var(--color-steel);
+            border-radius: var(--radius-sm); color: var(--color-white);
+            font-size: 0.9375rem; font-family: var(--font-body);
+            transition: all var(--transition-fast);
+        }
+        .form-control:focus { outline: none; border-color: var(--color-gold); box-shadow: 0 0 0 3px var(--color-gold-muted); }
+        .form-control::placeholder { color: var(--color-steel); }
+        textarea.form-control { min-height: 120px; resize: vertical; }
+        select.form-control { cursor: pointer; }
+
+        .checkbox-group { display: flex; align-items: center; gap: var(--space-3); }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--color-gold); }
+
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed var(--color-slate); border-radius: var(--radius-md);
+            padding: var(--space-6); text-align: center; cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .image-upload:hover { border-color: var(--color-gold); background: var(--color-gold-muted); }
+        .image-upload i { font-size: 2.5rem; color: var(--color-steel); margin-bottom: var(--space-3); }
+        .image-upload p { color: var(--color-silver); font-size: 0.875rem; }
+        .image-preview { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+        .image-preview img { width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex; gap: var(--space-4); justify-content: flex-end;
+            padding-top: var(--space-5); border-top: 1px solid var(--color-slate);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; background: #30363d;
+            border: 1px solid #21262d; border-radius: 16px; padding: 16px 24px;
+            display: flex; align-items: center; gap: 12px; color: #ffffff;
+            font-size: 0.9375rem; z-index: 10000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0; transform: translateY(20px); transition: all 0.3s ease;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success i { color: #3fb950; }
+        .toast.error i { color: #f85149; }
+
+        @@media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="loader"></div>
+    </div>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"><i class="fas fa-compass"></i></div>
+                <div>
+                    <h1>TRAVIL</h1>
+                    <span>Admin Panel</span>
+                </div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="/admin/dashboard" class="nav-item" onclick="navigateTo('/admin/dashboard', event)">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/packages" class="nav-item active" onclick="navigateTo('/admin/packages', event)">
+                    <i class="fas fa-suitcase"></i>
+                    <span>Packages</span>
+                </a>
+                <a href="/admin/bookings" class="nav-item" onclick="navigateTo('/admin/bookings', event)">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Bookings</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="/admin/users" class="nav-item" onclick="navigateTo('/admin/users', event)">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="/admin/reviews" class="nav-item" onclick="navigateTo('/admin/reviews', event)">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews</span>
+                </a>
+                <a href="/admin/prices" class="nav-item" onclick="navigateTo('/admin/prices', event)">
+                    <i class="fas fa-tags"></i>
+                    <span>Discounts</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a href="/admin/profile" class="nav-item" onclick="navigateTo('/admin/profile', event)">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="/" class="nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>View Site</span>
+                </a>
+                <a href="#" class="nav-item" onclick="logout(event)">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <div>
+                    <h2><i class="fas fa-@(isEdit ? "edit" : "plus")" style="color: var(--color-gold); margin-right: 12px;"></i>@(isEdit ? "Edit" : "Add New") Package</h2>
+                    <p class="subtitle">@(isEdit ? "Update package details" : "Create a new travel package")</p>
+                </div>
+                <div>
+                    <a href="/admin/packages" class="btn btn-secondary" onclick="navigateTo('/admin/packages', event)">
+                        <i class="fas fa-arrow-left"></i> Back to Packages
+                    </a>
+                </div>
+            </div>
+
+            <form id="packageForm" class="form-card">
+                <input type="hidden" id="packageId" value="@(packageId ?? "")" />
+
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-info-circle" style="color: var(--color-gold); margin-right: 8px;"></i>Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="destination">Destination *</label>
+                            <input type="text" id="destination" name="destination" class="form-control" placeholder="e.g., Bali, Indonesia" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country *</label>
+                            <input type="text" id="country" name="country" class="form-control" placeholder="e.g., Indonesia" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="packageType">Package Type *</label>
+                            <select id="packageType" name="packageType" class="form-control" required>
+                                <option value="">Select Type</option>
+                                <option value="0">Family</option>
+                                <option value="1">Honeymoon</option>
+                                <option value="2">Adventure</option>
+                                <option value="3">Cruise</option>
+                                <option value="4">Luxury</option>
+                                <option value="5">Budget</option>
+                                <option value="6">Cultural</option>
+                                <option value="7">Beach</option>
+                                <option value="8">Mountain</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availableRooms">Available Rooms *</label>
+                            <input type="number" id="availableRooms" name="availableRooms" class="form-control" min="1" placeholder="e.g., 20" required />
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="description">Description *</label>
+                            <textarea id="description" name="description" class="form-control" placeholder="Describe the travel package..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dates -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-calendar" style="color: var(--color-gold); margin-right: 8px;"></i>Travel Dates</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="startDate">Start Date *</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">End Date *</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-dollar-sign" style="color: var(--color-gold); margin-right: 8px;"></i>Pricing</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="price">Price (USD) *</label>
+                            <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" placeholder="e.g., 1299.00" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="discountedPrice">Discounted Price (USD)</label>
+                            <input type="number" id="discountedPrice" name="discountedPrice" class="form-control" step="0.01" min="0" placeholder="e.g., 999.00" />
+                        </div>
+                        <div class="form-group">
+                            <label for="discountStartDate">Discount Start Date</label>
+                            <input type="date" id="discountStartDate" name="discountStartDate" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="discountEndDate">Discount End Date</label>
+                            <input type="date" id="discountEndDate" name="discountEndDate" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Age Requirements -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-user-friends" style="color: var(--color-gold); margin-right: 8px;"></i>Age Requirements</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="minimumAge">Minimum Age</label>
+                            <input type="number" id="minimumAge" name="minimumAge" class="form-control" min="0" placeholder="e.g., 18" />
+                        </div>
+                        <div class="form-group">
+                            <label for="maximumAge">Maximum Age</label>
+                            <input type="number" id="maximumAge" name="maximumAge" class="form-control" min="0" placeholder="e.g., 65" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-images" style="color: var(--color-gold); margin-right: 8px;"></i>Package Images</h3>
+                    <div class="form-group">
+                        <label for="imageUrl">Main Image URL</label>
+                        <input type="url" id="imageUrl" name="imageUrl" class="form-control" placeholder="https://example.com/image.jpg" />
+                    </div>
+                    <div class="image-upload" onclick="document.getElementById('imageUpload').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload additional images or drag and drop</p>
+                        <input type="file" id="imageUpload" multiple accept="image/*" style="display: none;" />
+                    </div>
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+
+                <!-- Itinerary -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-route" style="color: var(--color-gold); margin-right: 8px;"></i>Itinerary</h3>
+                    <div class="form-group full-width">
+                        <label for="itinerary">Travel Itinerary</label>
+                        <textarea id="itinerary" name="itinerary" class="form-control" placeholder="Day 1: Arrival and hotel check-in...&#10;Day 2: City tour...&#10;Day 3: Beach activities..." rows="6"></textarea>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-toggle-on" style="color: var(--color-gold); margin-right: 8px;"></i>Status</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="isActive" name="isActive" checked />
+                        <label for="isActive" style="margin-bottom: 0;">Package is Active</label>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="navigateTo('/admin/packages', event)">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> @(isEdit ? "Update" : "Create") Package
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Package saved successfully!</span>
+    </div>
+
+    <script>
+        // Navigation
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            document.getElementById('pageTransition').classList.add('active');
+            setTimeout(() => { window.location.href = url; }, 400);
+        }
+
+        // Logout
+        function logout(event) {
+            event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigateTo('/account/login');
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Image preview
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Load package data if editing
+        async function loadPackageData() {
+            const packageId = document.getElementById('packageId').value;
+            if (!packageId) return;
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`/api/packages/${packageId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const pkg = await response.json();
+                    document.getElementById('destination').value = pkg.destination || '';
+                    document.getElementById('country').value = pkg.country || '';
+                    document.getElementById('packageType').value = pkg.packageType || '';
+                    document.getElementById('availableRooms').value = pkg.availableRooms || '';
+                    document.getElementById('description').value = pkg.description || '';
+                    document.getElementById('startDate').value = pkg.startDate ? pkg.startDate.split('T')[0] : '';
+                    document.getElementById('endDate').value = pkg.endDate ? pkg.endDate.split('T')[0] : '';
+                    document.getElementById('price').value = pkg.price || '';
+                    document.getElementById('discountedPrice').value = pkg.discountedPrice || '';
+                    document.getElementById('discountStartDate').value = pkg.discountStartDate ? pkg.discountStartDate.split('T')[0] : '';
+                    document.getElementById('discountEndDate').value = pkg.discountEndDate ? pkg.discountEndDate.split('T')[0] : '';
+                    document.getElementById('minimumAge').value = pkg.minimumAge || '';
+                    document.getElementById('maximumAge').value = pkg.maximumAge || '';
+                    document.getElementById('imageUrl').value = pkg.imageUrl || '';
+                    document.getElementById('itinerary').value = pkg.itinerary || '';
+                    document.getElementById('isActive').checked = pkg.isActive !== false;
+                }
+            } catch (error) {
+                console.error('Error loading package:', error);
+            }
+        }
+
+        // Form submission
+        document.getElementById('packageForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const packageId = document.getElementById('packageId').value;
+            const isEdit = !!packageId;
+            
+            const formData = {
+                destination: document.getElementById('destination').value,
+                country: document.getElementById('country').value,
+                packageType: parseInt(document.getElementById('packageType').value),
+                availableRooms: parseInt(document.getElementById('availableRooms').value),
+                description: document.getElementById('description').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                price: parseFloat(document.getElementById('price').value),
+                discountedPrice: document.getElementById('discountedPrice').value ? parseFloat(document.getElementById('discountedPrice').value) : null,
+                discountStartDate: document.getElementById('discountStartDate').value || null,
+                discountEndDate: document.getElementById('discountEndDate').value || null,
+                minimumAge: document.getElementById('minimumAge').value ? parseInt(document.getElementById('minimumAge').value) : null,
+                maximumAge: document.getElementById('maximumAge').value ? parseInt(document.getElementById('maximumAge').value) : null,
+                imageUrl: document.getElementById('imageUrl').value || null,
+                itinerary: document.getElementById('itinerary').value || null,
+                isActive: document.getElementById('isActive').checked
+            };
+
+            try {
+                const token = localStorage.getItem('token');
+                const url = isEdit ? `/api/packages/${packageId}` : '/api/packages';
+                const method = isEdit ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    showToast(`Package ${isEdit ? 'updated' : 'created'} successfully!`);
+                    setTimeout(() => navigateTo('/admin/packages'), 1500);
+                } else {
+                    const error = await response.json();
+                    showToast(error.message || 'Failed to save package', 'error');
+                }
+            } catch (error) {
+                console.error('Error saving package:', error);
+                showToast('An error occurred while saving', 'error');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPackageData();
+        });
+    </script>
+</body>
+</html>
