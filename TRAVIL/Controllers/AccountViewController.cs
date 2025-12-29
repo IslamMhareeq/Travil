@@ -5,13 +5,13 @@ namespace TRAVEL.Controllers
     /// <summary>
     /// Controller for Account Views (Login and Register pages)
     /// </summary>
-    [Route("account")]
     public class AccountViewController : Controller
     {
         /// <summary>
         /// Login page
         /// </summary>
-        [HttpGet("login")]
+        [HttpGet]
+        [Route("account/login")]
         public IActionResult Login()
         {
             return View("~/Views/Account/Login.cshtml");
@@ -20,7 +20,8 @@ namespace TRAVEL.Controllers
         /// <summary>
         /// Register page
         /// </summary>
-        [HttpGet("register")]
+        [HttpGet]
+        [Route("account/register")]
         public IActionResult Register()
         {
             return View("~/Views/Account/Register.cshtml");
@@ -29,18 +30,18 @@ namespace TRAVEL.Controllers
         /// <summary>
         /// User dashboard page
         /// </summary>
-        [HttpGet("dashboard")]
+        [HttpGet]
+        [Route("account/dashboard")]
         public IActionResult Dashboard()
         {
-            // Check if user is authenticated by checking localStorage token
-            // For now, just return the view
             return View("~/Views/Account/Dashboard.cshtml");
         }
 
         /// <summary>
         /// User profile page
         /// </summary>
-        [HttpGet("profile")]
+        [HttpGet]
+        [Route("account/profile")]
         public IActionResult Profile()
         {
             return View("~/Views/Account/Profile.cshtml");
@@ -49,7 +50,8 @@ namespace TRAVEL.Controllers
         /// <summary>
         /// User bookings page
         /// </summary>
-        [HttpGet("bookings")]
+        [HttpGet]
+        [Route("account/bookings")]
         public IActionResult MyBookings()
         {
             return View("~/Views/Account/MyBookings.cshtml");

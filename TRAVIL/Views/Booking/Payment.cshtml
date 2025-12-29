@@ -1,0 +1,674 @@
+﻿@{
+    ViewData["Title"] = "Payment";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - TRAVIL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #1a1a2e;
+            --color-accent: #e94560;
+            --color-success: #00b894;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .payment-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+            .payment-header .logo {
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 24px;
+                text-decoration: none;
+                color: var(--color-primary);
+            }
+
+                .payment-header .logo .icon {
+                    width: 50px;
+                    height: 50px;
+                    background: var(--color-accent);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 22px;
+                }
+
+                .payment-header .logo span {
+                    font-family: var(--font-display);
+                    font-size: 28px;
+                    font-weight: 600;
+                }
+
+            .payment-header h1 {
+                font-family: var(--font-display);
+                font-size: 32px;
+                color: var(--color-primary);
+            }
+
+        .ssl-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 16px;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+            .card h2 {
+                font-family: var(--font-display);
+                font-size: 22px;
+                color: var(--color-primary);
+                margin-bottom: 24px;
+            }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 13px;
+                font-weight: 600;
+                color: #555;
+                margin-bottom: 8px;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--color-accent);
+                box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+            }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .card-number-input {
+            position: relative;
+        }
+
+            .card-number-input .card-icon {
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 24px;
+                color: #6c757d;
+            }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .payment-method {
+            flex: 1;
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .payment-method:hover {
+                border-color: var(--color-accent);
+            }
+
+            .payment-method.active {
+                border-color: var(--color-accent);
+                background: rgba(233, 69, 96, 0.05);
+            }
+
+            .payment-method i {
+                font-size: 28px;
+                color: var(--color-primary);
+                margin-bottom: 8px;
+            }
+
+            .payment-method span {
+                display: block;
+                font-size: 13px;
+                color: #555;
+            }
+
+        /* Order Summary */
+        .order-item {
+            display: flex;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .order-image {
+            width: 100px;
+            height: 80px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .order-details h3 {
+            font-size: 16px;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .order-details p {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .order-summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+            .order-summary-row.total {
+                border-bottom: none;
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--color-primary);
+                padding-top: 16px;
+            }
+
+                .order-summary-row.total span:last-child {
+                    color: var(--color-accent);
+                    font-size: 24px;
+                }
+
+        /* Buttons */
+        .btn-pay {
+            width: 100%;
+            padding: 18px;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+            .btn-pay:hover {
+                background: #d63850;
+                transform: translateY(-2px);
+            }
+
+            .btn-pay:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .btn-cancel {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #6c757d;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s;
+        }
+
+            .btn-cancel:hover {
+                border-color: var(--color-accent);
+                color: var(--color-accent);
+            }
+
+        /* Security Info */
+        .security-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+            .security-info i {
+                font-size: 24px;
+                color: var(--color-success);
+            }
+
+            .security-info p {
+                font-size: 13px;
+                color: #555;
+            }
+
+        /* Alerts */
+        .alert {
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-danger {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+
+        .alert-success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--color-success);
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        /* Loading */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .payment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <a href="/" class="logo">
+                <div class="icon"><i class="fas fa-paper-plane"></i></div>
+                <span>TRAVIL</span>
+            </a>
+            <h1>Secure Payment</h1>
+            <div class="ssl-badge">
+                <i class="fas fa-lock"></i>
+                <span>SSL Secured • 256-bit Encryption</span>
+            </div>
+        </div>
+
+        <div id="errorAlert" class="alert alert-danger d-none">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorMessage"></span>
+        </div>
+
+        <div id="successAlert" class="alert alert-success d-none">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage"></span>
+        </div>
+
+        <div class="payment-grid">
+            <!-- Payment Form -->
+            <div class="card">
+                <h2>Payment Details</h2>
+
+                <div class="payment-methods">
+                    <div class="payment-method active" onclick="selectMethod(this, 0)">
+                        <i class="fab fa-cc-visa"></i>
+                        <span>Credit Card</span>
+                    </div>
+                    <div class="payment-method" onclick="selectMethod(this, 1)">
+                        <i class="fab fa-cc-mastercard"></i>
+                        <span>Debit Card</span>
+                    </div>
+                    <div class="payment-method" onclick="selectMethod(this, 2)">
+                        <i class="fab fa-paypal"></i>
+                        <span>PayPal</span>
+                    </div>
+                </div>
+
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label>Cardholder Name</label>
+                        <input type="text" class="form-control" id="cardName" placeholder="Name on card" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <div class="card-number-input">
+                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                            <i class="fab fa-cc-visa card-icon" id="cardBrand"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" class="form-control" id="expiry" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-pay" id="payButton">
+                        <span id="payText">Pay Now</span>
+                        <span id="payLoader" class="d-none"><div class="spinner"></div> Processing...</span>
+                    </button>
+
+                    <button type="button" class="btn-cancel" onclick="cancelPayment()">Cancel and Return</button>
+
+                    <div class="security-info">
+                        <i class="fas fa-shield-alt"></i>
+                        <p><strong>Your payment is secure.</strong> Card details are encrypted and never stored on our servers.</p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="card">
+                <h2>Booking Summary</h2>
+
+                <div class="order-item" id="orderItem">
+                    <div class="order-image" id="orderImage"></div>
+                    <div class="order-details">
+                        <h3 id="orderDestination">Loading...</h3>
+                        <p id="orderCountry"></p>
+                        <p id="orderDates"></p>
+                    </div>
+                </div>
+
+                <div class="order-summary-row">
+                    <span>Package Price</span>
+                    <span id="packagePrice">$0</span>
+                </div>
+                <div class="order-summary-row">
+                    <span>Rooms</span>
+                    <span id="roomCount">0</span>
+                </div>
+                <div class="order-summary-row">
+                    <span>Guests</span>
+                    <span id="guestCount">0</span>
+                </div>
+                <div class="order-summary-row">
+                    <span>Booking Reference</span>
+                    <span id="bookingRef">-</span>
+                </div>
+                <div class="order-summary-row total">
+                    <span>Total Amount</span>
+                    <span id="totalAmount">$0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let bookingId = null;
+        let paymentMethod = 0;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Get booking ID from URL
+            const path = window.location.pathname;
+            const match = path.match(/\/booking\/payment\/(\d+)/);
+            bookingId = match ? parseInt(match[1]) : null;
+
+            if (!bookingId) {
+                showError('Invalid booking');
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/account/login';
+                return;
+            }
+
+            await loadBookingDetails();
+        });
+
+        async function loadBookingDetails() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`/api/booking/${bookingId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const booking = result.data;
+
+                    document.getElementById('orderDestination').textContent = booking.package.destination;
+                    document.getElementById('orderCountry').textContent = booking.package.country;
+                    document.getElementById('orderImage').style.backgroundImage = `url('${booking.package.imageUrl || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400'}')`;
+
+                    const startDate = new Date(booking.package.startDate);
+                    const endDate = new Date(booking.package.endDate);
+                    document.getElementById('orderDates').textContent = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+
+                    document.getElementById('roomCount').textContent = booking.numberOfRooms;
+                    document.getElementById('guestCount').textContent = booking.numberOfGuests;
+                    document.getElementById('bookingRef').textContent = booking.bookingReference;
+                    document.getElementById('packagePrice').textContent = `$${(booking.totalPrice / booking.numberOfRooms).toLocaleString()}`;
+                    document.getElementById('totalAmount').textContent = `$${booking.totalPrice.toLocaleString()}`;
+                } else {
+                    showError('Failed to load booking details');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error loading booking details');
+            }
+        }
+
+        function selectMethod(element, method) {
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+            element.classList.add('active');
+            paymentMethod = method;
+        }
+
+        // Card number formatting
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = value;
+
+            // Detect card brand
+            const firstDigit = value.charAt(0);
+            const cardBrand = document.getElementById('cardBrand');
+            if (firstDigit === '4') {
+                cardBrand.className = 'fab fa-cc-visa card-icon';
+            } else if (firstDigit === '5') {
+                cardBrand.className = 'fab fa-cc-mastercard card-icon';
+            } else if (firstDigit === '3') {
+                cardBrand.className = 'fab fa-cc-amex card-icon';
+            } else {
+                cardBrand.className = 'far fa-credit-card card-icon';
+            }
+        });
+
+        // Expiry date formatting
+        document.getElementById('expiry').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2);
+            }
+            e.target.value = value;
+        });
+
+        // Form submission
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const cardName = document.getElementById('cardName').value;
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+
+            // Basic validation
+            if (cardNumber.length < 13) {
+                showError('Invalid card number');
+                return;
+            }
+
+            if (!expiry.match(/^\d{2}\/\d{2}$/)) {
+                showError('Invalid expiry date (MM/YY)');
+                return;
+            }
+
+            if (cvv.length < 3) {
+                showError('Invalid CVV');
+                return;
+            }
+
+            const [month, year] = expiry.split('/');
+
+            // Show loading
+            document.getElementById('payText').classList.add('d-none');
+            document.getElementById('payLoader').classList.remove('d-none');
+            document.getElementById('payButton').disabled = true;
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        bookingId: bookingId,
+                        cardNumber: cardNumber,
+                        cardHolderName: cardName,
+                        expiryMonth: parseInt(month),
+                        expiryYear: parseInt('20' + year),
+                        cvv: cvv,
+                        paymentMethod: paymentMethod
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showSuccess('Payment successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/booking/success?ref=' + document.getElementById('bookingRef').textContent;
+                    }, 2000);
+                } else {
+                    showError(result.message || 'Payment failed');
+                    resetButton();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Payment processing error');
+                resetButton();
+            }
+        });
+
+        function resetButton() {
+            document.getElementById('payText').classList.remove('d-none');
+            document.getElementById('payLoader').classList.add('d-none');
+            document.getElementById('payButton').disabled = false;
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorAlert').classList.remove('d-none');
+            document.getElementById('successAlert').classList.add('d-none');
+        }
+
+        function showSuccess(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successAlert').classList.remove('d-none');
+            document.getElementById('errorAlert').classList.add('d-none');
+        }
+
+        function cancelPayment() {
+            if (confirm('Are you sure you want to cancel this payment?')) {
+                window.location.href = '/booking/my-bookings';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -55,11 +55,11 @@ namespace TRAVEL.Models
 
         [Required]
         [StringLength(100)]
-        public string Destination { get; set; }
+        public string Destination { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
-        public string Country { get; set; }
+        public string Country { get; set; } = string.Empty;
 
         [Required]
         public DateTime StartDate { get; set; }
@@ -90,10 +90,10 @@ namespace TRAVEL.Models
 
         [Required]
         [StringLength(1000)]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [StringLength(500)]
-        public string Itinerary { get; set; }
+        public string? Itinerary { get; set; }
 
         public bool IsActive { get; set; } = true;
 
@@ -102,7 +102,7 @@ namespace TRAVEL.Models
         public DateTime? UpdatedAt { get; set; }
 
         [StringLength(500)]
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         // Navigation properties
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
@@ -125,14 +125,14 @@ namespace TRAVEL.Models
 
         [Required]
         [StringLength(500)]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         [StringLength(200)]
-        public string AltText { get; set; }
+        public string? AltText { get; set; }
 
         public int DisplayOrder { get; set; }
 
-        public virtual TravelPackage TravelPackage { get; set; }
+        public virtual TravelPackage TravelPackage { get; set; } = null!;
     }
 
     // ===== BOOKING =====
@@ -170,15 +170,15 @@ namespace TRAVEL.Models
         public DateTime? CancelledDate { get; set; }
 
         [StringLength(500)]
-        public string CancellationReason { get; set; }
+        public string? CancellationReason { get; set; }
 
         [StringLength(100)]
-        public string BookingReference { get; set; }
+        public string? BookingReference { get; set; }
 
         // Navigation properties
-        public virtual User User { get; set; }
-        public virtual TravelPackage TravelPackage { get; set; }
-        public virtual Payment Payment { get; set; }
+        public virtual User User { get; set; } = null!;
+        public virtual TravelPackage TravelPackage { get; set; } = null!;
+        public virtual Payment? Payment { get; set; }
     }
 
     // ===== PAYMENT =====
@@ -204,17 +204,17 @@ namespace TRAVEL.Models
         public PaymentMethod PaymentMethod { get; set; }
 
         [StringLength(255)]
-        public string TransactionId { get; set; }
+        public string? TransactionId { get; set; }
 
         public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
 
         public DateTime? CompletedDate { get; set; }
 
         [StringLength(500)]
-        public string FailureReason { get; set; }
+        public string? FailureReason { get; set; }
 
         // Navigation property
-        public virtual Booking Booking { get; set; }
+        public virtual Booking Booking { get; set; } = null!;
     }
 
     // ===== REVIEW =====
@@ -238,18 +238,18 @@ namespace TRAVEL.Models
 
         [Required]
         [StringLength(1000)]
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
 
         [StringLength(100)]
-        public string ReviewType { get; set; }
+        public string? ReviewType { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public bool IsApproved { get; set; } = false;
 
         // Navigation properties
-        public virtual User User { get; set; }
-        public virtual TravelPackage TravelPackage { get; set; }
+        public virtual User User { get; set; } = null!;
+        public virtual TravelPackage? TravelPackage { get; set; }
     }
 
     // ===== WAITING LIST =====
@@ -278,10 +278,10 @@ namespace TRAVEL.Models
         public bool IsNotified { get; set; } = false;
 
         [StringLength(100)]
-        public string Position { get; set; }
+        public string? Position { get; set; }
 
         // Navigation properties
-        public virtual User User { get; set; }
-        public virtual TravelPackage TravelPackage { get; set; }
+        public virtual User User { get; set; } = null!;
+        public virtual TravelPackage TravelPackage { get; set; } = null!;
     }
 }

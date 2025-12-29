@@ -1,4 +1,290 @@
-﻿@page
-@model TRAVEL.Views.Admin.DashboardModel
-@{
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TRAVIL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/admin.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"><i class="fas fa-paper-plane"></i></div>
+                <div>
+                    <h1>TRAVIL</h1>
+                    <span>Admin Panel</span>
+                </div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="/admin/dashboard" class="nav-item active">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/packages" class="nav-item">
+                    <i class="fas fa-suitcase"></i>
+                    <span>Packages</span>
+                </a>
+                <a href="/admin/bookings" class="nav-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Bookings</span>
+                    <span class="badge" id="pendingBookingsCount">0</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="/admin/users" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="/admin/waiting-lists" class="nav-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Waiting Lists</span>
+                </a>
+                <a href="/admin/prices" class="nav-item">
+                    <i class="fas fa-tags"></i>
+                    <span>Prices & Discounts</span>
+                </a>
+                <a href="/admin/reviews" class="nav-item">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews</span>
+                    <span class="badge" id="pendingReviewsCount">0</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a href="/admin/settings" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="/" class="nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>View Site</span>
+                </a>
+                <a href="#" class="nav-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <div>
+                    <h2>Dashboard</h2>
+                    <p class="subtitle">Welcome back, Admin!</p>
+                </div>
+                <div class="header-actions">
+                    <a href="/admin/packages/edit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Package
+                    </a>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <span id="adminName">Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card packages">
+                    <div class="stat-icon"><i class="fas fa-suitcase"></i></div>
+                    <div class="stat-value" id="totalPackages">--</div>
+                    <div class="stat-label">Total Packages</div>
+                    <div class="stat-change positive" id="activePackages">-- active</div>
+                </div>
+                <div class="stat-card bookings">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="stat-value" id="totalBookings">--</div>
+                    <div class="stat-label">Total Bookings</div>
+                    <div class="stat-change positive" id="confirmedBookings">-- confirmed</div>
+                </div>
+                <div class="stat-card users">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-value" id="totalUsers">--</div>
+                    <div class="stat-label">Registered Users</div>
+                    <div class="stat-change positive" id="activeUsers">-- active</div>
+                </div>
+                <div class="stat-card revenue">
+                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-value" id="totalRevenue">$--</div>
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-change positive" id="fullyBooked">-- fully booked</div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Recent Bookings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Bookings</h3>
+                        <a href="/admin/bookings" class="btn btn-outline btn-sm">View All</a>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <div id="recentBookingsLoader" class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                        <table class="table" id="recentBookingsTable" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Customer</th>
+                                    <th>Destination</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentBookingsBody"></tbody>
+                        </table>
+                        <div id="noBookings" class="empty-state" style="display: none;">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No bookings yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-actions">
+                            <a href="/admin/packages/edit" class="quick-action">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Add Package</span>
+                            </a>
+                            <a href="/admin/users" class="quick-action">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Manage Users</span>
+                            </a>
+                            <a href="/admin/prices" class="quick-action">
+                                <i class="fas fa-percentage"></i>
+                                <span>Set Discounts</span>
+                            </a>
+                            <a href="/admin/reviews" class="quick-action">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Approve Reviews</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                window.location.href = '/account/login';
+                return;
+            }
+
+            const userData = JSON.parse(user);
+            if (userData.role !== 'Admin' && userData.role !== 0) {
+                alert('Access denied. Admin privileges required.');
+                window.location.href = '/';
+                return;
+            }
+
+            document.getElementById('adminName').textContent = userData.firstName || 'Admin';
+            document.getElementById('userAvatar').textContent = (userData.firstName || 'A').charAt(0).toUpperCase();
+
+            await loadDashboard();
+        });
+
+        async function loadDashboard() {
+            const token = localStorage.getItem('token');
+
+            try {
+                const response = await fetch('/api/admin/dashboard', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const data = result.data;
+
+                    document.getElementById('totalPackages').textContent = data.packages.total;
+                    document.getElementById('activePackages').textContent = `${data.packages.active} active`;
+                    document.getElementById('totalBookings').textContent = data.bookings.total;
+                    document.getElementById('confirmedBookings').textContent = `${data.bookings.confirmed} confirmed`;
+                    document.getElementById('totalUsers').textContent = data.users.total;
+                    document.getElementById('activeUsers').textContent = `${data.users.active} active`;
+                    document.getElementById('totalRevenue').textContent = `$${data.bookings.totalRevenue.toLocaleString()}`;
+                    document.getElementById('fullyBooked').textContent = `${data.packages.fullyBooked} fully booked`;
+
+                    document.getElementById('pendingBookingsCount').textContent = data.bookings.pending;
+                    document.getElementById('pendingReviewsCount').textContent = data.reviews.pending;
+                }
+
+                await loadRecentBookings();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function loadRecentBookings() {
+            const token = localStorage.getItem('token');
+
+            try {
+                const response = await fetch('/api/booking/all', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                document.getElementById('recentBookingsLoader').style.display = 'none';
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const bookings = result.data.slice(0, 5);
+
+                    if (bookings.length === 0) {
+                        document.getElementById('noBookings').style.display = 'flex';
+                        return;
+                    }
+
+                    document.getElementById('recentBookingsTable').style.display = 'table';
+                    const tbody = document.getElementById('recentBookingsBody');
+
+                    bookings.forEach(b => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><strong>${b.bookingReference}</strong></td>
+                            <td>${b.userName}</td>
+                            <td>${b.destination}</td>
+                            <td>$${b.totalPrice.toLocaleString()}</td>
+                            <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

@@ -1,4 +1,352 @@
-﻿@page
-@model TRAVEL.Views.Account.DashboardModel
-@{
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TRAVIL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/dashboard.css" rel="stylesheet" asp-append-version="true" />
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-brand">
+                    <div class="icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <span>TRAVIL</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main Menu</div>
+                    <a href="/account/dashboard" class="nav-link active">
+                        <i class="fas fa-th-large"></i>
+                        Dashboard
+                    </a>
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-compass"></i>
+                        Explore Packages
+                    </a>
+                    <a href="/account/bookings" class="nav-link">
+                        <i class="fas fa-suitcase"></i>
+                        My Bookings
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-heart"></i>
+                        Wishlist
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="/account/profile" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-credit-card"></i>
+                        Payment Methods
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Support</div>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        Help Center
+                    </a>
+                    <a href="#" class="nav-link" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sign Out
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-user-avatar" id="sidebarAvatar">JD</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="sidebarName">John Doe</div>
+                        <div class="sidebar-user-email" id="sidebarEmail">john&#64;example.com</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="header-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="header-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Welcome Message -->
+                <div class="content-card" style="background: linear-gradient(135deg, rgba(201, 169, 98, 0.15) 0%, rgba(201, 169, 98, 0.05) 100%); border-color: rgba(201, 169, 98, 0.3);">
+                    <div class="content-card-body">
+                        <h2 style="font-family: var(--font-display); font-size: 24px; color: var(--color-white); margin-bottom: 8px;">
+                            Welcome back, <span id="welcomeName">Traveler</span>! 👋
+                        </h2>
+                        <p style="color: var(--color-silver); font-size: 15px;">
+                            Ready to plan your next adventure? Explore our latest travel packages and special offers.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon primary">
+                                <i class="fas fa-suitcase"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="totalBookings">0</div>
+                        <div class="stat-card-label">Total Bookings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="completedTrips">0</div>
+                        <div class="stat-card-label">Completed Trips</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon info">
+                                <i class="fas fa-plane"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="upcomingTrips">0</div>
+                        <div class="stat-card-label">Upcoming Trips</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon warning">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="wishlistCount">0</div>
+                        <div class="stat-card-label">Wishlist Items</div>
+                    </div>
+                </div>
+
+                <!-- Recent Bookings -->
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <h3 class="content-card-title">Recent Bookings</h3>
+                        <a href="/account/bookings" class="btn btn-secondary btn-sm">View All</a>
+                    </div>
+                    <div class="content-card-body" id="recentBookings">
+                        <!-- Bookings will be loaded here -->
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-suitcase-rolling"></i>
+                            </div>
+                            <h3>No Bookings Yet</h3>
+                            <p>Start exploring and book your first adventure!</p>
+                            <a href="/" class="btn btn-primary">
+                                <i class="fas fa-compass"></i>
+                                Explore Packages
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <h3 class="content-card-title">Quick Actions</h3>
+                    </div>
+                    <div class="content-card-body">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                            <a href="/" class="btn btn-secondary" style="padding: 20px;">
+                                <i class="fas fa-search"></i>
+                                Search Packages
+                            </a>
+                            <a href="/account/profile" class="btn btn-secondary" style="padding: 20px;">
+                                <i class="fas fa-user-edit"></i>
+                                Edit Profile
+                            </a>
+                            <a href="#" class="btn btn-secondary" style="padding: 20px;">
+                                <i class="fas fa-headset"></i>
+                                Contact Support
+                            </a>
+                            <a href="#" class="btn btn-secondary" style="padding: 20px;">
+                                <i class="fas fa-star"></i>
+                                Leave a Review
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                window.location.href = '/account/login';
+                return null;
+            }
+
+            return JSON.parse(user);
+        }
+
+        // Initialize dashboard
+        function initDashboard() {
+            const user = checkAuth();
+            if (!user) return;
+
+            // Update user info
+            document.getElementById('welcomeName').textContent = user.firstName;
+            document.getElementById('sidebarName').textContent = `${user.firstName} ${user.lastName}`;
+            document.getElementById('sidebarEmail').textContent = user.email;
+            document.getElementById('sidebarAvatar').textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+
+            // Load dashboard data
+            loadDashboardData();
+        }
+
+        // Load dashboard data from API
+        async function loadDashboardData() {
+            const token = localStorage.getItem('token');
+
+            try {
+                // Try to load bookings
+                const response = await fetch('/api/bookings/my', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const bookings = await response.json();
+                    updateStats(bookings);
+                    renderRecentBookings(bookings);
+                }
+            } catch (error) {
+                console.log('Could not load bookings');
+            }
+        }
+
+        // Update stats
+        function updateStats(bookings) {
+            if (!bookings) return;
+
+            const total = bookings.length;
+            const completed = bookings.filter(b => b.status === 3).length;
+            const upcoming = bookings.filter(b => b.status === 1).length;
+
+            document.getElementById('totalBookings').textContent = total;
+            document.getElementById('completedTrips').textContent = completed;
+            document.getElementById('upcomingTrips').textContent = upcoming;
+        }
+
+        // Render recent bookings
+        function renderRecentBookings(bookings) {
+            const container = document.getElementById('recentBookings');
+
+            if (!bookings || bookings.length === 0) {
+                return; // Keep empty state
+            }
+
+            const statusLabels = {
+                0: { text: 'Pending', class: 'pending' },
+                1: { text: 'Confirmed', class: 'confirmed' },
+                2: { text: 'Cancelled', class: 'cancelled' },
+                3: { text: 'Completed', class: 'completed' }
+            };
+
+            const recentBookings = bookings.slice(0, 3);
+
+            container.innerHTML = recentBookings.map(booking => {
+                const status = statusLabels[booking.status] || { text: 'Unknown', class: '' };
+                return `
+                    <div class="booking-item">
+                        <div class="booking-image">
+                            <img src="${booking.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80'}" alt="${booking.destination}">
+                        </div>
+                        <div class="booking-info">
+                            <div class="booking-destination">${booking.destination || 'Travel Package'}</div>
+                            <div class="booking-dates">
+                                <i class="fas fa-calendar"></i>
+                                ${new Date(booking.bookingDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </div>
+                        </div>
+                        <span class="booking-status ${status.class}">${status.text}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/account/login';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initDashboard();
+
+            // Mobile menu
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+            document.getElementById('sidebarOverlay').addEventListener('click', toggleMobileMenu);
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        });
+    </script>
+</body>
+</html>

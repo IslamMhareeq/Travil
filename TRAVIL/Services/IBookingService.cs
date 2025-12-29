@@ -1,6 +1,6 @@
-﻿namespace TRAVEL.Services
+﻿/*namespace TRAVEL.Services
 {
     public interface IBookingService
     {
     }
-}
+}*/

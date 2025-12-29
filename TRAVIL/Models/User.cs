@@ -39,22 +39,22 @@ namespace TRAVEL.Models
         [Required(ErrorMessage = "First name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 100 characters")]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Last name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 100 characters")]
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email is required")]
         [StringLength(255)]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [Display(Name = "Email Address")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
         [Display(Name = "Password Hash")]
-        public string PasswordHash { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;
 
         [Required]
         [Display(Name = "User Role")]
@@ -67,23 +67,23 @@ namespace TRAVEL.Models
         [StringLength(20)]
         [Phone(ErrorMessage = "Invalid phone number")]
         [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [StringLength(500)]
         [Display(Name = "Address")]
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
         [StringLength(100)]
         [Display(Name = "City")]
-        public string City { get; set; }
+        public string City { get; set; } = string.Empty;
 
         [StringLength(100)]
         [Display(Name = "Country")]
-        public string Country { get; set; }
+        public string Country { get; set; } = string.Empty;
 
         [StringLength(10)]
         [Display(Name = "Postal Code")]
-        public string PostalCode { get; set; }
+        public string PostalCode { get; set; } = string.Empty;
 
         [Display(Name = "Created Date")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -96,7 +96,7 @@ namespace TRAVEL.Models
 
         [StringLength(500)]
         [Display(Name = "Profile Image URL")]
-        public string? ProfileImageUrl { get; set; } // NULLABLE - Can be null
+        public string? ProfileImageUrl { get; set; }
 
         [Display(Name = "Email Verified")]
         public bool EmailVerified { get; set; } = false;
@@ -126,16 +126,16 @@ namespace TRAVEL.Models
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 100 characters")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Display(Name = "Remember Me")]
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get; set; } = false;
     }
 
     /// <summary>
@@ -146,49 +146,49 @@ namespace TRAVEL.Models
         [Required(ErrorMessage = "First name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 100 characters")]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Last name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 100 characters")]
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 100 characters")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Confirm password is required")]
         [Compare("Password", ErrorMessage = "Passwords do not match")]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; } = string.Empty;
 
         [Phone(ErrorMessage = "Invalid phone format")]
         [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [StringLength(500)]
         [Display(Name = "Address")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [StringLength(100)]
         [Display(Name = "City")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [StringLength(100)]
         [Display(Name = "Country")]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         [StringLength(10)]
         [Display(Name = "Postal Code")]
-        public string PostalCode { get; set; }
+        public string? PostalCode { get; set; }
     }
 
     // ===== LOGIN/REGISTER RESPONSE DTOs =====
@@ -202,13 +202,13 @@ namespace TRAVEL.Models
         public bool Success { get; set; }
 
         [Display(Name = "Message")]
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         [Display(Name = "JWT Token")]
-        public string Token { get; set; }
+        public string Token { get; set; } = string.Empty;
 
         [Display(Name = "User")]
-        public UserDto User { get; set; }
+        public UserDto? User { get; set; }
     }
 
     /// <summary>

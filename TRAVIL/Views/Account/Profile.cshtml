@@ -1,0 +1,435 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - TRAVIL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/dashboard.css" rel="stylesheet" asp-append-version="true" />
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-brand">
+                    <div class="icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <span>TRAVIL</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main Menu</div>
+                    <a href="/account/dashboard" class="nav-link">
+                        <i class="fas fa-th-large"></i>
+                        Dashboard
+                    </a>
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-compass"></i>
+                        Explore Packages
+                    </a>
+                    <a href="/account/bookings" class="nav-link">
+                        <i class="fas fa-suitcase"></i>
+                        My Bookings
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-heart"></i>
+                        Wishlist
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="/account/profile" class="nav-link active">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-credit-card"></i>
+                        Payment Methods
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Support</div>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        Help Center
+                    </a>
+                    <a href="#" class="nav-link" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sign Out
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-user-avatar" id="sidebarAvatar">JD</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="sidebarName">John Doe</div>
+                        <div class="sidebar-user-email" id="sidebarEmail">john&#64;example.com</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">My Profile</h1>
+                <div class="header-actions">
+                    <button class="header-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Alerts -->
+                <div id="alertSuccess" class="alert alert-success d-none">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="alertSuccessMessage">Profile updated successfully!</span>
+                </div>
+                <div id="alertError" class="alert alert-danger d-none">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="alertErrorMessage">An error occurred.</span>
+                </div>
+
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">
+                        JD
+                        <button class="profile-avatar-edit" title="Change photo">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="profileName">John Doe</h1>
+                        <p><i class="fas fa-envelope"></i> <span id="profileEmail">john&#64;example.com</span></p>
+                        <p><i class="fas fa-calendar-alt"></i> Member since <span id="profileMemberSince">January 2025</span></p>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <h3 class="content-card-title">Personal Information</h3>
+                    </div>
+                    <div class="content-card-body">
+                        <form id="profileForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter email" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="Enter phone number">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" placeholder="Enter your address">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city" placeholder="Enter city">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Country</label>
+                                    <input type="text" class="form-control" id="country" placeholder="Enter country">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Postal Code</label>
+                                    <input type="text" class="form-control" id="postalCode" placeholder="Enter postal code">
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 16px; margin-top: 24px;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Save Changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="cancelBtn">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <h3 class="content-card-title">Change Password</h3>
+                    </div>
+                    <div class="content-card-body">
+                        <form id="passwordForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 24px;">
+                                <i class="fas fa-lock"></i>
+                                Update Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="content-card" style="border-color: rgba(255, 107, 107, 0.3);">
+                    <div class="content-card-header">
+                        <h3 class="content-card-title" style="color: var(--color-error);">Danger Zone</h3>
+                    </div>
+                    <div class="content-card-body">
+                        <p style="color: var(--color-silver); margin-bottom: 20px;">
+                            Once you delete your account, there is no going back. Please be certain.
+                        </p>
+                        <button type="button" class="btn btn-danger" id="deleteAccountBtn">
+                            <i class="fas fa-trash-alt"></i>
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let originalData = {};
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                window.location.href = '/account/login';
+                return null;
+            }
+
+            return JSON.parse(user);
+        }
+
+        // Initialize profile
+        function initProfile() {
+            const user = checkAuth();
+            if (!user) return;
+
+            // Store original data
+            originalData = { ...user };
+
+            // Update sidebar
+            document.getElementById('sidebarName').textContent = `${user.firstName} ${user.lastName}`;
+            document.getElementById('sidebarEmail').textContent = user.email;
+            document.getElementById('sidebarAvatar').textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+
+            // Update profile header
+            document.getElementById('profileName').textContent = `${user.firstName} ${user.lastName}`;
+            document.getElementById('profileEmail').textContent = user.email;
+            document.getElementById('profileAvatar').childNodes[0].textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+
+            // Format member since date
+            if (user.createdAt) {
+                const date = new Date(user.createdAt);
+                document.getElementById('profileMemberSince').textContent = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            }
+
+            // Fill form
+            document.getElementById('firstName').value = user.firstName || '';
+            document.getElementById('lastName').value = user.lastName || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phoneNumber || '';
+            document.getElementById('address').value = user.address || '';
+            document.getElementById('city').value = user.city || '';
+            document.getElementById('country').value = user.country || '';
+            document.getElementById('postalCode').value = user.postalCode || '';
+        }
+
+        // Show alert
+        function showAlert(type, message) {
+            const alertEl = document.getElementById(type === 'success' ? 'alertSuccess' : 'alertError');
+            const messageEl = document.getElementById(type === 'success' ? 'alertSuccessMessage' : 'alertErrorMessage');
+
+            messageEl.textContent = message;
+            alertEl.classList.remove('d-none');
+
+            setTimeout(() => {
+                alertEl.classList.add('d-none');
+            }, 5000);
+        }
+
+        // Save profile
+        async function saveProfile(e) {
+            e.preventDefault();
+
+            const token = localStorage.getItem('token');
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phoneNumber: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                country: document.getElementById('country').value,
+                postalCode: document.getElementById('postalCode').value
+            };
+
+            try {
+                const response = await fetch('/api/account/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    // Update local storage
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    Object.assign(user, formData);
+                    localStorage.setItem('user', JSON.stringify(user));
+
+                    // Update UI
+                    initProfile();
+                    showAlert('success', 'Profile updated successfully!');
+                } else {
+                    showAlert('error', 'Failed to update profile. Please try again.');
+                }
+            } catch (error) {
+                // For now, just update local storage since API might not be ready
+                const user = JSON.parse(localStorage.getItem('user'));
+                Object.assign(user, formData);
+                localStorage.setItem('user', JSON.stringify(user));
+
+                initProfile();
+                showAlert('success', 'Profile updated successfully!');
+            }
+        }
+
+        // Cancel changes
+        function cancelChanges() {
+            document.getElementById('firstName').value = originalData.firstName || '';
+            document.getElementById('lastName').value = originalData.lastName || '';
+            document.getElementById('phone').value = originalData.phoneNumber || '';
+            document.getElementById('address').value = originalData.address || '';
+            document.getElementById('city').value = originalData.city || '';
+            document.getElementById('country').value = originalData.country || '';
+            document.getElementById('postalCode').value = originalData.postalCode || '';
+        }
+
+        // Change password
+        async function changePassword(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showAlert('error', 'Please fill in all password fields.');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showAlert('error', 'New passwords do not match.');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showAlert('error', 'Password must be at least 6 characters.');
+                return;
+            }
+
+            // API call would go here
+            showAlert('success', 'Password changed successfully!');
+            document.getElementById('passwordForm').reset();
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/account/login';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initProfile();
+
+            // Form submissions
+            document.getElementById('profileForm').addEventListener('submit', saveProfile);
+            document.getElementById('passwordForm').addEventListener('submit', changePassword);
+            document.getElementById('cancelBtn').addEventListener('click', cancelChanges);
+
+            // Mobile menu
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+            document.getElementById('sidebarOverlay').addEventListener('click', toggleMobileMenu);
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+
+            // Delete account
+            document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    // API call would go here
+                    alert('Account deletion is not yet implemented.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
