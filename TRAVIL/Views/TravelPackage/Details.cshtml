@@ -1,1055 +1,878 @@
 @{
     ViewData["Title"] = "Package Details";
     Layout = null;
+    var packageId = ViewData["PackageId"];
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Package Details - TRAVIL</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="/css/home.css" rel="stylesheet" />
-    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .page-transition {
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-charcoal: #21262d;
+            --color-slate: #30363d;
+            --color-silver: #8b949e;
+            --color-white: #f0f6fc;
+            --color-gold: #d4a853;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-success: #3fb950;
+            --color-error: #f85149;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-white);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
             position: fixed;
-            inset: 0;
-            background: #0d1117;
-            z-index: 10000;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--space-4) var(--space-6);
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .navbar .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+        .nav-brand {
             display: flex;
             align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            gap: var(--space-3);
+            text-decoration: none;
         }
 
-        .page-transition.active {
-            opacity: 1;
-            visibility: visible;
+            .nav-brand .logo {
+                width: 42px;
+                height: 42px;
+                background: linear-gradient(135deg, var(--color-gold), #b8934a);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
+
+            .nav-brand span {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--color-gold);
+            }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-6);
         }
 
-        .page-transition .loader {
-            width: 48px;
-            height: 48px;
-            border: 3px solid #21262d;
-            border-top-color: #d4a853;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            .nav-links a {
+                color: var(--color-silver);
+                text-decoration: none;
+                font-size: 0.9375rem;
+                font-weight: 500;
+                transition: color 0.2s;
+            }
+
+                .nav-links a:hover {
+                    color: var(--color-gold);
+                }
+
+        .nav-auth {
+            display: flex;
+            gap: var(--space-3);
         }
 
-        @@keyframes spin {
-            to { transform: rotate(360deg); }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 0.9375rem;
         }
 
-        /* Package Hero */
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-white);
+        }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-midnight);
+        }
+
+            .btn-primary:hover {
+                background: #e4b863;
+                transform: translateY(-2px);
+            }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-slate);
+            color: var(--color-white);
+        }
+
+            .btn-outline:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        .btn-lg {
+            padding: var(--space-4) var(--space-6);
+            font-size: 1rem;
+        }
+
+        /* Hero */
         .package-hero {
             position: relative;
-            height: 60vh;
-            min-height: 500px;
+            height: 500px;
+            margin-top: 74px;
             overflow: hidden;
         }
 
-        .package-hero-bg {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            transform: scale(1.05);
-        }
+            .package-hero img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
-        .package-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(13, 17, 23, 0.3) 0%, rgba(13, 17, 23, 0.8) 80%, #0d1117 100%);
-            z-index: 1;
-        }
+            .package-hero::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to top, var(--color-midnight), transparent 50%);
+            }
 
         .package-hero-content {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 48px;
-            z-index: 2;
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: var(--space-7);
+            z-index: 1;
         }
 
-        .package-badges {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
+            .package-hero-content .container {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
 
         .package-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 16px;
-            background: rgba(212, 168, 83, 0.2);
-            border: 1px solid rgba(212, 168, 83, 0.4);
-            border-radius: 9999px;
-            color: #d4a853;
-            font-size: 0.8125rem;
-            font-weight: 600;
+            display: inline-block;
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-gold);
+            color: var(--color-midnight);
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 20px;
+            margin-bottom: var(--space-3);
+            text-transform: uppercase;
         }
 
         .package-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-family: var(--font-display);
+            font-size: 3rem;
             font-weight: 500;
-            color: #ffffff;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
+            margin-bottom: var(--space-3);
         }
 
         .package-location {
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: #c9d1d9;
+            gap: var(--space-2);
+            color: var(--color-gold);
             font-size: 1.125rem;
         }
 
-        .package-location i {
-            color: #d4a853;
+        /* Main Content */
+        .package-content {
+            padding: var(--space-7) var(--space-6);
         }
 
-        /* Package Content */
-        .package-content-section {
-            background: #0d1117;
-            padding: 48px 24px;
-        }
-
-        .package-grid {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 48px;
-        }
-
-        @@media (max-width: 1024px) {
-            .package-grid {
-                grid-template-columns: 1fr;
+            .package-content .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 1fr 400px;
+                gap: var(--space-6);
             }
-        }
 
-        /* Package Info */
-        .package-info {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-        }
-
+        /* Info Sections */
         .info-section {
-            background: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 16px;
-            padding: 32px;
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            margin-bottom: var(--space-5);
         }
 
-        .info-section h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: #ffffff;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #21262d;
-        }
+            .info-section h2 {
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin-bottom: var(--space-4);
+                padding-bottom: var(--space-3);
+                border-bottom: 1px solid var(--color-slate);
+            }
 
-        .info-section p {
-            color: #c9d1d9;
-            line-height: 1.8;
-            margin-bottom: 16px;
-        }
+            .info-section p {
+                color: var(--color-silver);
+                line-height: 1.8;
+            }
 
-        .info-section p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Package Stats */
+        /* Stats */
         .package-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        @@media (max-width: 600px) {
-            .package-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            gap: var(--space-4);
         }
 
         .stat-box {
             text-align: center;
-            padding: 20px;
-            background: #21262d;
-            border-radius: 12px;
+            padding: var(--space-4);
+            background: var(--color-charcoal);
+            border-radius: var(--radius-md);
         }
 
-        .stat-box i {
-            font-size: 1.5rem;
-            color: #d4a853;
-            margin-bottom: 8px;
-        }
+            .stat-box i {
+                font-size: 1.5rem;
+                color: var(--color-gold);
+                margin-bottom: var(--space-2);
+            }
 
-        .stat-box .stat-value {
-            display: block;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 4px;
-        }
+            .stat-box .stat-value {
+                display: block;
+                font-size: 1.125rem;
+                font-weight: 600;
+                margin-bottom: var(--space-2);
+            }
 
-        .stat-box .stat-label {
-            font-size: 0.8125rem;
-            color: #8b949e;
-        }
+            .stat-box .stat-label {
+                font-size: 0.8125rem;
+                color: var(--color-silver);
+            }
 
         /* Highlights */
         .highlights-list {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        @@media (max-width: 600px) {
-            .highlights-list {
-                grid-template-columns: 1fr;
-            }
+            gap: var(--space-3);
         }
 
         .highlight-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: #21262d;
-            border-radius: 10px;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            background: var(--color-charcoal);
+            border-radius: var(--radius-md);
         }
 
-        .highlight-item i {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(212, 168, 83, 0.15);
-            border-radius: 50%;
-            color: #d4a853;
-            font-size: 0.875rem;
-        }
+            .highlight-item i {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--color-gold-muted);
+                border-radius: 50%;
+                color: var(--color-gold);
+                font-size: 0.875rem;
+            }
 
-        .highlight-item span {
-            font-size: 0.9375rem;
-            color: #c9d1d9;
-        }
+            .highlight-item span {
+                font-size: 0.9375rem;
+                color: var(--color-silver);
+            }
 
         /* Itinerary */
         .itinerary-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: var(--space-4);
         }
 
         .itinerary-day {
             display: flex;
-            gap: 20px;
-            padding: 20px;
-            background: #21262d;
-            border-radius: 12px;
-            transition: all 0.3s;
+            gap: var(--space-4);
         }
 
-        .itinerary-day:hover {
-            background: #30363d;
-        }
-
-        .day-number {
-            width: 48px;
-            height: 48px;
+        .itinerary-marker {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
-            border-radius: 12px;
-            font-weight: 700;
-            color: #0d1117;
-            flex-shrink: 0;
         }
 
-        .day-content h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 8px;
+        .itinerary-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--color-gold);
+            border-radius: 50%;
         }
 
-        .day-content p {
-            font-size: 0.875rem;
-            color: #8b949e;
-            margin: 0;
+        .itinerary-line {
+            flex: 1;
+            width: 2px;
+            background: var(--color-slate);
         }
+
+        .itinerary-content {
+            flex: 1;
+            padding-bottom: var(--space-4);
+        }
+
+            .itinerary-content h4 {
+                font-size: 1rem;
+                margin-bottom: var(--space-2);
+                color: var(--color-gold);
+            }
+
+            .itinerary-content p {
+                font-size: 0.9375rem;
+                color: var(--color-silver);
+            }
 
         /* Booking Card */
         .booking-card {
             position: sticky;
             top: 100px;
-            background: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .booking-header {
-            padding: 24px;
-            border-bottom: 1px solid #21262d;
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
         }
 
         .booking-price {
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-        }
-
-        .booking-price .amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #d4a853;
-        }
-
-        .booking-price .per {
-            font-size: 0.9375rem;
-            color: #8b949e;
-        }
-
-        .original-price {
-            text-decoration: line-through;
-            color: #484f58;
-            font-size: 1.125rem;
-            margin-top: 4px;
-        }
-
-        .booking-body {
-            padding: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: #c9d1d9;
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            background: #21262d;
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9375rem;
-            color: #ffffff;
-            transition: all 0.2s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #d4a853;
-        }
-
-        .guests-input {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .guest-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #21262d;
-            border: 1px solid #30363d;
-            border-radius: 50%;
-            color: #c9d1d9;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .guest-btn:hover {
-            background: #d4a853;
-            color: #0d1117;
-            border-color: #d4a853;
-        }
-
-        .guest-count {
-            flex: 1;
             text-align: center;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #ffffff;
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-slate);
+            margin-bottom: var(--space-4);
         }
 
-        .price-breakdown {
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid #21262d;
+            .booking-price .old-price {
+                font-size: 1.25rem;
+                color: var(--color-silver);
+                text-decoration: line-through;
+                margin-right: var(--space-2);
+            }
+
+            .booking-price .current-price {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: var(--color-gold);
+            }
+
+            .booking-price .per-person {
+                font-size: 0.9375rem;
+                color: var(--color-silver);
+            }
+
+            .booking-price .discount-badge {
+                display: inline-block;
+                padding: var(--space-2) var(--space-3);
+                background: var(--color-success);
+                color: white;
+                font-size: 0.75rem;
+                font-weight: 600;
+                border-radius: 20px;
+                margin-top: var(--space-2);
+            }
+
+        .booking-details {
+            margin-bottom: var(--space-4);
         }
 
-        .price-row {
+        .booking-detail {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 0.9375rem;
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--color-slate);
         }
 
-        .price-row .label {
-            color: #8b949e;
-        }
+            .booking-detail:last-child {
+                border-bottom: none;
+            }
 
-        .price-row .value {
-            color: #c9d1d9;
-        }
+            .booking-detail .label {
+                color: var(--color-silver);
+                display: flex;
+                align-items: center;
+                gap: var(--space-2);
+            }
 
-        .price-row.total {
-            padding-top: 12px;
-            border-top: 1px solid #21262d;
-            font-weight: 600;
-        }
+                .booking-detail .label i {
+                    color: var(--color-gold);
+                }
 
-        .price-row.total .value {
-            color: #d4a853;
-            font-size: 1.25rem;
-        }
+            .booking-detail .value {
+                font-weight: 500;
+            }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 16px 32px;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
-            color: #0d1117;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(212, 168, 83, 0.25);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #30363d;
-            color: #c9d1d9;
-            margin-top: 12px;
-        }
-
-        .btn-outline:hover {
-            border-color: #d4a853;
-            color: #d4a853;
-        }
-
-        /* Reviews */
-        .reviews-list {
+        .booking-actions {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: var(--space-3);
         }
 
-        .review-card {
-            padding: 24px;
-            background: #21262d;
-            border-radius: 12px;
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .review-author {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .review-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #0d1117;
-        }
-
-        .review-author-info h4 {
-            font-size: 0.9375rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .review-author-info span {
-            font-size: 0.8125rem;
-            color: #8b949e;
-        }
-
-        .review-rating {
-            display: flex;
-            gap: 4px;
-        }
-
-        .review-rating i {
-            color: #d4a853;
+        .availability-tag {
+            text-align: center;
+            padding: var(--space-3);
+            background: rgba(63, 185, 80, 0.15);
+            border: 1px solid var(--color-success);
+            border-radius: var(--radius-md);
+            color: var(--color-success);
             font-size: 0.875rem;
+            font-weight: 500;
         }
 
-        .review-content p {
-            color: #c9d1d9;
-            line-height: 1.7;
-            margin: 0;
+            .availability-tag.limited {
+                background: rgba(210, 153, 34, 0.15);
+                border-color: #d29922;
+                color: #d29922;
+            }
+
+            .availability-tag.sold-out {
+                background: rgba(248, 81, 73, 0.15);
+                border-color: var(--color-error);
+                color: var(--color-error);
+            }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
         }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--color-slate);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-state {
+            text-align: center;
+            padding: var(--space-7);
+        }
+
+            .error-state i {
+                font-size: 4rem;
+                color: var(--color-error);
+                margin-bottom: var(--space-4);
+            }
+
+            .error-state h2 {
+                margin-bottom: var(--space-3);
+            }
+
+            .error-state p {
+                color: var(--color-silver);
+                margin-bottom: var(--space-5);
+            }
 
         /* Toast */
         .toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: #30363d;
-            border: 1px solid #21262d;
-            border-radius: 16px;
-            padding: 16px 24px;
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4) var(--space-5);
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #ffffff;
-            font-size: 0.9375rem;
+            gap: var(--space-3);
             z-index: 10000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .toast.success {
+                border-color: var(--color-success);
+            }
+
+            .toast.error {
+                border-color: var(--color-error);
+            }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        .toast.success i { color: #3fb950; }
-        .toast.error i { color: #f85149; }
+        @@media (max-width: 1024px) {
+            .package-content .container {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-card {
+                position: static;
+            }
+
+            .package-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .nav-links, .nav-auth {
+                display: none;
+            }
+
+            .package-title {
+                font-size: 2rem;
+            }
+
+            .package-hero {
+                height: 350px;
+            }
+
+            .highlights-list {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Page Transition -->
-    <div class="page-transition" id="pageTransition">
-        <div class="loader"></div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="navbar scrolled" id="navbar">
+    <!-- Navbar -->
+    <nav class="navbar">
         <div class="container">
-            <a href="/" class="nav-brand" onclick="navigateTo('/', event)">
-                <div class="logo">
-                    <i class="fas fa-compass"></i>
-                </div>
+            <a href="/" class="nav-brand">
+                <div class="logo"><i class="fas fa-compass"></i></div>
                 <span>TRAVIL</span>
             </a>
-            
             <div class="nav-links">
-                <a href="/" onclick="navigateTo('/', event)">Home</a>
-                <a href="/packages" onclick="navigateTo('/packages', event)" class="active">Packages</a>
+                <a href="/">Home</a>
+                <a href="/packages">Packages</a>
                 <a href="/#destinations">Destinations</a>
                 <a href="/#about">About</a>
-                <a href="/#contact">Contact</a>
             </div>
-            
             <div class="nav-auth" id="navAuth">
-                <a href="/account/login" class="btn btn-ghost" onclick="navigateTo('/account/login', event)">Sign In</a>
-                <a href="/account/register" class="btn btn-primary" onclick="navigateTo('/account/register', event)">Get Started</a>
+                <a href="/account/login" class="btn btn-ghost">Sign In</a>
+                <a href="/account/register" class="btn btn-primary">Get Started</a>
             </div>
-            
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
     </nav>
 
-    <!-- Package Hero -->
-    <section class="package-hero">
-        <div class="package-hero-bg" id="packageHeroBg" style="background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=85');"></div>
-        <div class="package-hero-content">
-            <div class="package-badges">
-                <span class="package-badge"><i class="fas fa-star"></i> Featured</span>
-                <span class="package-badge"><i class="fas fa-fire"></i> Best Seller</span>
-            </div>
-            <h1 class="package-title" id="packageTitle">Bali Paradise Escape</h1>
-            <div class="package-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span id="packageLocation">Bali, Indonesia</span>
-            </div>
+    <div id="mainContent">
+        <div class="loading">
+            <div class="spinner"></div>
         </div>
-    </section>
+    </div>
 
-    <!-- Package Content -->
-    <section class="package-content-section">
-        <div class="package-grid">
-            <!-- Package Info -->
-            <div class="package-info">
-                <!-- Quick Stats -->
-                <div class="info-section">
-                    <div class="package-stats">
-                        <div class="stat-box">
-                            <i class="far fa-clock"></i>
-                            <span class="stat-value" id="statDuration">7 Days</span>
-                            <span class="stat-label">Duration</span>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-users"></i>
-                            <span class="stat-value" id="statGroupSize">Max 12</span>
-                            <span class="stat-label">Group Size</span>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-language"></i>
-                            <span class="stat-value">English</span>
-                            <span class="stat-label">Language</span>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-star"></i>
-                            <span class="stat-value" id="statRating">4.9</span>
-                            <span class="stat-label">Rating</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Overview -->
-                <div class="info-section">
-                    <h2>Overview</h2>
-                    <p id="packageDescription">Experience the enchanting island of Bali with our carefully curated 7-day adventure. From the spiritual heart of Ubud to the pristine beaches of Seminyak, this journey takes you through ancient temples, lush rice terraces, and vibrant local markets.</p>
-                    <p>Discover the island's rich cultural heritage while enjoying world-class accommodations and authentic Balinese cuisine. Perfect for couples, solo travelers, and small groups looking for an unforgettable tropical getaway.</p>
-                </div>
-
-                <!-- Highlights -->
-                <div class="info-section">
-                    <h2>Trip Highlights</h2>
-                    <div class="highlights-list">
-                        <div class="highlight-item">
-                            <i class="fas fa-gopuram"></i>
-                            <span>Visit ancient temples</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-seedling"></i>
-                            <span>Tegallalang rice terraces</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-umbrella-beach"></i>
-                            <span>Beach hopping</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-spa"></i>
-                            <span>Traditional spa treatment</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-utensils"></i>
-                            <span>Cooking class</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-water"></i>
-                            <span>Waterfall exploration</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Itinerary -->
-                <div class="info-section">
-                    <h2>Day by Day Itinerary</h2>
-                    <div class="itinerary-list">
-                        <div class="itinerary-day">
-                            <div class="day-number">1</div>
-                            <div class="day-content">
-                                <h4>Arrival & Welcome</h4>
-                                <p>Airport pickup, hotel check-in, welcome dinner at beachside restaurant</p>
-                            </div>
-                        </div>
-                        <div class="itinerary-day">
-                            <div class="day-number">2</div>
-                            <div class="day-content">
-                                <h4>Ubud Cultural Tour</h4>
-                                <p>Sacred Monkey Forest, Ubud Palace, traditional art galleries, rice terrace walk</p>
-                            </div>
-                        </div>
-                        <div class="itinerary-day">
-                            <div class="day-number">3</div>
-                            <div class="day-content">
-                                <h4>Temple Discovery</h4>
-                                <p>Tanah Lot sunrise, Uluwatu Temple, traditional Kecak fire dance performance</p>
-                            </div>
-                        </div>
-                        <div class="itinerary-day">
-                            <div class="day-number">4</div>
-                            <div class="day-content">
-                                <h4>Adventure Day</h4>
-                                <p>White water rafting, Tegenungan Waterfall, traditional Balinese cooking class</p>
-                            </div>
-                        </div>
-                        <div class="itinerary-day">
-                            <div class="day-number">5</div>
-                            <div class="day-content">
-                                <h4>Beach & Relaxation</h4>
-                                <p>Seminyak beach, spa treatment, sunset at Potato Head Beach Club</p>
-                            </div>
-                        </div>
-                        <div class="itinerary-day">
-                            <div class="day-number">6</div>
-                            <div class="day-content">
-                                <h4>Island Exploration</h4>
-                                <p>Nusa Penida day trip, Kelingking Beach, snorkeling with manta rays</p>
-                            </div>
-                        </div>
-                        <div class="itinerary-day">
-                            <div class="day-number">7</div>
-                            <div class="day-content">
-                                <h4>Departure</h4>
-                                <p>Leisurely breakfast, last-minute shopping, airport transfer</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reviews -->
-                <div class="info-section">
-                    <h2>Guest Reviews</h2>
-                    <div class="reviews-list">
-                        <div class="review-card">
-                            <div class="review-header">
-                                <div class="review-author">
-                                    <div class="review-avatar">S</div>
-                                    <div class="review-author-info">
-                                        <h4>Sarah Johnson</h4>
-                                        <span>December 2024</span>
-                                    </div>
-                                </div>
-                                <div class="review-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <div class="review-content">
-                                <p>Absolutely incredible experience! The itinerary was perfectly balanced between adventure and relaxation. Our guide was knowledgeable and made us feel like VIPs throughout the entire trip.</p>
-                            </div>
-                        </div>
-                        <div class="review-card">
-                            <div class="review-header">
-                                <div class="review-author">
-                                    <div class="review-avatar">M</div>
-                                    <div class="review-author-info">
-                                        <h4>Michael Chen</h4>
-                                        <span>November 2024</span>
-                                    </div>
-                                </div>
-                                <div class="review-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <div class="review-content">
-                                <p>This trip exceeded all expectations. The accommodations were top-notch, and every detail was thoughtfully planned. Can't recommend TRAVIL enough!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Booking Card -->
-            <div>
-                <div class="booking-card">
-                    <div class="booking-header">
-                        <div class="booking-price">
-                            <span class="amount" id="bookingPrice">$1,299</span>
-                            <span class="per">/ person</span>
-                        </div>
-                        <div class="original-price" id="originalPrice">$1,599</div>
-                    </div>
-                    <div class="booking-body">
-                        <form id="bookingForm">
-                            <div class="form-group">
-                                <label>Select Date</label>
-                                <input type="date" class="form-control" id="travelDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Number of Guests</label>
-                                <div class="guests-input">
-                                    <button type="button" class="guest-btn" onclick="updateGuests(-1)">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                    <span class="guest-count" id="guestCount">2</span>
-                                    <button type="button" class="guest-btn" onclick="updateGuests(1)">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="price-breakdown">
-                                <div class="price-row">
-                                    <span class="label">$1,299 × <span id="guestCountDisplay">2</span> guests</span>
-                                    <span class="value" id="subtotal">$2,598</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="label">Service fee</span>
-                                    <span class="value">$150</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="label">Discount</span>
-                                    <span class="value" style="color: #3fb950;">-$200</span>
-                                </div>
-                                <div class="price-row total">
-                                    <span class="label">Total</span>
-                                    <span class="value" id="totalPrice">$2,548</span>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-calendar-check"></i>
-                                Book Now
-                            </button>
-                            <button type="button" class="btn btn-outline" onclick="addToWishlist()">
-                                <i class="far fa-heart"></i>
-                                Add to Wishlist
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="nav-brand" onclick="navigateTo('/', event)">
-                        <div class="logo">
-                            <i class="fas fa-compass"></i>
-                        </div>
-                        <span>TRAVIL</span>
-                    </a>
-                    <p>Crafting unforgettable journeys to the world's most extraordinary destinations since 2010.</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 TRAVIL. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Toast -->
     <div id="toast" class="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastMessage">Message</span>
     </div>
 
     <script>
-        // Variables
-        let guests = 2;
-        const pricePerPerson = 1299;
-        const packageId = getPackageId();
+        var packageId = @(packageId ?? 0);
 
-        function getPackageId() {
-            const path = window.location.pathname;
-            const match = path.match(/\/(\d+)$/);
-            return match ? parseInt(match[1]) : 1;
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
-        // Demo package data
-        const packages = {
-            1: {
-                title: 'Bali Paradise Escape',
-                location: 'Bali, Indonesia',
-                price: 1299,
-                duration: '7 Days',
-                image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=85',
-                description: 'Experience the enchanting island of Bali with our carefully curated 7-day adventure.'
-            },
-            2: {
-                title: 'Romantic Paris Getaway',
-                location: 'Paris, France',
-                price: 1599,
-                duration: '5 Days',
-                image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1600&q=85',
-                description: 'Fall in love with the City of Light through iconic landmarks and hidden gems.'
-            },
-            3: {
-                title: 'Ancient Kyoto Discovery',
-                location: 'Kyoto, Japan',
-                price: 2199,
-                duration: '8 Days',
-                image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=85',
-                description: 'Immerse yourself in traditional Japanese culture, temples, and gardens.'
-            },
-            4: {
-                title: 'Maldives Luxury Resort',
-                location: 'Maldives',
-                price: 3499,
-                duration: '6 Days',
-                image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600&q=85',
-                description: 'Ultimate relaxation in overwater villas with crystal-clear waters.'
-            }
-        };
+        function updateNav() {
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
+            var navAuth = document.getElementById('navAuth');
 
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            const pkg = packages[packageId] || packages[1];
-            
-            document.getElementById('packageTitle').textContent = pkg.title;
-            document.getElementById('packageLocation').textContent = pkg.location;
-            document.getElementById('packageHeroBg').style.backgroundImage = `url('${pkg.image}')`;
-            document.getElementById('bookingPrice').textContent = `$${pkg.price.toLocaleString()}`;
-            document.getElementById('statDuration').textContent = pkg.duration;
-            
-            // Set minimum date to tomorrow
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            document.getElementById('travelDate').min = tomorrow.toISOString().split('T')[0];
-            
-            updatePriceBreakdown();
-            checkAuthStatus();
-        });
-
-        // Update guest count
-        function updateGuests(change) {
-            guests = Math.max(1, Math.min(12, guests + change));
-            document.getElementById('guestCount').textContent = guests;
-            updatePriceBreakdown();
-        }
-
-        // Update price breakdown
-        function updatePriceBreakdown() {
-            const pkg = packages[packageId] || packages[1];
-            const subtotal = pkg.price * guests;
-            const serviceFee = 150;
-            const discount = 200;
-            const total = subtotal + serviceFee - discount;
-            
-            document.getElementById('guestCountDisplay').textContent = guests;
-            document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
-            document.getElementById('totalPrice').textContent = `$${total.toLocaleString()}`;
-        }
-
-        // Check auth status
-        function checkAuthStatus() {
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
-            
             if (token && user) {
-                const userData = JSON.parse(user);
-                const navAuth = document.getElementById('navAuth');
-                navAuth.innerHTML = `
-                    <a href="/account/dashboard" class="btn btn-ghost" onclick="navigateTo('/account/dashboard', event)">
-                        <i class="fas fa-user"></i>
-                        ${userData.firstName || 'Account'}
-                    </a>
-                `;
+                try {
+                    var userData = JSON.parse(user);
+                    var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
+                    navAuth.innerHTML = '<a href="' + (isAdmin ? '/admin/dashboard' : '/account/dashboard') + '" class="btn btn-ghost"><i class="fas fa-user"></i> Dashboard</a>' +
+                        '<a href="#" class="btn btn-outline" onclick="logout(event)">Logout</a>';
+                } catch(e) {}
             }
         }
 
-        // Booking form
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const token = localStorage.getItem('token');
-            if (!token) {
-                showToast('Please login to book', 'error');
-                setTimeout(() => navigateTo('/account/login'), 1500);
-                return;
-            }
-            
-            const travelDate = document.getElementById('travelDate').value;
-            if (!travelDate) {
-                showToast('Please select a travel date', 'error');
-                return;
-            }
-            
-            showToast('Redirecting to booking...');
-            setTimeout(() => navigateTo(`/booking/create/${packageId}`), 1000);
-        });
-
-        // Add to wishlist
-        function addToWishlist() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                showToast('Please login to save to wishlist', 'error');
-                return;
-            }
-            showToast('Added to wishlist!');
-        }
-
-        // Navigation
-        function navigateTo(url, event) {
+        function logout(event) {
             if (event) event.preventDefault();
-            const transition = document.getElementById('pageTransition');
-            transition.classList.add('active');
-            setTimeout(() => {
-                window.location.href = url;
-            }, 400);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
         }
 
-        // Toast
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = toast.querySelector('i');
-            
-            toastMessage.textContent = message;
-            toast.className = 'toast ' + type;
-            toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+        function formatDate(dateStr) {
+            if (!dateStr) return 'TBD';
+            var date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
-        // Page load transition
-        window.addEventListener('pageshow', function() {
-            document.getElementById('pageTransition').classList.remove('active');
+        function calculateDuration(startDate, endDate) {
+            if (!startDate || !endDate) return 7;
+            var start = new Date(startDate);
+            var end = new Date(endDate);
+            var days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            return days > 0 ? days : 1;
+        }
+
+        function getDefaultImage() {
+            return 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1920&q=80';
+        }
+
+        async function loadPackage() {
+            var mainContent = document.getElementById('mainContent');
+
+            if (!packageId || packageId === 0) {
+                showError('Invalid package ID');
+                return;
+            }
+
+            try {
+                var response = await fetch('/api/travelpackage/' + packageId);
+
+                if (response.ok) {
+                    var result = await response.json();
+                    var pkg = result.data || result;
+
+                    console.log('Loaded package:', pkg);
+
+                    if (pkg && pkg.packageId) {
+                        renderPackage(pkg, result.averageRating || 0);
+                    } else {
+                        showError('Package not found');
+                    }
+                } else if (response.status === 404) {
+                    showError('Package not found');
+                } else {
+                    showError('Failed to load package');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error loading package');
+            }
+        }
+
+        function showError(message) {
+            var mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = '<div class="error-state" style="margin-top: 150px;">' +
+                '<i class="fas fa-exclamation-circle"></i>' +
+                '<h2>' + message + '</h2>' +
+                '<p>The package you are looking for might have been removed or is no longer available.</p>' +
+                '<a href="/packages" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Packages</a>' +
+                '</div>';
+        }
+
+        function renderPackage(pkg, avgRating) {
+            var imageUrl = pkg.imageUrl || getDefaultImage();
+            var duration = calculateDuration(pkg.startDate, pkg.endDate);
+            var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
+            var displayPrice = hasDiscount ? pkg.discountedPrice : pkg.price;
+            var discountPercent = hasDiscount ? Math.round((1 - pkg.discountedPrice / pkg.price) * 100) : 0;
+
+            var availabilityClass = '';
+            var availabilityText = '';
+            if (pkg.availableRooms <= 0) {
+                availabilityClass = 'sold-out';
+                availabilityText = 'Sold Out';
+            } else if (pkg.availableRooms <= 3) {
+                availabilityClass = 'limited';
+                availabilityText = 'Only ' + pkg.availableRooms + ' rooms left!';
+            } else {
+                availabilityText = pkg.availableRooms + ' rooms available';
+            }
+
+            var html = '';
+
+            // Hero Section
+            html += '<section class="package-hero">';
+            html += '<img src="' + imageUrl + '" alt="' + (pkg.destination || 'Package') + '" onerror="this.src=\'' + getDefaultImage() + '\'">';
+            html += '<div class="package-hero-content"><div class="container">';
+            if (hasDiscount) {
+                html += '<span class="package-badge">Save ' + discountPercent + '%</span>';
+            }
+            html += '<h1 class="package-title">' + (pkg.destination || 'Travel Package') + '</h1>';
+            html += '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Unknown Location') + '</div>';
+            html += '</div></div></section>';
+
+            // Content Section
+            html += '<section class="package-content"><div class="container">';
+
+            // Left Column
+            html += '<div>';
+
+            // Overview
+            html += '<div class="info-section">';
+            html += '<h2><i class="fas fa-info-circle" style="color: var(--color-gold); margin-right: 8px;"></i>Overview</h2>';
+            html += '<p>' + (pkg.description || 'Experience an unforgettable journey to ' + (pkg.destination || 'your dream destination') + '. This carefully curated package includes accommodation, guided tours, and authentic local experiences.') + '</p>';
+            html += '</div>';
+
+            // Stats
+            html += '<div class="info-section">';
+            html += '<h2><i class="fas fa-chart-bar" style="color: var(--color-gold); margin-right: 8px;"></i>Trip Details</h2>';
+            html += '<div class="package-stats">';
+            html += '<div class="stat-box"><i class="far fa-clock"></i><span class="stat-value">' + duration + ' Days</span><span class="stat-label">Duration</span></div>';
+            html += '<div class="stat-box"><i class="fas fa-bed"></i><span class="stat-value">' + (pkg.availableRooms || 0) + '</span><span class="stat-label">Rooms Available</span></div>';
+            html += '<div class="stat-box"><i class="fas fa-star"></i><span class="stat-value">' + (avgRating > 0 ? avgRating.toFixed(1) : 'New') + '</span><span class="stat-label">Rating</span></div>';
+            html += '<div class="stat-box"><i class="fas fa-users"></i><span class="stat-value">' + (pkg.maxGuests || 2) + '</span><span class="stat-label">Max Guests</span></div>';
+            html += '</div></div>';
+
+            // Highlights
+            html += '<div class="info-section">';
+            html += '<h2><i class="fas fa-star" style="color: var(--color-gold); margin-right: 8px;"></i>Highlights</h2>';
+            html += '<div class="highlights-list">';
+            html += '<div class="highlight-item"><i class="fas fa-hotel"></i><span>Premium Accommodation</span></div>';
+            html += '<div class="highlight-item"><i class="fas fa-utensils"></i><span>Breakfast Included</span></div>';
+            html += '<div class="highlight-item"><i class="fas fa-map"></i><span>Guided Tours</span></div>';
+            html += '<div class="highlight-item"><i class="fas fa-shuttle-van"></i><span>Airport Transfer</span></div>';
+            html += '<div class="highlight-item"><i class="fas fa-camera"></i><span>Photo Opportunities</span></div>';
+            html += '<div class="highlight-item"><i class="fas fa-headset"></i><span>24/7 Support</span></div>';
+            html += '</div></div>';
+
+            // Itinerary
+            if (pkg.itinerary) {
+                html += '<div class="info-section">';
+                html += '<h2><i class="fas fa-route" style="color: var(--color-gold); margin-right: 8px;"></i>Itinerary</h2>';
+                html += '<div class="itinerary-list">';
+                var itineraryLines = pkg.itinerary.split('\n');
+                for (var i = 0; i < itineraryLines.length; i++) {
+                    if (itineraryLines[i].trim()) {
+                        html += '<div class="itinerary-day">';
+                        html += '<div class="itinerary-marker"><div class="itinerary-dot"></div><div class="itinerary-line"></div></div>';
+                        html += '<div class="itinerary-content"><h4>Day ' + (i + 1) + '</h4><p>' + itineraryLines[i] + '</p></div>';
+                        html += '</div>';
+                    }
+                }
+                html += '</div></div>';
+            }
+
+            html += '</div>'; // End left column
+
+            // Right Column - Booking Card
+            html += '<div>';
+            html += '<div class="booking-card">';
+
+            // Price
+            html += '<div class="booking-price">';
+            if (hasDiscount) {
+                html += '<span class="old-price">$' + Math.round(pkg.price) + '</span>';
+            }
+            html += '<span class="current-price">$' + Math.round(displayPrice) + '</span>';
+            html += '<span class="per-person"> / person</span>';
+            if (hasDiscount) {
+                html += '<div><span class="discount-badge">SAVE ' + discountPercent + '%</span></div>';
+            }
+            html += '</div>';
+
+            // Booking Details
+            html += '<div class="booking-details">';
+            html += '<div class="booking-detail"><span class="label"><i class="far fa-calendar"></i> Start Date</span><span class="value">' + formatDate(pkg.startDate) + '</span></div>';
+            html += '<div class="booking-detail"><span class="label"><i class="far fa-calendar-check"></i> End Date</span><span class="value">' + formatDate(pkg.endDate) + '</span></div>';
+            html += '<div class="booking-detail"><span class="label"><i class="far fa-clock"></i> Duration</span><span class="value">' + duration + ' Days</span></div>';
+            html += '<div class="booking-detail"><span class="label"><i class="fas fa-bed"></i> Rooms</span><span class="value">' + (pkg.availableRooms || 0) + ' Available</span></div>';
+            html += '</div>';
+
+            // Availability
+            html += '<div class="availability-tag ' + availabilityClass + '"><i class="fas fa-' + (availabilityClass === 'sold-out' ? 'times-circle' : 'check-circle') + '"></i> ' + availabilityText + '</div>';
+
+            // Actions
+            html += '<div class="booking-actions" style="margin-top: var(--space-4);">';
+            if (pkg.availableRooms > 0) {
+                html += '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;"><i class="fas fa-calendar-check"></i> Book Now</a>';
+            } else {
+                html += '<button class="btn btn-outline btn-lg" style="width: 100%; justify-content: center;" disabled><i class="fas fa-bell"></i> Notify When Available</button>';
+            }
+            html += '<button class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="addToWishlist(' + pkg.packageId + ')"><i class="far fa-heart"></i> Add to Wishlist</button>';
+            html += '</div>';
+
+            html += '</div>'; // End booking card
+            html += '</div>'; // End right column
+
+            html += '</div></section>'; // End content
+
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        async function addToWishlist(pkgId) {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login to add to wishlist', 'error');
+                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
+                return;
+            }
+
+            try {
+                var response = await fetch('/api/wishlist/' + pkgId, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showToast('Added to wishlist!', 'success');
+                } else {
+                    var error = await response.json();
+                    showToast(error.message || 'Failed to add to wishlist', 'error');
+                }
+            } catch (error) {
+                showToast('Error adding to wishlist', 'error');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNav();
+            loadPackage();
         });
     </script>
 </body>
