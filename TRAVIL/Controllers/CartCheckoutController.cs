@@ -4,10 +4,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRAVEL.Services;
+using TRAVEL.Models;
 
 namespace TRAVEL.Controllers
 {
@@ -38,8 +38,10 @@ namespace TRAVEL.Controllers
 
         private int GetUserId()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return int.Parse(userIdClaim ?? "0");
+            // Try multiple claim types for user ID
+            var userIdClaim = User.FindFirst("UserId")?.Value
+                ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int userId) ? userId : 0;
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace TRAVEL.Controllers
                 }
 
                 // Check user's active bookings count (max 3 as per requirements)
-                var activeBookings = await _bookingService.GetActiveBookingsCountAsync(userId);
+                var activeBookings = await _bookingService.GetActiveBookingCountAsync(userId);
                 if (activeBookings + cart.Items.Count > 3)
                 {
                     return BadRequest(new
@@ -74,45 +76,46 @@ namespace TRAVEL.Controllers
 
                 var createdBookings = new List<object>();
                 decimal totalAmount = 0;
+                int? firstBookingId = null;
 
                 // Create bookings for each cart item
                 foreach (var item in cart.Items)
                 {
-                    var booking = await _bookingService.CreateBookingAsync(
+                    var result = await _bookingService.CreateBookingAsync(
                         userId,
                         item.PackageId,
                         item.NumberOfRooms,
-                        item.NumberOfGuests,
-                        item.SpecialRequests
+                        item.NumberOfGuests
                     );
 
-                    if (booking == null)
+                    if (!result.Success || result.Booking == null)
                     {
-                        _logger.LogWarning($"Failed to create booking for package {item.PackageId}");
+                        _logger.LogWarning($"Failed to create booking for package {item.PackageId}: {result.Message}");
                         continue;
                     }
 
-                    totalAmount += booking.TotalPrice;
+                    if (firstBookingId == null)
+                    {
+                        firstBookingId = result.Booking.BookingId;
+                    }
+
+                    totalAmount += result.Booking.TotalPrice;
                     createdBookings.Add(new
                     {
-                        bookingId = booking.BookingId,
-                        bookingReference = booking.BookingReference,
+                        bookingId = result.Booking.BookingId,
+                        bookingReference = result.Booking.BookingReference,
                         packageId = item.PackageId,
-                        totalPrice = booking.TotalPrice
+                        totalPrice = result.Booking.TotalPrice
                     });
                 }
 
-                if (!createdBookings.Any())
+                if (!createdBookings.Any() || firstBookingId == null)
                 {
                     return BadRequest(new { success = false, message = "Failed to create bookings. Some packages may be unavailable." });
                 }
 
-                // Process payment for all bookings at once
+                // Process payment for the first booking
                 // In a real implementation, we'd process a single payment for the total
-                // For now, we'll process payment for the first booking and mark others as paid
-
-                var firstBookingId = ((dynamic)createdBookings.First()).bookingId;
-
                 var paymentRequest = new PaymentRequest
                 {
                     CardNumber = request.CardNumber,
@@ -120,10 +123,10 @@ namespace TRAVEL.Controllers
                     ExpiryMonth = request.ExpiryMonth,
                     ExpiryYear = request.ExpiryYear,
                     CVV = request.CVV,
-                    PaymentMethod = request.PaymentMethod
+                    PaymentMethod = (PaymentMethod)request.PaymentMethod
                 };
 
-                var paymentResult = await _paymentService.ProcessPaymentAsync((int)firstBookingId, paymentRequest);
+                var paymentResult = await _paymentService.ProcessPaymentAsync(firstBookingId.Value, paymentRequest);
 
                 if (!paymentResult.Success)
                 {
