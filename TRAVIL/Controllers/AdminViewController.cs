@@ -3,33 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace TRAVEL.Controllers
 {
     /// <summary>
-    /// Controller for Admin Views
+    /// Controller for Admin Panel Views
     /// </summary>
     public class AdminViewController : Controller
     {
         /// <summary>
-        /// Admin Dashboard
+        /// Admin Dashboard - route: /admin
         /// </summary>
         [HttpGet]
         [Route("admin")]
+        [Route("admin/index")]
         [Route("admin/dashboard")]
-        public IActionResult Dashboard()
+        public IActionResult Index()
         {
-            return View("~/Views/Admin/Dashboard.cshtml");
+            return View("~/Views/Admin/Index.cshtml");
         }
 
         /// <summary>
-        /// Admin Profile
-        /// </summary>
-        [HttpGet]
-        [Route("admin/profile")]
-        public IActionResult Profile()
-        {
-            return View("~/Views/Admin/Profile.cshtml");
-        }
-
-        /// <summary>
-        /// Admin Packages
+        /// Packages Management - route: /admin/packages
         /// </summary>
         [HttpGet]
         [Route("admin/packages")]
@@ -39,19 +30,30 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Edit Package
+        /// Create New Package - route: /admin/packages/create
         /// </summary>
         [HttpGet]
-        [Route("admin/packages/edit")]
-        [Route("admin/packages/edit/{id?}")]
-        public IActionResult EditPackage(int? id)
+        [Route("admin/packages/create")]
+        [Route("admin/package/create")]
+        public IActionResult CreatePackage()
+        {
+            return View("~/Views/Admin/EditPackage.cshtml");
+        }
+
+        /// <summary>
+        /// Edit Package - route: /admin/packages/edit/{id}
+        /// </summary>
+        [HttpGet]
+        [Route("admin/packages/edit/{id:int}")]
+        [Route("admin/package/edit/{id:int}")]
+        public IActionResult EditPackage(int id)
         {
             ViewData["PackageId"] = id;
             return View("~/Views/Admin/EditPackage.cshtml");
         }
 
         /// <summary>
-        /// Admin Bookings
+        /// Bookings Management - route: /admin/bookings
         /// </summary>
         [HttpGet]
         [Route("admin/bookings")]
@@ -61,7 +63,7 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Admin Users
+        /// Users Management - route: /admin/users
         /// </summary>
         [HttpGet]
         [Route("admin/users")]
@@ -71,33 +73,24 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Admin Reviews
+        /// Waiting List Management - route: /admin/waiting-list
         /// </summary>
         [HttpGet]
-        [Route("admin/reviews")]
-        public IActionResult Reviews()
+        [Route("admin/waiting-list")]
+        [Route("admin/waitlist")]
+        public IActionResult WaitingList()
         {
-            return View("~/Views/Admin/Reviews.cshtml");
+            return View("~/Views/Admin/WaitingList.cshtml");
         }
 
         /// <summary>
-        /// Admin Prices/Discounts
+        /// Admin Profile - route: /admin/profile
         /// </summary>
         [HttpGet]
-        [Route("admin/prices")]
-        public IActionResult Prices()
+        [Route("admin/profile")]
+        public IActionResult Profile()
         {
-            return View("~/Views/Admin/Prices.cshtml");
-        }
-
-        /// <summary>
-        /// Admin Settings
-        /// </summary>
-        [HttpGet]
-        [Route("admin/settings")]
-        public IActionResult Settings()
-        {
-            return View("~/Views/Admin/Settings.cshtml");
+            return View("~/Views/Admin/Profile.cshtml");
         }
     }
 }
