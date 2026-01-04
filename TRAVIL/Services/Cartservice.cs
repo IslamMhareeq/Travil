@@ -17,6 +17,7 @@ namespace TRAVEL.Services
         Task<Cart> GetOrCreateCartAsync(int userId);
         Task<Cart?> GetCartByIdAsync(int cartId);
         Task<Cart?> GetActiveCartAsync(int userId);
+        Task<Cart?> GetCartWithItemsAsync(int userId);
         Task<CartResult> AddToCartAsync(int userId, int packageId, int quantity = 1, int guests = 1, string? specialRequests = null);
         Task<CartResult> UpdateCartItemAsync(int userId, int cartItemId, int quantity, int guests);
         Task<CartResult> RemoveFromCartAsync(int userId, int cartItemId);
@@ -46,16 +47,13 @@ namespace TRAVEL.Services
     {
         private readonly TravelDbContext _context;
         private readonly ILogger<CartService> _logger;
-        private readonly IBookingService _bookingService;
 
         public CartService(
             TravelDbContext context,
-            ILogger<CartService> logger,
-            IBookingService bookingService)
+            ILogger<CartService> logger)
         {
             _context = context;
             _logger = logger;
-            _bookingService = bookingService;
         }
 
         /// <summary>
@@ -116,6 +114,19 @@ namespace TRAVEL.Services
                 .Include(c => c.Items)
                     .ThenInclude(i => i.TravelPackage)
                         .ThenInclude(p => p!.Images)
+                .FirstOrDefaultAsync(c => c.UserId == userId && c.IsActive);
+        }
+
+        /// <summary>
+        /// Gets the cart with all items for a user (alias for GetActiveCartAsync)
+        /// </summary>
+        public async Task<Cart?> GetCartWithItemsAsync(int userId)
+        {
+            return await _context.Carts
+                .Include(c => c.Items)
+                    .ThenInclude(i => i.TravelPackage)
+                        .ThenInclude(p => p!.Images)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.IsActive);
         }
 
@@ -419,7 +430,7 @@ namespace TRAVEL.Services
             {
                 _logger.LogInformation($"Processing checkout for user {userId}");
 
-                var cart = await GetActiveCartAsync(userId);
+                var cart = await GetCartWithItemsAsync(userId);
                 if (cart == null || !cart.Items.Any())
                 {
                     return new CartResult { Success = false, Message = "Cart is empty" };
@@ -466,7 +477,7 @@ namespace TRAVEL.Services
                         };
                     }
 
-                    // Create booking
+                    // Create booking (Booking model doesn't have SpecialRequests property)
                     var booking = new Booking
                     {
                         UserId = userId,
@@ -476,8 +487,7 @@ namespace TRAVEL.Services
                         TotalPrice = item.UnitPrice * item.Quantity,
                         Status = BookingStatus.Pending,
                         BookingDate = DateTime.UtcNow,
-                        BookingReference = GenerateBookingReference(),
-                        SpecialRequests = item.SpecialRequests
+                        BookingReference = GenerateBookingReference()
                     };
 
                     // Reduce available rooms

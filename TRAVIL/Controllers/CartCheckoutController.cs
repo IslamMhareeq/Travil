@@ -1,219 +1,357 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRAVEL.Services;
-using TRAVEL.Models;
 
 namespace TRAVEL.Controllers
 {
     /// <summary>
-    /// Cart Checkout API Controller - Handles payment for multiple cart items
+    /// API Controller for Cart operations
     /// </summary>
     [ApiController]
-    [Route("api/checkout")]
-    [Authorize]
+    [Route("api/cart")]
+    [Produces("application/json")]
     public class CartCheckoutController : ControllerBase
     {
         private readonly ICartService _cartService;
-        private readonly IBookingService _bookingService;
-        private readonly IPaymentService _paymentService;
         private readonly ILogger<CartCheckoutController> _logger;
 
         public CartCheckoutController(
             ICartService cartService,
-            IBookingService bookingService,
-            IPaymentService paymentService,
             ILogger<CartCheckoutController> logger)
         {
             _cartService = cartService;
-            _bookingService = bookingService;
-            _paymentService = paymentService;
             _logger = logger;
         }
 
-        private int GetUserId()
+        private int? GetUserId()
         {
-            // Try multiple claim types for user ID
             var userIdClaim = User.FindFirst("UserId")?.Value
-                ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return int.TryParse(userIdClaim, out int userId) ? userId : 0;
+                ?? User.FindFirst("userid")?.Value
+                ?? User.FindFirst("sub")?.Value
+                ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return null;
+            }
+            return userId;
         }
 
         /// <summary>
-        /// Process checkout for all cart items - creates bookings and processes single payment
+        /// Get current user's cart
         /// </summary>
-        [HttpPost("process")]
-        public async Task<IActionResult> ProcessCheckout([FromBody] CheckoutRequest request)
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCart()
         {
-            var userId = GetUserId();
-            if (userId == 0)
-                return Unauthorized(new { success = false, message = "Please login to checkout" });
-
             try
             {
-                // Get cart with items
-                var cart = await _cartService.GetCartWithItemsAsync(userId);
-                if (cart == null || !cart.Items.Any())
+                var userId = GetUserId();
+                if (userId == null)
                 {
-                    return BadRequest(new { success = false, message = "Your cart is empty" });
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
                 }
 
-                // Check user's active bookings count (max 3 as per requirements)
-                var activeBookings = await _bookingService.GetActiveBookingCountAsync(userId);
-                if (activeBookings + cart.Items.Count > 3)
+                var cart = await _cartService.GetCartWithItemsAsync(userId.Value);
+
+                if (cart == null)
                 {
-                    return BadRequest(new
-                    {
-                        success = false,
-                        message = $"You cannot exceed 3 active booked trips. You currently have {activeBookings} active bookings and {cart.Items.Count} items in cart."
-                    });
+                    return Ok(new { success = true, data = new { items = new object[0], totalPrice = 0, totalItems = 0 } });
                 }
 
-                var createdBookings = new List<object>();
-                decimal totalAmount = 0;
-                int? firstBookingId = null;
-
-                // Create bookings for each cart item
-                foreach (var item in cart.Items)
+                var result = new
                 {
-                    var result = await _bookingService.CreateBookingAsync(
-                        userId,
-                        item.PackageId,
-                        item.NumberOfRooms,
-                        item.NumberOfGuests
-                    );
-
-                    if (!result.Success || result.Booking == null)
+                    cartId = cart.CartId,
+                    items = cart.Items.Select(i => new
                     {
-                        _logger.LogWarning($"Failed to create booking for package {item.PackageId}: {result.Message}");
-                        continue;
-                    }
-
-                    if (firstBookingId == null)
-                    {
-                        firstBookingId = result.Booking.BookingId;
-                    }
-
-                    totalAmount += result.Booking.TotalPrice;
-                    createdBookings.Add(new
-                    {
-                        bookingId = result.Booking.BookingId,
-                        bookingReference = result.Booking.BookingReference,
-                        packageId = item.PackageId,
-                        totalPrice = result.Booking.TotalPrice
-                    });
-                }
-
-                if (!createdBookings.Any() || firstBookingId == null)
-                {
-                    return BadRequest(new { success = false, message = "Failed to create bookings. Some packages may be unavailable." });
-                }
-
-                // Process payment for the first booking
-                // In a real implementation, we'd process a single payment for the total
-                var paymentRequest = new PaymentRequest
-                {
-                    CardNumber = request.CardNumber,
-                    CardHolderName = request.CardHolderName,
-                    ExpiryMonth = request.ExpiryMonth,
-                    ExpiryYear = request.ExpiryYear,
-                    CVV = request.CVV,
-                    PaymentMethod = (PaymentMethod)request.PaymentMethod
+                        cartItemId = i.CartItemId,
+                        packageId = i.PackageId,
+                        quantity = i.Quantity,
+                        numberOfGuests = i.NumberOfGuests,
+                        unitPrice = i.UnitPrice,
+                        subtotal = i.Subtotal,
+                        dateAdded = i.DateAdded,
+                        specialRequests = i.SpecialRequests,
+                        travelPackage = i.TravelPackage != null ? new
+                        {
+                            packageId = i.TravelPackage.PackageId,
+                            destination = i.TravelPackage.Destination,
+                            country = i.TravelPackage.Country,
+                            startDate = i.TravelPackage.StartDate,
+                            endDate = i.TravelPackage.EndDate,
+                            price = i.TravelPackage.Price,
+                            discountedPrice = i.TravelPackage.DiscountedPrice,
+                            imageUrl = i.TravelPackage.ImageUrl,
+                            availableRooms = i.TravelPackage.AvailableRooms
+                        } : null
+                    }).ToList(),
+                    totalPrice = cart.TotalPrice,
+                    totalItems = cart.TotalItems,
+                    createdAt = cart.CreatedAt,
+                    updatedAt = cart.UpdatedAt
                 };
 
-                var paymentResult = await _paymentService.ProcessPaymentAsync(firstBookingId.Value, paymentRequest);
+                return Ok(new { success = true, data = result });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting cart");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
 
-                if (!paymentResult.Success)
+        /// <summary>
+        /// Add package to cart
+        /// </summary>
+        [HttpPost("add")]
+        [Authorize]
+        public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
                 {
-                    return BadRequest(new { success = false, message = paymentResult.Message });
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
                 }
 
-                // Clear the cart after successful payment
-                await _cartService.ClearCartAsync(userId);
+                if (request.PackageId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid package ID" });
+                }
 
-                _logger.LogInformation($"Cart checkout completed for user {userId}. {createdBookings.Count} bookings created.");
+                var result = await _cartService.AddToCartAsync(
+                    userId.Value,
+                    request.PackageId,
+                    request.Quantity > 0 ? request.Quantity : 1,
+                    request.Guests > 0 ? request.Guests : 1,
+                    request.SpecialRequests);
+
+                if (!result.Success)
+                {
+                    return BadRequest(new { success = false, message = result.Message });
+                }
+
+                return Ok(new { success = true, message = result.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding to cart");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+
+        /// <summary>
+        /// Update cart item
+        /// </summary>
+        [HttpPut("item/{cartItemId}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateCartItem(int cartItemId, [FromBody] UpdateCartItemRequest request)
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
+                {
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                }
+
+                var result = await _cartService.UpdateCartItemAsync(
+                    userId.Value,
+                    cartItemId,
+                    request.Quantity,
+                    request.Guests > 0 ? request.Guests : 1);
+
+                if (!result.Success)
+                {
+                    return BadRequest(new { success = false, message = result.Message });
+                }
+
+                return Ok(new { success = true, message = result.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating cart item {cartItemId}");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+
+        /// <summary>
+        /// Remove item from cart
+        /// </summary>
+        [HttpDelete("item/{cartItemId}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveFromCart(int cartItemId)
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
+                {
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                }
+
+                var result = await _cartService.RemoveFromCartAsync(userId.Value, cartItemId);
+
+                if (!result.Success)
+                {
+                    return BadRequest(new { success = false, message = result.Message });
+                }
+
+                return Ok(new { success = true, message = result.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error removing cart item {cartItemId}");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+
+        /// <summary>
+        /// Clear entire cart
+        /// </summary>
+        [HttpDelete("clear")]
+        [Authorize]
+        public async Task<IActionResult> ClearCart()
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
+                {
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                }
+
+                var result = await _cartService.ClearCartAsync(userId.Value);
+
+                if (!result.Success)
+                {
+                    return BadRequest(new { success = false, message = result.Message });
+                }
+
+                return Ok(new { success = true, message = result.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error clearing cart");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+
+        /// <summary>
+        /// Get cart item count
+        /// </summary>
+        [HttpGet("count")]
+        [Authorize]
+        public async Task<IActionResult> GetCartCount()
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
+                {
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                }
+
+                var count = await _cartService.GetCartItemCountAsync(userId.Value);
+
+                return Ok(new { success = true, count = count });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting cart count");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+
+        /// <summary>
+        /// Check if package is in cart
+        /// </summary>
+        [HttpGet("check/{packageId}")]
+        [Authorize]
+        public async Task<IActionResult> CheckPackageInCart(int packageId)
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
+                {
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                }
+
+                var inCart = await _cartService.IsPackageInCartAsync(userId.Value, packageId);
+
+                return Ok(new { success = true, inCart = inCart });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error checking if package {packageId} is in cart");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+
+        /// <summary>
+        /// Checkout cart - creates bookings from cart items
+        /// </summary>
+        [HttpPost("checkout")]
+        [Authorize]
+        public async Task<IActionResult> Checkout()
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
+                {
+                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                }
+
+                var result = await _cartService.CheckoutCartAsync(userId.Value);
+
+                if (!result.Success)
+                {
+                    return BadRequest(new { success = false, message = result.Message });
+                }
+
+                var bookingsResult = result.Bookings?.Select(b => new
+                {
+                    bookingId = b.BookingId,
+                    bookingReference = b.BookingReference,
+                    packageId = b.PackageId,
+                    totalPrice = b.TotalPrice,
+                    status = b.Status.ToString()
+                }).ToList();
 
                 return Ok(new
                 {
                     success = true,
-                    message = "Payment successful! All bookings confirmed.",
-                    data = new
-                    {
-                        bookings = createdBookings,
-                        totalAmount = totalAmount,
-                        transactionId = paymentResult.Payment?.TransactionId
-                    }
+                    message = result.Message,
+                    bookings = bookingsResult
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error processing checkout for user {userId}");
-                return StatusCode(500, new { success = false, message = "An error occurred during checkout" });
+                _logger.LogError(ex, "Error during checkout");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
             }
-        }
-
-        /// <summary>
-        /// Get checkout summary before payment
-        /// </summary>
-        [HttpGet("summary")]
-        public async Task<IActionResult> GetCheckoutSummary()
-        {
-            var userId = GetUserId();
-            if (userId == 0)
-                return Unauthorized(new { success = false, message = "Please login" });
-
-            var cart = await _cartService.GetCartWithItemsAsync(userId);
-            if (cart == null || !cart.Items.Any())
-            {
-                return Ok(new { success = true, data = new { items = new object[] { }, total = 0 } });
-            }
-
-            var items = cart.Items.Select(i => new
-            {
-                packageId = i.PackageId,
-                destination = i.Package?.Destination,
-                country = i.Package?.Country,
-                imageUrl = i.Package?.ImageUrl,
-                startDate = i.Package?.StartDate,
-                endDate = i.Package?.EndDate,
-                numberOfRooms = i.NumberOfRooms,
-                numberOfGuests = i.NumberOfGuests,
-                pricePerRoom = i.Price,
-                subtotal = i.Price * i.NumberOfRooms
-            }).ToList();
-
-            var subtotal = items.Sum(i => i.subtotal);
-            var serviceFee = Math.Round(subtotal * 0.05m, 2); // 5% service fee
-            var taxes = Math.Round(subtotal * 0.10m, 2); // 10% taxes
-            var total = subtotal + serviceFee + taxes;
-
-            return Ok(new
-            {
-                success = true,
-                data = new
-                {
-                    items = items,
-                    subtotal = subtotal,
-                    serviceFee = serviceFee,
-                    taxes = taxes,
-                    total = total
-                }
-            });
         }
     }
 
-    public class CheckoutRequest
+    // Request DTOs
+    public class AddToCartRequest
     {
-        public string CardNumber { get; set; }
-        public string CardHolderName { get; set; }
-        public int ExpiryMonth { get; set; }
-        public int ExpiryYear { get; set; }
-        public string CVV { get; set; }
-        public int PaymentMethod { get; set; } // 0 = Credit, 1 = Debit, 2 = PayPal
+        public int PackageId { get; set; }
+        public int Quantity { get; set; } = 1;
+        public int Guests { get; set; } = 1;
+        public string? SpecialRequests { get; set; }
+    }
+
+    public class UpdateCartItemRequest
+    {
+        public int Quantity { get; set; }
+        public int Guests { get; set; } = 1;
     }
 }
