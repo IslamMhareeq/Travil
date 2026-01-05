@@ -4,43 +4,62 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 using TRAVEL.Data;
+using MongoDB.Driver;
 using TRAVEL.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add MVC services with JSON configuration to handle circular references
+// Add services with JSON options to handle circular references
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
-        // Ignore circular references
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
-// Database Configuration
+// Add Entity Framework Core with PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TravelDbContext>(options =>
-    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("TRAVEL"))
+    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("TRAVIL"))
 );
 
-// Register ALL Services - IMPORTANT: Don't forget any!
+// Add MongoDB for Image Storage (GridFS)
+var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDbConnection");
+builder.Services.AddSingleton<IMongoClient>(sp =>
+{
+    var settings = MongoClientSettings.FromConnectionString(mongoConnectionString);
+    settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+    return new MongoClient(settings);
+});
+
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+    var dbName = builder.Configuration.GetConnectionString("MongoDbName") ?? "TRAVEL";
+    return client.GetDatabase(dbName);
+});
+
+// ===== Register All Services =====
+
+// Authentication & Email
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Core Business Services
 builder.Services.AddScoped<ITravelPackageService, TravelPackageService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
-builder.Services.AddScoped<IWishlistService, WishlistService>();  // <-- THIS WAS MISSING!
-// builder.Services.AddScoped<ICartService, CartService>();       // Uncomment if CartService exists
+builder.Services.AddScoped<IWishlistService, WishlistService>();
 
-// JWT Authentication
+// MongoDB Image Storage Service
+builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
+
+// Add JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JWT");
-var secretKeyString = jwtSettings["SecretKey"];
-if (string.IsNullOrEmpty(secretKeyString))
-    throw new InvalidOperationException("JWT SecretKey is not configured");
-
-var secretKey = Encoding.UTF8.GetBytes(secretKeyString);
+var secretKey = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? "your-very-secret-key-min-32-characters-long-here");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -62,19 +81,21 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Authorization
+// Add Authorization
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
     options.AddPolicy("UserOnly", policy => policy.RequireRole("User", "Admin"));
 });
 
-// CORS
+// Add CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", corsBuilder =>
+    options.AddPolicy("AllowAll", builder =>
     {
-        corsBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
     });
 });
 
@@ -88,7 +109,7 @@ builder.Services.AddLogging(config =>
 
 var app = builder.Build();
 
-// Configure HTTP Pipeline
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -101,15 +122,19 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map Routes
-app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Database initialization
+// Initialize database on startup
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -117,18 +142,18 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<TravelDbContext>();
         context.Database.Migrate();
-        Console.WriteLine("✅ Database initialized successfully.");
+
+        // Test MongoDB connection
+        var mongoClient = services.GetRequiredService<IMongoClient>();
+        var mongoDb = services.GetRequiredService<IMongoDatabase>();
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation($"MongoDB connected: {mongoDb.DatabaseNamespace.DatabaseName}");
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while initializing the database.");
-        Console.WriteLine($"⚠️ Database initialization warning: {ex.Message}");
     }
 }
-
-Console.WriteLine("🚀 TRAVIL Application starting...");
-Console.WriteLine($"🌐 HTTP: http://localhost:5255");
-Console.WriteLine($"🔒 HTTPS: https://localhost:7298");
 
 app.Run();
