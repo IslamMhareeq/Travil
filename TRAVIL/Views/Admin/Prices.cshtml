@@ -8,133 +8,578 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Discounts & Pricing - TRAVIL Admin</title>
-    
+    <title>Discounts - TRAVIL Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="/css/admin.css" rel="stylesheet" />
-    
     <style>
         :root {
-            --color-midnight: #0d1117; --color-navy: #161b22; --color-slate: #21262d;
-            --color-steel: #484f58; --color-silver: #8b949e; --color-white: #ffffff;
-            --color-gold: #d4a853; --color-gold-dark: #b8943f;
-            --color-gold-muted: rgba(212, 168, 83, 0.15);
-            --sidebar-width: 280px;
-            --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
-            --radius-sm: 6px; --radius-md: 12px; --radius-lg: 16px;
-            --transition-fast: 0.15s ease; --transition-normal: 0.3s ease;
-            --font-display: 'Cormorant Garamond', serif; --font-body: 'Outfit', sans-serif;
+            --color-bg: #0a0a0f;
+            --color-surface: #12121a;
+            --color-surface-2: #1a1a24;
+            --color-border: #2a2a3a;
+            --color-gold: #d4a853;
+            --color-gold-hover: #e4b863;
+            --color-white: #ffffff;
+            --color-silver: #a0a0b0;
+            --color-success: #3fb950;
+            --color-danger: #f85149;
+            --color-warning: #d29922;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --sidebar-width: 260px;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-body); background: var(--color-midnight); color: var(--color-white); }
 
-        .page-transition { position: fixed; inset: 0; background: #0d1117; z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
-        .page-transition.active { opacity: 1; visibility: visible; }
-        .page-transition .loader { width: 48px; height: 48px; border: 3px solid #21262d; border-top-color: #d4a853; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @@keyframes spin { to { transform: rotate(360deg); } }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        .admin-layout { display: flex; min-height: 100vh; }
-        .sidebar { width: var(--sidebar-width); background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-midnight) 100%); position: fixed; height: 100vh; overflow-y: auto; z-index: 1000; border-right: 1px solid var(--color-slate); }
-        .sidebar-header { padding: var(--space-5); border-bottom: 1px solid var(--color-slate); display: flex; align-items: center; gap: var(--space-3); }
-        .sidebar-header .logo { width: 48px; height: 48px; background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--color-midnight); }
-        .sidebar-header h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; color: var(--color-white); letter-spacing: 0.1em; margin-bottom: 0; }
-        .sidebar-header span { font-size: 0.6875rem; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.15em; }
-        .nav-section { padding: var(--space-4) var(--space-3); }
-        .nav-section-title { padding: 0 var(--space-3); font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-steel); margin-bottom: var(--space-3); }
-        .nav-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); color: var(--color-silver); text-decoration: none; border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 500; transition: all var(--transition-fast); margin-bottom: var(--space-1); border-left: 3px solid transparent; }
-        .nav-item i { width: 20px; text-align: center; font-size: 1rem; }
-        .nav-item:hover { background: var(--color-slate); color: var(--color-white); }
-        .nav-item.active { background: var(--color-gold-muted); color: var(--color-gold); border-left-color: var(--color-gold); }
+        body {
+            font-family: var(--font-main);
+            background: var(--color-bg);
+            color: var(--color-white);
+            min-height: 100vh;
+        }
 
-        .main-content { flex: 1; margin-left: var(--sidebar-width); padding: var(--space-6); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4); }
-        .header h2 { font-size: 1.75rem; font-weight: 600; }
-        .header .subtitle { color: var(--color-silver); font-size: 0.9375rem; margin-top: var(--space-1); }
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
 
-        .btn { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-5); border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all var(--transition-fast); text-decoration: none; border: none; }
-        .btn-primary { background: var(--color-gold); color: var(--color-midnight); }
-        .btn-primary:hover { background: var(--color-gold-dark); }
-        .btn-secondary { background: var(--color-slate); color: var(--color-white); }
-        .btn-danger { background: #f85149; color: white; }
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--color-surface);
+            border-right: 1px solid var(--color-border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+        }
 
-        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
-        .stat-card { background: var(--color-navy); border: 1px solid var(--color-slate); border-radius: var(--radius-md); padding: var(--space-5); text-align: center; }
-        .stat-card .icon { font-size: 2rem; color: var(--color-gold); margin-bottom: var(--space-3); }
-        .stat-card .value { font-size: 2rem; font-weight: 700; margin-bottom: var(--space-1); }
-        .stat-card .label { color: var(--color-silver); font-size: 0.875rem; }
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-        .discount-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: var(--space-5); }
-        .discount-card { background: var(--color-navy); border: 1px solid var(--color-slate); border-radius: var(--radius-lg); overflow: hidden; }
-        .discount-card.expired { opacity: 0.6; }
-        .discount-header { padding: var(--space-4) var(--space-5); background: var(--color-slate); display: flex; justify-content: space-between; align-items: center; }
-        .discount-header h3 { font-size: 1.125rem; font-weight: 600; display: flex; align-items: center; gap: var(--space-2); }
-        .discount-header h3 i { color: var(--color-gold); }
-        .discount-body { padding: var(--space-5); }
-        .discount-info { display: grid; gap: var(--space-3); margin-bottom: var(--space-5); }
-        .info-row { display: flex; justify-content: space-between; padding: var(--space-2) 0; }
-        .info-label { color: var(--color-silver); font-size: 0.875rem; }
-        .info-value { font-weight: 500; }
-        .discount-amount { font-size: 2rem; font-weight: 700; color: var(--color-gold); text-align: center; padding: var(--space-4); background: var(--color-gold-muted); border-radius: var(--radius-md); margin-bottom: var(--space-4); }
-        .discount-actions { display: flex; gap: var(--space-3); }
-        .discount-actions .btn { flex: 1; justify-content: center; }
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), #b8943f);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
 
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
-        .badge-active { background: rgba(63, 185, 80, 0.15); color: #3fb950; }
-        .badge-expired { background: rgba(248, 81, 73, 0.15); color: #f85149; }
-        .badge-scheduled { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+        .sidebar-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-gold);
+        }
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: var(--color-navy); border: 1px solid var(--color-slate); border-radius: var(--radius-lg); padding: var(--space-6); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5); padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-slate); }
-        .modal-header h3 { font-size: 1.25rem; }
-        .modal-close { background: none; border: none; color: var(--color-silver); font-size: 1.5rem; cursor: pointer; }
-        .form-group { margin-bottom: var(--space-4); }
-        .form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--color-silver); margin-bottom: var(--space-2); }
-        .form-control { width: 100%; padding: var(--space-3) var(--space-4); background: var(--color-slate); border: 1px solid var(--color-steel); border-radius: var(--radius-sm); color: var(--color-white); font-size: 0.9375rem; font-family: var(--font-body); }
-        .form-control:focus { outline: none; border-color: var(--color-gold); box-shadow: 0 0 0 3px var(--color-gold-muted); }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
-        .modal-actions { display: flex; gap: var(--space-3); justify-content: flex-end; margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--color-slate); }
+        .sidebar-header span {
+            font-size: 0.75rem;
+            color: var(--color-silver);
+        }
 
-        .toast { position: fixed; bottom: 24px; right: 24px; background: #30363d; border: 1px solid #21262d; border-radius: 16px; padding: 16px 24px; display: flex; align-items: center; gap: 12px; color: #ffffff; font-size: 0.9375rem; z-index: 10000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); opacity: 0; transform: translateY(20px); transition: all 0.3s ease; }
-        .toast.show { opacity: 1; transform: translateY(0); }
-        .toast.success i { color: #3fb950; }
-        .toast.error i { color: #f85149; }
+        .nav-section {
+            padding: 16px;
+        }
 
-        .empty-state { text-align: center; padding: 60px 24px; color: var(--color-silver); background: var(--color-navy); border: 1px solid var(--color-slate); border-radius: var(--radius-lg); }
-        .empty-state i { font-size: 3rem; opacity: 0.5; margin-bottom: var(--space-4); }
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-silver);
+            margin-bottom: 12px;
+            padding-left: 12px;
+        }
 
-        @@media (max-width: 1024px) { .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } .main-content { margin-left: 0; } }
-        @@media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .discount-grid { grid-template-columns: 1fr; } }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--color-silver);
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+        }
+
+            .nav-item:hover {
+                background: var(--color-surface-2);
+                color: var(--color-white);
+            }
+
+            .nav-item.active {
+                background: rgba(212, 168, 83, 0.15);
+                color: var(--color-gold);
+            }
+
+            .nav-item i {
+                width: 20px;
+                text-align: center;
+            }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 32px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+            .header h2 {
+                font-size: 1.5rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+        .subtitle {
+            color: var(--color-silver);
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-bg);
+        }
+
+            .btn-primary:hover {
+                background: var(--color-gold-hover);
+            }
+
+        .btn-secondary {
+            background: var(--color-surface-2);
+            color: var(--color-silver);
+            border: 1px solid var(--color-border);
+        }
+
+            .btn-secondary:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        .btn-danger {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--color-danger);
+        }
+
+            .btn-danger:hover {
+                background: rgba(248, 81, 73, 0.25);
+            }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+            .stat-card .icon {
+                width: 48px;
+                height: 48px;
+                background: rgba(212, 168, 83, 0.15);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-gold);
+            }
+
+            .stat-card .value {
+                font-size: 1.75rem;
+                font-weight: 700;
+            }
+
+            .stat-card .label {
+                font-size: 0.8125rem;
+                color: var(--color-silver);
+            }
+
+        .discount-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .discount-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+            .discount-card:hover {
+                border-color: rgba(212, 168, 83, 0.3);
+                transform: translateY(-2px);
+            }
+
+            .discount-card.expired {
+                opacity: 0.6;
+            }
+
+        .discount-header {
+            padding: 20px;
+            background: var(--color-surface-2);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .discount-header h3 {
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+                .discount-header h3 i {
+                    color: var(--color-gold);
+                }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-active {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--color-success);
+        }
+
+        .badge-scheduled {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--color-warning);
+        }
+
+        .badge-expired {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--color-danger);
+        }
+
+        .discount-body {
+            padding: 20px;
+        }
+
+        .discount-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .discount-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+            .info-row:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+        .info-label {
+            color: var(--color-silver);
+            font-size: 0.875rem;
+        }
+
+        .info-value {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .discount-actions {
+            padding: 16px 20px;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            gap: 12px;
+        }
+
+            .discount-actions .btn {
+                flex: 1;
+                justify-content: center;
+                padding: 10px;
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            grid-column: 1 / -1;
+        }
+
+            .empty-state i {
+                font-size: 3rem;
+                color: var(--color-silver);
+                margin-bottom: 16px;
+                opacity: 0.5;
+            }
+
+            .empty-state h3 {
+                margin-bottom: 8px;
+            }
+
+            .empty-state p {
+                color: var(--color-silver);
+                margin-bottom: 20px;
+            }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+            .modal-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .modal {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+            .modal-header h3 {
+                font-size: 1.125rem;
+                display: flex;
+                align-items: center;
+            }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--color-silver);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--color-silver);
+                margin-bottom: 8px;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--color-surface-2);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-size: 0.875rem;
+            font-family: var(--font-main);
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-danger);
+            }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-silver);
+            grid-column: 1 / -1;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@media (max-width: 1200px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .discount-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
-
     <div class="admin-layout">
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo"><i class="fas fa-compass"></i></div>
                 <div><h1>TRAVIL</h1><span>Admin Panel</span></div>
             </div>
             <nav class="nav-section">
                 <div class="nav-section-title">Main</div>
-                <a href="/admin/dashboard" class="nav-item" onclick="navigateTo('/admin/dashboard', event)"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="/admin/packages" class="nav-item" onclick="navigateTo('/admin/packages', event)"><i class="fas fa-suitcase"></i><span>Packages</span></a>
-                <a href="/admin/bookings" class="nav-item" onclick="navigateTo('/admin/bookings', event)"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
+                <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="/admin/packages" class="nav-item"><i class="fas fa-suitcase"></i><span>Packages</span></a>
+                <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
             </nav>
             <nav class="nav-section">
                 <div class="nav-section-title">Management</div>
-                <a href="/admin/users" class="nav-item" onclick="navigateTo('/admin/users', event)"><i class="fas fa-users"></i><span>Users</span></a>
-                <a href="/admin/reviews" class="nav-item" onclick="navigateTo('/admin/reviews', event)"><i class="fas fa-star"></i><span>Reviews</span></a>
-                <a href="/admin/prices" class="nav-item active" onclick="navigateTo('/admin/prices', event)"><i class="fas fa-tags"></i><span>Discounts</span></a>
+                <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+                <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
+                <a href="/admin/prices" class="nav-item active"><i class="fas fa-tags"></i><span>Discounts</span></a>
             </nav>
             <nav class="nav-section">
                 <div class="nav-section-title">Settings</div>
-                <a href="/admin/profile" class="nav-item" onclick="navigateTo('/admin/profile', event)"><i class="fas fa-user-cog"></i><span>Profile</span></a>
                 <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
                 <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
             </nav>
@@ -143,7 +588,7 @@
         <main class="main-content">
             <div class="header">
                 <div>
-                    <h2><i class="fas fa-tags" style="color: var(--color-gold); margin-right: 12px;"></i>Discounts & Pricing</h2>
+                    <h2><i class="fas fa-tags" style="color: var(--color-gold);"></i>Discounts & Pricing</h2>
                     <p class="subtitle">Manage package discounts and promotional offers</p>
                 </div>
                 <button class="btn btn-primary" onclick="openAddModal()">
@@ -152,19 +597,30 @@
             </div>
 
             <div class="stats-row">
-                <div class="stat-card"><div class="icon"><i class="fas fa-percent"></i></div><div class="value" id="activeDiscounts">--</div><div class="label">Active Discounts</div></div>
-                <div class="stat-card"><div class="icon"><i class="fas fa-calendar-alt"></i></div><div class="value" id="scheduledDiscounts">--</div><div class="label">Scheduled</div></div>
-                <div class="stat-card"><div class="icon"><i class="fas fa-dollar-sign"></i></div><div class="value" id="totalSavings">$--</div><div class="label">Total Savings</div></div>
-                <div class="stat-card"><div class="icon"><i class="fas fa-box"></i></div><div class="value" id="packagesWithDiscount">--</div><div class="label">Packages on Sale</div></div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-percent"></i></div>
+                    <div><div class="value" id="activeDiscounts">0</div><div class="label">Active Discounts</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div><div class="value" id="scheduledDiscounts">0</div><div class="label">Scheduled</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div><div class="value" id="totalSavings">$0</div><div class="label">Total Savings</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-box"></i></div>
+                    <div><div class="value" id="packagesWithDiscount">0</div><div class="label">Packages on Sale</div></div>
+                </div>
             </div>
 
             <div class="discount-grid" id="discountGrid">
-                <!-- Filled dynamically -->
+                <div class="loading"><div class="spinner"></div><p>Loading discounts...</p></div>
             </div>
         </main>
     </div>
 
-    <!-- Add/Edit Discount Modal -->
     <div class="modal-overlay" id="discountModal">
         <div class="modal">
             <div class="modal-header">
@@ -172,37 +628,24 @@
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <form id="discountForm">
-                <input type="hidden" id="discountId" />
+                <input type="hidden" id="discountPackageId" />
                 <div class="form-group">
                     <label for="packageSelect">Package *</label>
                     <select id="packageSelect" class="form-control" required>
                         <option value="">Select a package</option>
-                        <option value="1">Bali Paradise Escape</option>
-                        <option value="2">Paris Romantic Getaway</option>
-                        <option value="3">Kyoto Cultural Journey</option>
-                        <option value="4">Maldives Luxury Resort</option>
-                        <option value="5">Santorini Dream</option>
-                        <option value="6">Swiss Alps Adventure</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="discountName">Discount Name *</label>
-                    <input type="text" id="discountName" class="form-control" placeholder="e.g., New Year Sale" required />
-                </div>
-                <div class="form-grid">
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="discountType">Discount Type *</label>
-                        <select id="discountType" class="form-control" required>
-                            <option value="percentage">Percentage (%)</option>
-                            <option value="fixed">Fixed Amount ($)</option>
-                        </select>
+                        <label for="originalPrice">Original Price ($)</label>
+                        <input type="number" id="originalPrice" class="form-control" readonly />
                     </div>
                     <div class="form-group">
-                        <label for="discountValue">Value *</label>
-                        <input type="number" id="discountValue" class="form-control" min="0" step="0.01" placeholder="e.g., 20" required />
+                        <label for="discountedPrice">Discounted Price ($) *</label>
+                        <input type="number" id="discountedPrice" class="form-control" step="0.01" min="1" required />
                     </div>
                 </div>
-                <div class="form-grid">
+                <div class="form-row">
                     <div class="form-group">
                         <label for="startDate">Start Date *</label>
                         <input type="date" id="startDate" class="form-control" required />
@@ -212,26 +655,26 @@
                         <input type="date" id="endDate" class="form-control" required />
                     </div>
                 </div>
+                <p style="font-size: 0.8125rem; color: var(--color-silver);"><i class="fas fa-info-circle"></i> Discount can be active for max 7 days</p>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Discount</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Apply Discount</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal">
             <div class="modal-header">
-                <h3><i class="fas fa-exclamation-triangle" style="color: #f85149; margin-right: 8px;"></i>Delete Discount</h3>
+                <h3><i class="fas fa-trash" style="color: var(--color-danger); margin-right: 8px;"></i>Remove Discount</h3>
                 <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
             </div>
-            <p style="color: var(--color-silver); margin-bottom: var(--space-5);">Are you sure you want to delete this discount? This action cannot be undone.</p>
-            <input type="hidden" id="deleteDiscountId" />
+            <p style="color: var(--color-silver); margin-bottom: 20px;">Are you sure you want to remove this discount? The package will return to its original price.</p>
+            <input type="hidden" id="deletePackageId" />
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-                <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+                <button class="btn btn-danger" onclick="confirmDelete()"><i class="fas fa-trash"></i> Remove</button>
             </div>
         </div>
     </div>
@@ -239,184 +682,249 @@
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success!</span></div>
 
     <script>
-        let discounts = [
-            { id: 1, packageId: 1, packageName: 'Bali Paradise Escape', name: 'New Year Sale', type: 'percentage', value: 20, originalPrice: 1299, startDate: '2024-12-20', endDate: '2025-01-15' },
-            { id: 2, packageId: 4, packageName: 'Maldives Luxury Resort', name: 'Winter Special', type: 'fixed', value: 500, originalPrice: 6999, startDate: '2024-12-01', endDate: '2025-02-28' },
-            { id: 3, packageId: 2, packageName: 'Paris Romantic Getaway', name: 'Valentine Promo', type: 'percentage', value: 15, originalPrice: 1599, startDate: '2025-02-01', endDate: '2025-02-28' },
-            { id: 4, packageId: 5, packageName: 'Santorini Dream', name: 'Early Bird', type: 'percentage', value: 10, originalPrice: 1999, startDate: '2024-11-01', endDate: '2024-12-15' },
-        ];
+        var allPackages = [];
+        var discountedPackages = [];
 
-        function navigateTo(url, event) { if (event) event.preventDefault(); document.getElementById('pageTransition').classList.add('active'); setTimeout(() => { window.location.href = url; }, 400); }
-        function logout(event) { event.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); navigateTo('/account/login'); }
-        function showToast(message, type = 'success') { const toast = document.getElementById('toast'); document.getElementById('toastMessage').textContent = message; toast.className = `toast ${type}`; toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
+        function logout(e) { e.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = '/account/login'; }
 
-        function getDiscountStatus(discount) {
-            const now = new Date();
-            const start = new Date(discount.startDate);
-            const end = new Date(discount.endDate);
-            if (now < start) return 'scheduled';
-            if (now > end) return 'expired';
-            return 'active';
-        }
-
-        function getDiscountedPrice(discount) {
-            if (discount.type === 'percentage') {
-                return discount.originalPrice * (1 - discount.value / 100);
-            }
-            return discount.originalPrice - discount.value;
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
         function formatDate(dateStr) {
             return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
         }
 
+        function getDiscountStatus(pkg) {
+            if (!pkg.discountedPrice) return 'none';
+            var now = new Date();
+            var start = new Date(pkg.discountStartDate);
+            var end = new Date(pkg.discountEndDate);
+            if (now < start) return 'scheduled';
+            if (now > end) return 'expired';
+            return 'active';
+        }
+
+        async function loadData() {
+            var token = localStorage.getItem('token');
+            try {
+                var response = await fetch('/api/packages/all', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.ok) {
+                    var result = await response.json();
+                    allPackages = result.data || [];
+                    discountedPackages = allPackages.filter(function(p) { return p.discountedPrice && p.discountedPrice > 0; });
+
+                    populatePackageSelect();
+                    updateStats();
+                    renderDiscounts();
+                } else {
+                    showToast('Failed to load packages', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('discountGrid').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error Loading Data</h3><p>Please try again later</p></div>';
+            }
+        }
+
+        function populatePackageSelect() {
+            var select = document.getElementById('packageSelect');
+            select.innerHTML = '<option value="">Select a package</option>';
+
+            allPackages.forEach(function(pkg) {
+                var option = document.createElement('option');
+                option.value = pkg.packageId;
+                option.textContent = pkg.destination + ' - $' + pkg.price;
+                option.dataset.price = pkg.price;
+                select.appendChild(option);
+            });
+        }
+
         function updateStats() {
-            const now = new Date();
-            const activeCount = discounts.filter(d => getDiscountStatus(d) === 'active').length;
-            const scheduledCount = discounts.filter(d => getDiscountStatus(d) === 'scheduled').length;
-            const totalSavings = discounts.filter(d => getDiscountStatus(d) === 'active').reduce((sum, d) => {
-                return sum + (d.originalPrice - getDiscountedPrice(d));
+            var now = new Date();
+            var active = discountedPackages.filter(function(p) {
+                return new Date(p.discountStartDate) <= now && new Date(p.discountEndDate) >= now;
+            }).length;
+
+            var scheduled = discountedPackages.filter(function(p) {
+                return new Date(p.discountStartDate) > now;
+            }).length;
+
+            var totalSavings = discountedPackages.reduce(function(sum, p) {
+                var status = getDiscountStatus(p);
+                if (status === 'active') {
+                    return sum + (p.price - p.discountedPrice);
+                }
+                return sum;
             }, 0);
-            
-            document.getElementById('activeDiscounts').textContent = activeCount;
-            document.getElementById('scheduledDiscounts').textContent = scheduledCount;
-            document.getElementById('totalSavings').textContent = '$' + totalSavings.toLocaleString();
-            document.getElementById('packagesWithDiscount').textContent = new Set(discounts.filter(d => getDiscountStatus(d) !== 'expired').map(d => d.packageId)).size;
+
+            document.getElementById('activeDiscounts').textContent = active;
+            document.getElementById('scheduledDiscounts').textContent = scheduled;
+            document.getElementById('totalSavings').textContent = '$' + Math.round(totalSavings).toLocaleString();
+            document.getElementById('packagesWithDiscount').textContent = discountedPackages.filter(function(p) {
+                var status = getDiscountStatus(p);
+                return status === 'active' || status === 'scheduled';
+            }).length;
         }
 
         function renderDiscounts() {
-            const grid = document.getElementById('discountGrid');
-            
-            if (discounts.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;"><i class="fas fa-tags"></i><h3>No Discounts</h3><p>Create your first discount to get started</p></div>`;
+            var grid = document.getElementById('discountGrid');
+
+            if (discountedPackages.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-tags"></i><h3>No Discounts</h3><p>Create your first discount to get started</p><button class="btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Create Discount</button></div>';
                 return;
             }
 
-            grid.innerHTML = discounts.map(discount => {
-                const status = getDiscountStatus(discount);
-                const discountedPrice = getDiscountedPrice(discount);
-                const savings = discount.originalPrice - discountedPrice;
-                
-                return `
-                    <div class="discount-card ${status === 'expired' ? 'expired' : ''}">
-                        <div class="discount-header">
-                            <h3><i class="fas fa-tag"></i>${discount.name}</h3>
-                            <span class="badge badge-${status}">${status}</span>
-                        </div>
-                        <div class="discount-body">
-                            <div class="discount-amount">
-                                ${discount.type === 'percentage' ? discount.value + '% OFF' : '$' + discount.value + ' OFF'}
-                            </div>
-                            <div class="discount-info">
-                                <div class="info-row">
-                                    <span class="info-label">Package</span>
-                                    <span class="info-value">${discount.packageName}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Original Price</span>
-                                    <span class="info-value">$${discount.originalPrice.toLocaleString()}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Discounted Price</span>
-                                    <span class="info-value" style="color: var(--color-gold);">$${discountedPrice.toLocaleString()}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Customer Saves</span>
-                                    <span class="info-value" style="color: #3fb950;">$${savings.toLocaleString()}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Valid Period</span>
-                                    <span class="info-value">${formatDate(discount.startDate)} - ${formatDate(discount.endDate)}</span>
-                                </div>
-                            </div>
-                            <div class="discount-actions">
-                                <button class="btn btn-secondary" onclick="editDiscount(${discount.id})"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="btn btn-danger" onclick="deleteDiscount(${discount.id})"><i class="fas fa-trash"></i> Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            grid.innerHTML = discountedPackages.map(function(pkg) {
+                var status = getDiscountStatus(pkg);
+                var savings = pkg.price - pkg.discountedPrice;
+                var discountPercent = Math.round((savings / pkg.price) * 100);
+
+                return '<div class="discount-card ' + (status === 'expired' ? 'expired' : '') + '">' +
+                    '<div class="discount-header">' +
+                        '<h3><i class="fas fa-tag"></i>' + pkg.destination + '</h3>' +
+                        '<span class="badge badge-' + status + '">' + status + '</span>' +
+                    '</div>' +
+                    '<div class="discount-body">' +
+                        '<div class="discount-amount">' + discountPercent + '% OFF</div>' +
+                        '<div class="discount-info">' +
+                            '<div class="info-row"><span class="info-label">Original Price</span><span class="info-value">$' + pkg.price.toLocaleString() + '</span></div>' +
+                            '<div class="info-row"><span class="info-label">Discounted Price</span><span class="info-value" style="color: var(--color-gold);">$' + pkg.discountedPrice.toLocaleString() + '</span></div>' +
+                            '<div class="info-row"><span class="info-label">Customer Saves</span><span class="info-value" style="color: var(--color-success);">$' + savings.toLocaleString() + '</span></div>' +
+                            '<div class="info-row"><span class="info-label">Valid Period</span><span class="info-value">' + formatDate(pkg.discountStartDate) + ' - ' + formatDate(pkg.discountEndDate) + '</span></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="discount-actions">' +
+                        '<button class="btn btn-secondary" onclick="editDiscount(' + pkg.packageId + ')"><i class="fas fa-edit"></i> Edit</button>' +
+                        '<button class="btn btn-danger" onclick="deleteDiscount(' + pkg.packageId + ')"><i class="fas fa-trash"></i> Remove</button>' +
+                    '</div>' +
+                '</div>';
             }).join('');
         }
 
         function openAddModal() {
-            document.getElementById('discountId').value = '';
             document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus-circle" style="color: var(--color-gold); margin-right: 8px;"></i>Create Discount';
+            document.getElementById('discountPackageId').value = '';
             document.getElementById('discountForm').reset();
+            document.getElementById('originalPrice').value = '';
+
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = today;
+            document.getElementById('startDate').min = today;
+            document.getElementById('endDate').min = today;
+
             document.getElementById('discountModal').classList.add('active');
         }
 
-        function editDiscount(id) {
-            const discount = discounts.find(d => d.id === id);
-            if (discount) {
-                document.getElementById('discountId').value = discount.id;
-                document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit" style="color: var(--color-gold); margin-right: 8px;"></i>Edit Discount';
-                document.getElementById('packageSelect').value = discount.packageId;
-                document.getElementById('discountName').value = discount.name;
-                document.getElementById('discountType').value = discount.type;
-                document.getElementById('discountValue').value = discount.value;
-                document.getElementById('startDate').value = discount.startDate;
-                document.getElementById('endDate').value = discount.endDate;
-                document.getElementById('discountModal').classList.add('active');
-            }
+        function editDiscount(packageId) {
+            var pkg = allPackages.find(function(p) { return p.packageId === packageId; });
+            if (!pkg) return;
+
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit" style="color: var(--color-gold); margin-right: 8px;"></i>Edit Discount';
+            document.getElementById('discountPackageId').value = packageId;
+            document.getElementById('packageSelect').value = packageId;
+            document.getElementById('originalPrice').value = pkg.price;
+            document.getElementById('discountedPrice').value = pkg.discountedPrice || '';
+            document.getElementById('startDate').value = pkg.discountStartDate ? pkg.discountStartDate.split('T')[0] : '';
+            document.getElementById('endDate').value = pkg.discountEndDate ? pkg.discountEndDate.split('T')[0] : '';
+
+            document.getElementById('discountModal').classList.add('active');
         }
 
         function closeModal() { document.getElementById('discountModal').classList.remove('active'); }
 
-        function deleteDiscount(id) {
-            document.getElementById('deleteDiscountId').value = id;
+        function deleteDiscount(packageId) {
+            document.getElementById('deletePackageId').value = packageId;
             document.getElementById('deleteModal').classList.add('active');
         }
 
         function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('active'); }
 
-        function confirmDelete() {
-            const id = parseInt(document.getElementById('deleteDiscountId').value);
-            discounts = discounts.filter(d => d.id !== id);
-            updateStats();
-            renderDiscounts();
-            showToast('Discount deleted successfully');
+        async function confirmDelete() {
+            var packageId = parseInt(document.getElementById('deletePackageId').value);
+            var token = localStorage.getItem('token');
+
+            try {
+                var response = await fetch('/api/packages/' + packageId + '/discount', {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.ok) {
+                    showToast('Discount removed successfully');
+                    loadData();
+                } else {
+                    var result = await response.json();
+                    showToast(result.message || 'Failed to remove discount', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred', 'error');
+            }
+
             closeDeleteModal();
         }
 
-        document.getElementById('discountForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = document.getElementById('discountId').value;
-            const packageId = parseInt(document.getElementById('packageSelect').value);
-            const packageSelect = document.getElementById('packageSelect');
-            const packageName = packageSelect.options[packageSelect.selectedIndex].text;
-            
-            const discountData = {
-                packageId: packageId,
-                packageName: packageName,
-                name: document.getElementById('discountName').value,
-                type: document.getElementById('discountType').value,
-                value: parseFloat(document.getElementById('discountValue').value),
-                originalPrice: [1299, 1599, 2499, 6999, 1999, 3499][packageId - 1] || 1299,
-                startDate: document.getElementById('startDate').value,
-                endDate: document.getElementById('endDate').value
-            };
+        document.getElementById('packageSelect').addEventListener('change', function() {
+            var selected = this.options[this.selectedIndex];
+            document.getElementById('originalPrice').value = selected.dataset.price || '';
+        });
 
-            if (id) {
-                const index = discounts.findIndex(d => d.id === parseInt(id));
-                if (index !== -1) {
-                    discounts[index] = { ...discounts[index], ...discountData };
+        document.getElementById('discountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            var packageId = document.getElementById('discountPackageId').value || document.getElementById('packageSelect').value;
+            var discountedPrice = parseFloat(document.getElementById('discountedPrice').value);
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var originalPrice = parseFloat(document.getElementById('originalPrice').value);
+
+            if (!packageId) { showToast('Please select a package', 'error'); return; }
+            if (discountedPrice >= originalPrice) { showToast('Discounted price must be less than original price', 'error'); return; }
+
+            var token = localStorage.getItem('token');
+
+            try {
+                var response = await fetch('/api/packages/' + packageId + '/discount', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        discountedPrice: discountedPrice,
+                        startDate: startDate,
+                        endDate: endDate
+                    })
+                });
+
+                var result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast('Discount applied successfully');
+                    closeModal();
+                    loadData();
+                } else {
+                    showToast(result.message || 'Failed to apply discount', 'error');
                 }
-                showToast('Discount updated successfully');
-            } else {
-                discountData.id = Math.max(...discounts.map(d => d.id), 0) + 1;
-                discounts.push(discountData);
-                showToast('Discount created successfully');
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred', 'error');
             }
-            
-            updateStats();
-            renderDiscounts();
-            closeModal();
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            updateStats();
-            renderDiscounts();
+            var token = localStorage.getItem('token');
+            if (!token) { window.location.href = '/account/login'; return; }
+            loadData();
         });
     </script>
 </body>

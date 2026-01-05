@@ -1,40 +1,33 @@
 @{
     ViewData["Title"] = "Package Details";
     Layout = null;
-    var packageId = ViewData["PackageId"];
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Package Details - TRAVIL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-midnight: #0d1117;
-            --color-navy: #161b22;
-            --color-charcoal: #21262d;
-            --color-slate: #30363d;
-            --color-silver: #8b949e;
-            --color-white: #f0f6fc;
+            --color-bg: #0a0a0f;
+            --color-surface: #12121a;
+            --color-surface-2: #1a1a24;
+            --color-border: #2a2a3a;
             --color-gold: #d4a853;
-            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-gold-hover: #e4b863;
+            --color-white: #ffffff;
+            --color-silver: #a0a0b0;
             --color-success: #3fb950;
-            --color-error: #f85149;
-            --font-display: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --space-2: 8px;
-            --space-3: 12px;
-            --space-4: 16px;
-            --space-5: 24px;
-            --space-6: 32px;
-            --space-7: 48px;
+            --color-danger: #f85149;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --radius-md: 10px;
+            --radius-lg: 16px;
         }
 
         * {
@@ -44,69 +37,57 @@
         }
 
         body {
-            font-family: var(--font-body);
-            background: var(--color-midnight);
+            font-family: var(--font-main);
+            background: var(--color-bg);
             color: var(--color-white);
-            line-height: 1.6;
+            min-height: 100vh;
         }
 
-        /* Navbar */
-        .navbar {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .site-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            padding: var(--space-4) var(--space-6);
-            background: rgba(13, 17, 23, 0.95);
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-slate);
+            border-bottom: 1px solid var(--color-border);
         }
 
-            .navbar .container {
-                max-width: 1400px;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-        .nav-brand {
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            text-decoration: none;
+            gap: 8px;
         }
-
-            .nav-brand .logo {
-                width: 42px;
-                height: 42px;
-                background: linear-gradient(135deg, var(--color-gold), #b8934a);
-                border-radius: var(--radius-md);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.25rem;
-                color: var(--color-midnight);
-            }
-
-            .nav-brand span {
-                font-family: var(--font-display);
-                font-size: 1.5rem;
-                font-weight: 600;
-                color: var(--color-gold);
-            }
 
         .nav-links {
             display: flex;
-            gap: var(--space-6);
+            gap: 32px;
         }
 
             .nav-links a {
                 color: var(--color-silver);
                 text-decoration: none;
-                font-size: 0.9375rem;
-                font-weight: 500;
                 transition: color 0.2s;
             }
 
@@ -114,43 +95,43 @@
                     color: var(--color-gold);
                 }
 
-        .nav-auth {
+        .header-actions {
             display: flex;
-            gap: var(--space-3);
+            align-items: center;
+            gap: 16px;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-5);
+            gap: 8px;
+            padding: 12px 24px;
             border-radius: var(--radius-md);
+            font-size: 0.875rem;
             font-weight: 500;
-            text-decoration: none;
             cursor: pointer;
-            border: none;
             transition: all 0.2s;
-            font-size: 0.9375rem;
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--color-white);
+            border: none;
+            text-decoration: none;
         }
 
         .btn-primary {
             background: var(--color-gold);
-            color: var(--color-midnight);
+            color: var(--color-bg);
         }
 
             .btn-primary:hover {
-                background: #e4b863;
-                transform: translateY(-2px);
+                background: var(--color-gold-hover);
+            }
+
+            .btn-primary:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
             }
 
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--color-slate);
+            border: 1px solid var(--color-border);
             color: var(--color-white);
         }
 
@@ -159,16 +140,12 @@
                 color: var(--color-gold);
             }
 
-        .btn-lg {
-            padding: var(--space-4) var(--space-6);
-            font-size: 1rem;
-        }
-
         /* Hero */
         .package-hero {
             position: relative;
-            height: 500px;
-            margin-top: 74px;
+            height: 50vh;
+            min-height: 400px;
+            margin-top: 70px;
             overflow: hidden;
         }
 
@@ -182,110 +159,100 @@
                 content: '';
                 position: absolute;
                 inset: 0;
-                background: linear-gradient(to top, var(--color-midnight), transparent 50%);
+                background: linear-gradient(to top, var(--color-bg) 0%, transparent 50%);
             }
 
-        .package-hero-content {
+        .hero-content {
             position: absolute;
-            bottom: 0;
+            bottom: 40px;
             left: 0;
             right: 0;
-            padding: var(--space-7);
             z-index: 1;
         }
 
-            .package-hero-content .container {
-                max-width: 1400px;
-                margin: 0 auto;
-            }
-
         .package-badge {
             display: inline-block;
-            padding: var(--space-2) var(--space-4);
-            background: var(--color-gold);
-            color: var(--color-midnight);
+            padding: 6px 16px;
+            background: var(--color-success);
+            color: white;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             border-radius: 20px;
-            margin-bottom: var(--space-3);
-            text-transform: uppercase;
+            margin-bottom: 12px;
         }
 
         .package-title {
-            font-family: var(--font-display);
-            font-size: 3rem;
-            font-weight: 500;
-            margin-bottom: var(--space-3);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
         .package-location {
+            color: var(--color-silver);
             display: flex;
             align-items: center;
-            gap: var(--space-2);
-            color: var(--color-gold);
-            font-size: 1.125rem;
+            gap: 8px;
         }
 
-        /* Main Content */
+        /* Content */
         .package-content {
-            padding: var(--space-7) var(--space-6);
+            padding: 40px 0 80px;
         }
 
-            .package-content .container {
-                max-width: 1400px;
-                margin: 0 auto;
-                display: grid;
-                grid-template-columns: 1fr 400px;
-                gap: var(--space-6);
-            }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+        }
 
-        /* Info Sections */
         .info-section {
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
-            padding: var(--space-5);
-            margin-bottom: var(--space-5);
+            padding: 24px;
+            margin-bottom: 24px;
         }
 
             .info-section h2 {
                 font-size: 1.25rem;
-                font-weight: 600;
-                margin-bottom: var(--space-4);
-                padding-bottom: var(--space-3);
-                border-bottom: 1px solid var(--color-slate);
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
+
+                .info-section h2 i {
+                    color: var(--color-gold);
+                }
 
             .info-section p {
                 color: var(--color-silver);
                 line-height: 1.8;
             }
 
-        /* Stats */
-        .package-stats {
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-4);
+            gap: 16px;
         }
 
         .stat-box {
             text-align: center;
-            padding: var(--space-4);
-            background: var(--color-charcoal);
+            padding: 16px;
+            background: var(--color-surface-2);
             border-radius: var(--radius-md);
         }
 
             .stat-box i {
                 font-size: 1.5rem;
                 color: var(--color-gold);
-                margin-bottom: var(--space-2);
+                margin-bottom: 8px;
             }
 
             .stat-box .stat-value {
-                display: block;
                 font-size: 1.125rem;
                 font-weight: 600;
-                margin-bottom: var(--space-2);
+                margin-bottom: 4px;
             }
 
             .stat-box .stat-label {
@@ -293,19 +260,18 @@
                 color: var(--color-silver);
             }
 
-        /* Highlights */
-        .highlights-list {
+        .highlights-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-3);
+            gap: 12px;
         }
 
         .highlight-item {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-3);
-            background: var(--color-charcoal);
+            gap: 12px;
+            padding: 12px;
+            background: var(--color-surface-2);
             border-radius: var(--radius-md);
         }
 
@@ -315,86 +281,39 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: var(--color-gold-muted);
+                background: rgba(212, 168, 83, 0.15);
                 border-radius: 50%;
                 color: var(--color-gold);
                 font-size: 0.875rem;
             }
 
             .highlight-item span {
-                font-size: 0.9375rem;
                 color: var(--color-silver);
-            }
-
-        /* Itinerary */
-        .itinerary-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-4);
-        }
-
-        .itinerary-day {
-            display: flex;
-            gap: var(--space-4);
-        }
-
-        .itinerary-marker {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .itinerary-dot {
-            width: 12px;
-            height: 12px;
-            background: var(--color-gold);
-            border-radius: 50%;
-        }
-
-        .itinerary-line {
-            flex: 1;
-            width: 2px;
-            background: var(--color-slate);
-        }
-
-        .itinerary-content {
-            flex: 1;
-            padding-bottom: var(--space-4);
-        }
-
-            .itinerary-content h4 {
-                font-size: 1rem;
-                margin-bottom: var(--space-2);
-                color: var(--color-gold);
-            }
-
-            .itinerary-content p {
                 font-size: 0.9375rem;
-                color: var(--color-silver);
             }
 
         /* Booking Card */
         .booking-card {
             position: sticky;
-            top: 100px;
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
+            top: 90px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
-            padding: var(--space-5);
+            padding: 24px;
         }
 
         .booking-price {
             text-align: center;
-            padding-bottom: var(--space-4);
-            border-bottom: 1px solid var(--color-slate);
-            margin-bottom: var(--space-4);
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 20px;
         }
 
             .booking-price .old-price {
                 font-size: 1.25rem;
                 color: var(--color-silver);
                 text-decoration: line-through;
-                margin-right: var(--space-2);
+                margin-right: 8px;
             }
 
             .booking-price .current-price {
@@ -408,26 +327,11 @@
                 color: var(--color-silver);
             }
 
-            .booking-price .discount-badge {
-                display: inline-block;
-                padding: var(--space-2) var(--space-3);
-                background: var(--color-success);
-                color: white;
-                font-size: 0.75rem;
-                font-weight: 600;
-                border-radius: 20px;
-                margin-top: var(--space-2);
-            }
-
-        .booking-details {
-            margin-bottom: var(--space-4);
-        }
-
         .booking-detail {
             display: flex;
             justify-content: space-between;
-            padding: var(--space-3) 0;
-            border-bottom: 1px solid var(--color-slate);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-border);
         }
 
             .booking-detail:last-child {
@@ -438,7 +342,7 @@
                 color: var(--color-silver);
                 display: flex;
                 align-items: center;
-                gap: var(--space-2);
+                gap: 8px;
             }
 
                 .booking-detail .label i {
@@ -449,21 +353,16 @@
                 font-weight: 500;
             }
 
-        .booking-actions {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
-        }
-
         .availability-tag {
             text-align: center;
-            padding: var(--space-3);
+            padding: 12px;
             background: rgba(63, 185, 80, 0.15);
             border: 1px solid var(--color-success);
             border-radius: var(--radius-md);
             color: var(--color-success);
             font-size: 0.875rem;
             font-weight: 500;
+            margin: 20px 0;
         }
 
             .availability-tag.limited {
@@ -474,11 +373,220 @@
 
             .availability-tag.sold-out {
                 background: rgba(248, 81, 73, 0.15);
-                border-color: var(--color-error);
-                color: var(--color-error);
+                border-color: var(--color-danger);
+                color: var(--color-danger);
             }
 
-        /* Loading */
+        .book-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 16px;
+            font-size: 1rem;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+            .reviews-header h2 {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 1.25rem;
+            }
+
+                .reviews-header h2 i {
+                    color: var(--color-gold);
+                }
+
+        .reviews-summary {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--color-surface-2);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+        }
+
+        .avg-rating {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-gold);
+        }
+
+        .rating-info .stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+            .rating-info .stars i {
+                color: var(--color-gold);
+            }
+
+                .rating-info .stars i.empty {
+                    color: var(--color-border);
+                }
+
+        .rating-info .count {
+            font-size: 0.875rem;
+            color: var(--color-silver);
+        }
+
+        .review-form {
+            padding: 20px;
+            background: var(--color-surface-2);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+        }
+
+            .review-form h3 {
+                font-size: 1rem;
+                margin-bottom: 16px;
+            }
+
+        .star-rating {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+            .star-rating i {
+                font-size: 1.5rem;
+                color: var(--color-border);
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+                .star-rating i:hover,
+                .star-rating i.active {
+                    color: var(--color-gold);
+                }
+
+        .review-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-family: var(--font-main);
+            font-size: 0.9375rem;
+            min-height: 100px;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+
+            .review-textarea:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
+
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .review-item {
+            padding: 20px;
+            background: var(--color-surface-2);
+            border-radius: var(--radius-md);
+        }
+
+        .review-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), #b8943f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--color-bg);
+        }
+
+        .reviewer-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .review-date {
+            font-size: 0.8125rem;
+            color: var(--color-silver);
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 2px;
+        }
+
+            .review-stars i {
+                color: var(--color-gold);
+                font-size: 0.875rem;
+            }
+
+                .review-stars i.empty {
+                    color: var(--color-border);
+                }
+
+        .review-text {
+            color: var(--color-silver);
+            line-height: 1.6;
+        }
+
+        .no-reviews {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-silver);
+        }
+
+            .no-reviews i {
+                font-size: 2rem;
+                margin-bottom: 12px;
+                opacity: 0.5;
+            }
+
+        .login-prompt {
+            text-align: center;
+            padding: 20px;
+            background: var(--color-surface-2);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+        }
+
+            .login-prompt p {
+                color: var(--color-silver);
+                margin-bottom: 12px;
+            }
+
+        /* Loading & Error */
         .loading {
             display: flex;
             justify-content: center;
@@ -489,62 +597,11 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 3px solid var(--color-slate);
+            border: 3px solid var(--color-border);
             border-top-color: var(--color-gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
-        .error-state {
-            text-align: center;
-            padding: var(--space-7);
-        }
-
-            .error-state i {
-                font-size: 4rem;
-                color: var(--color-error);
-                margin-bottom: var(--space-4);
-            }
-
-            .error-state h2 {
-                margin-bottom: var(--space-3);
-            }
-
-            .error-state p {
-                color: var(--color-silver);
-                margin-bottom: var(--space-5);
-            }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-slate);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4) var(--space-5);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            z-index: 10000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-
-            .toast.show {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            .toast.success {
-                border-color: var(--color-success);
-            }
-
-            .toast.error {
-                border-color: var(--color-error);
-            }
 
         @@keyframes spin {
             to {
@@ -552,171 +609,202 @@
             }
         }
 
+        .error-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+            .error-state i {
+                font-size: 4rem;
+                color: var(--color-danger);
+                margin-bottom: 16px;
+            }
+
+            .error-state h2 {
+                margin-bottom: 12px;
+            }
+
+            .error-state p {
+                color: var(--color-silver);
+                margin-bottom: 24px;
+            }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-danger);
+            }
+
         @@media (max-width: 1024px) {
-            .package-content .container {
+            .content-grid {
                 grid-template-columns: 1fr;
             }
 
             .booking-card {
                 position: static;
             }
-
-            .package-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         @@media (max-width: 768px) {
-            .nav-links, .nav-auth {
+            .nav-links {
                 display: none;
             }
 
             .package-title {
-                font-size: 2rem;
+                font-size: 1.75rem;
             }
 
-            .package-hero {
-                height: 350px;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .highlights-list {
+            .highlights-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="nav-brand">
-                <div class="logo"><i class="fas fa-compass"></i></div>
-                <span>TRAVIL</span>
-            </a>
-            <div class="nav-links">
+    <header class="site-header">
+        <div class="header-content">
+            <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVIL</a>
+            <nav class="nav-links">
                 <a href="/">Home</a>
                 <a href="/packages">Packages</a>
-                <a href="/#destinations">Destinations</a>
                 <a href="/#about">About</a>
-            </div>
-            <div class="nav-auth" id="navAuth">
-                <a href="/account/login" class="btn btn-ghost">Sign In</a>
-                <a href="/account/register" class="btn btn-primary">Get Started</a>
+                <a href="/#contact">Contact</a>
+            </nav>
+            <div class="header-actions" id="headerActions">
+                <a href="/account/login" class="btn btn-outline">Sign In</a>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <div id="mainContent">
-        <div class="loading">
-            <div class="spinner"></div>
-        </div>
-    </div>
+    <main id="mainContent">
+        <div class="loading"><div class="spinner"></div></div>
+    </main>
 
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Message</span>
-    </div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success!</span></div>
 
     <script>
-        var packageId = @(packageId ?? 0);
+        var packageId = null;
+        var packageData = null;
+        var selectedRating = 0;
+        var isLoggedIn = false;
 
         function showToast(message, type) {
             type = type || 'success';
             var toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
-            toast.className = 'toast ' + type + ' show';
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
             setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
-        function updateNav() {
-            var token = localStorage.getItem('token');
-            var user = localStorage.getItem('user');
-            var navAuth = document.getElementById('navAuth');
-
-            if (token && user) {
-                try {
-                    var userData = JSON.parse(user);
-                    var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
-                    navAuth.innerHTML = '<a href="' + (isAdmin ? '/admin/dashboard' : '/account/dashboard') + '" class="btn btn-ghost"><i class="fas fa-user"></i> Dashboard</a>' +
-                        '<a href="#" class="btn btn-outline" onclick="logout(event)">Logout</a>';
-                } catch(e) {}
-            }
-        }
-
-        function logout(event) {
-            if (event) event.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/';
-        }
-
         function formatDate(dateStr) {
-            if (!dateStr) return 'TBD';
-            var date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
         }
 
-        function calculateDuration(startDate, endDate) {
-            if (!startDate || !endDate) return 7;
-            var start = new Date(startDate);
-            var end = new Date(endDate);
-            var days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-            return days > 0 ? days : 1;
+        function renderStars(rating, interactive) {
+            var html = '';
+            for (var i = 1; i <= 5; i++) {
+                if (interactive) {
+                    html += '<i class="fas fa-star ' + (i <= selectedRating ? 'active' : '') + '" data-rating="' + i + '" onclick="setRating(' + i + ')"></i>';
+                } else {
+                    html += '<i class="fas fa-star ' + (i <= rating ? '' : 'empty') + '"></i>';
+                }
+            }
+            return html;
         }
 
-        function getDefaultImage() {
-            return 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1920&q=80';
+        function setRating(rating) {
+            selectedRating = rating;
+            var stars = document.querySelectorAll('.star-rating i');
+            stars.forEach(function(star, idx) {
+                if (idx < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function getPackageIdFromUrl() {
+            var path = window.location.pathname;
+            var match = path.match(/\/packages\/(\d+)/) || path.match(/\/TravelPackage\/Details\/(\d+)/);
+            if (match) return parseInt(match[1]);
+            var params = new URLSearchParams(window.location.search);
+            return parseInt(params.get('id')) || null;
         }
 
         async function loadPackage() {
-            var mainContent = document.getElementById('mainContent');
-
-            if (!packageId || packageId === 0) {
-                showError('Invalid package ID');
+            packageId = getPackageIdFromUrl();
+            if (!packageId) {
+                showError('Package Not Found', 'Invalid package ID');
                 return;
             }
 
             try {
-                var response = await fetch('/api/travelpackage/' + packageId);
+                var response = await fetch('/api/packages/' + packageId);
+                if (!response.ok) throw new Error('Package not found');
 
-                if (response.ok) {
-                    var result = await response.json();
-                    var pkg = result.data || result;
+                var result = await response.json();
+                packageData = result.data || result;
 
-                    console.log('Loaded package:', pkg);
-
-                    if (pkg && pkg.packageId) {
-                        renderPackage(pkg, result.averageRating || 0);
-                    } else {
-                        showError('Package not found');
-                    }
-                } else if (response.status === 404) {
-                    showError('Package not found');
-                } else {
-                    showError('Failed to load package');
-                }
+                renderPackage();
+                loadReviews();
             } catch (error) {
                 console.error('Error:', error);
-                showError('Error loading package');
+                showError('Package Not Found', 'The package you\'re looking for doesn\'t exist.');
             }
         }
 
-        function showError(message) {
-            var mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = '<div class="error-state" style="margin-top: 150px;">' +
-                '<i class="fas fa-exclamation-circle"></i>' +
-                '<h2>' + message + '</h2>' +
-                '<p>The package you are looking for might have been removed or is no longer available.</p>' +
-                '<a href="/packages" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Packages</a>' +
+        function showError(title, message) {
+            document.getElementById('mainContent').innerHTML =
+                '<div class="error-state">' +
+                    '<i class="fas fa-exclamation-triangle"></i>' +
+                    '<h2>' + title + '</h2>' +
+                    '<p>' + message + '</p>' +
+                    '<a href="/packages" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Packages</a>' +
                 '</div>';
         }
 
-        function renderPackage(pkg, avgRating) {
-            var imageUrl = pkg.imageUrl || getDefaultImage();
-            var duration = calculateDuration(pkg.startDate, pkg.endDate);
+        function renderPackage() {
+            var pkg = packageData;
+            var imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200';
             var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
             var displayPrice = hasDiscount ? pkg.discountedPrice : pkg.price;
             var discountPercent = hasDiscount ? Math.round((1 - pkg.discountedPrice / pkg.price) * 100) : 0;
+
+            var startDate = new Date(pkg.startDate);
+            var endDate = new Date(pkg.endDate);
+            var duration = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
 
             var availabilityClass = '';
             var availabilityText = '';
@@ -730,148 +818,220 @@
                 availabilityText = pkg.availableRooms + ' rooms available';
             }
 
+            document.title = pkg.destination + ' - TRAVIL';
+
             var html = '';
 
-            // Hero Section
+            // Hero
             html += '<section class="package-hero">';
-            html += '<img src="' + imageUrl + '" alt="' + (pkg.destination || 'Package') + '" onerror="this.src=\'' + getDefaultImage() + '\'">';
-            html += '<div class="package-hero-content"><div class="container">';
-            if (hasDiscount) {
-                html += '<span class="package-badge">Save ' + discountPercent + '%</span>';
-            }
-            html += '<h1 class="package-title">' + (pkg.destination || 'Travel Package') + '</h1>';
-            html += '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + (pkg.country || 'Unknown Location') + '</div>';
+            html += '<img src="' + imageUrl + '" alt="' + pkg.destination + '" onerror="this.src=\'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200\'">';
+            html += '<div class="hero-content"><div class="container">';
+            if (hasDiscount) html += '<span class="package-badge">Save ' + discountPercent + '%</span>';
+            html += '<h1 class="package-title">' + pkg.destination + '</h1>';
+            html += '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + pkg.country + '</div>';
             html += '</div></div></section>';
 
-            // Content Section
-            html += '<section class="package-content"><div class="container">';
+            // Content
+            html += '<section class="package-content"><div class="container"><div class="content-grid">';
 
             // Left Column
             html += '<div>';
 
             // Overview
             html += '<div class="info-section">';
-            html += '<h2><i class="fas fa-info-circle" style="color: var(--color-gold); margin-right: 8px;"></i>Overview</h2>';
-            html += '<p>' + (pkg.description || 'Experience an unforgettable journey to ' + (pkg.destination || 'your dream destination') + '. This carefully curated package includes accommodation, guided tours, and authentic local experiences.') + '</p>';
+            html += '<h2><i class="fas fa-info-circle"></i> Overview</h2>';
+            html += '<p>' + (pkg.description || 'Experience an unforgettable journey to ' + pkg.destination + '.') + '</p>';
             html += '</div>';
 
             // Stats
             html += '<div class="info-section">';
-            html += '<h2><i class="fas fa-chart-bar" style="color: var(--color-gold); margin-right: 8px;"></i>Trip Details</h2>';
-            html += '<div class="package-stats">';
-            html += '<div class="stat-box"><i class="far fa-clock"></i><span class="stat-value">' + duration + ' Days</span><span class="stat-label">Duration</span></div>';
-            html += '<div class="stat-box"><i class="fas fa-bed"></i><span class="stat-value">' + (pkg.availableRooms || 0) + '</span><span class="stat-label">Rooms Available</span></div>';
-            html += '<div class="stat-box"><i class="fas fa-star"></i><span class="stat-value">' + (avgRating > 0 ? avgRating.toFixed(1) : 'New') + '</span><span class="stat-label">Rating</span></div>';
-            html += '<div class="stat-box"><i class="fas fa-users"></i><span class="stat-value">' + (pkg.maxGuests || 2) + '</span><span class="stat-label">Max Guests</span></div>';
+            html += '<h2><i class="fas fa-chart-bar"></i> Trip Details</h2>';
+            html += '<div class="stats-grid">';
+            html += '<div class="stat-box"><i class="far fa-clock"></i><div class="stat-value">' + duration + ' Days</div><div class="stat-label">Duration</div></div>';
+            html += '<div class="stat-box"><i class="fas fa-bed"></i><div class="stat-value">' + pkg.availableRooms + '</div><div class="stat-label">Rooms</div></div>';
+            html += '<div class="stat-box"><i class="fas fa-star"></i><div class="stat-value" id="avgRatingValue">--</div><div class="stat-label">Rating</div></div>';
+            html += '<div class="stat-box"><i class="fas fa-users"></i><div class="stat-value">2-4</div><div class="stat-label">Guests</div></div>';
             html += '</div></div>';
 
             // Highlights
             html += '<div class="info-section">';
-            html += '<h2><i class="fas fa-star" style="color: var(--color-gold); margin-right: 8px;"></i>Highlights</h2>';
-            html += '<div class="highlights-list">';
+            html += '<h2><i class="fas fa-star"></i> Highlights</h2>';
+            html += '<div class="highlights-grid">';
             html += '<div class="highlight-item"><i class="fas fa-hotel"></i><span>Premium Accommodation</span></div>';
             html += '<div class="highlight-item"><i class="fas fa-utensils"></i><span>Breakfast Included</span></div>';
             html += '<div class="highlight-item"><i class="fas fa-map"></i><span>Guided Tours</span></div>';
             html += '<div class="highlight-item"><i class="fas fa-shuttle-van"></i><span>Airport Transfer</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-camera"></i><span>Photo Opportunities</span></div>';
-            html += '<div class="highlight-item"><i class="fas fa-headset"></i><span>24/7 Support</span></div>';
             html += '</div></div>';
 
-            // Itinerary
-            if (pkg.itinerary) {
-                html += '<div class="info-section">';
-                html += '<h2><i class="fas fa-route" style="color: var(--color-gold); margin-right: 8px;"></i>Itinerary</h2>';
-                html += '<div class="itinerary-list">';
-                var itineraryLines = pkg.itinerary.split('\n');
-                for (var i = 0; i < itineraryLines.length; i++) {
-                    if (itineraryLines[i].trim()) {
-                        html += '<div class="itinerary-day">';
-                        html += '<div class="itinerary-marker"><div class="itinerary-dot"></div><div class="itinerary-line"></div></div>';
-                        html += '<div class="itinerary-content"><h4>Day ' + (i + 1) + '</h4><p>' + itineraryLines[i] + '</p></div>';
-                        html += '</div>';
-                    }
-                }
-                html += '</div></div>';
-            }
+            // Reviews Section
+            html += '<div class="reviews-section" id="reviewsSection">';
+            html += '<div class="reviews-header"><h2><i class="fas fa-comments"></i> Reviews</h2></div>';
+            html += '<div id="reviewsContent"><div class="loading"><div class="spinner"></div></div></div>';
+            html += '</div>';
 
             html += '</div>'; // End left column
 
             // Right Column - Booking Card
             html += '<div>';
             html += '<div class="booking-card">';
-
-            // Price
             html += '<div class="booking-price">';
-            if (hasDiscount) {
-                html += '<span class="old-price">$' + Math.round(pkg.price) + '</span>';
-            }
+            if (hasDiscount) html += '<span class="old-price">$' + Math.round(pkg.price) + '</span>';
             html += '<span class="current-price">$' + Math.round(displayPrice) + '</span>';
             html += '<span class="per-person"> / person</span>';
-            if (hasDiscount) {
-                html += '<div><span class="discount-badge">SAVE ' + discountPercent + '%</span></div>';
-            }
             html += '</div>';
 
-            // Booking Details
-            html += '<div class="booking-details">';
-            html += '<div class="booking-detail"><span class="label"><i class="far fa-calendar"></i> Start Date</span><span class="value">' + formatDate(pkg.startDate) + '</span></div>';
-            html += '<div class="booking-detail"><span class="label"><i class="far fa-calendar-check"></i> End Date</span><span class="value">' + formatDate(pkg.endDate) + '</span></div>';
+            html += '<div class="booking-detail"><span class="label"><i class="far fa-calendar"></i> Start</span><span class="value">' + formatDate(pkg.startDate) + '</span></div>';
+            html += '<div class="booking-detail"><span class="label"><i class="far fa-calendar-check"></i> End</span><span class="value">' + formatDate(pkg.endDate) + '</span></div>';
             html += '<div class="booking-detail"><span class="label"><i class="far fa-clock"></i> Duration</span><span class="value">' + duration + ' Days</span></div>';
-            html += '<div class="booking-detail"><span class="label"><i class="fas fa-bed"></i> Rooms</span><span class="value">' + (pkg.availableRooms || 0) + ' Available</span></div>';
-            html += '</div>';
 
-            // Availability
             html += '<div class="availability-tag ' + availabilityClass + '"><i class="fas fa-' + (availabilityClass === 'sold-out' ? 'times-circle' : 'check-circle') + '"></i> ' + availabilityText + '</div>';
 
-            // Actions
-            html += '<div class="booking-actions" style="margin-top: var(--space-4);">';
             if (pkg.availableRooms > 0) {
-                html += '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;"><i class="fas fa-calendar-check"></i> Book Now</a>';
+                html += '<a href="/booking/create/' + pkg.packageId + '" class="btn btn-primary book-btn"><i class="fas fa-calendar-check"></i> Book Now</a>';
             } else {
-                html += '<button class="btn btn-outline btn-lg" style="width: 100%; justify-content: center;" disabled><i class="fas fa-bell"></i> Notify When Available</button>';
+                html += '<button class="btn btn-primary book-btn" disabled><i class="fas fa-bell"></i> Join Waiting List</button>';
             }
-            html += '<button class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="addToWishlist(' + pkg.packageId + ')"><i class="far fa-heart"></i> Add to Wishlist</button>';
-            html += '</div>';
 
-            html += '</div>'; // End booking card
-            html += '</div>'; // End right column
+            html += '</div></div>'; // End booking card and right column
 
-            html += '</div></section>'; // End content
+            html += '</div></div></section>'; // End content grid and section
 
             document.getElementById('mainContent').innerHTML = html;
         }
 
-        async function addToWishlist(pkgId) {
+        async function loadReviews() {
+            try {
+                var response = await fetch('/api/review/package/' + packageId);
+                var result = await response.json();
+                var reviews = result.data || [];
+                var avgRating = result.averageRating || 0;
+
+                document.getElementById('avgRatingValue').textContent = avgRating > 0 ? avgRating.toFixed(1) : 'New';
+
+                renderReviews(reviews, avgRating);
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                document.getElementById('reviewsContent').innerHTML = '<p class="no-reviews">Unable to load reviews</p>';
+            }
+        }
+
+        function renderReviews(reviews, avgRating) {
+            var html = '';
+
+            // Summary
+            html += '<div class="reviews-summary">';
+            html += '<div class="avg-rating">' + (avgRating > 0 ? avgRating.toFixed(1) : '0') + '</div>';
+            html += '<div class="rating-info">';
+            html += '<div class="stars">' + renderStars(Math.round(avgRating), false) + '</div>';
+            html += '<div class="count">' + reviews.length + ' review' + (reviews.length !== 1 ? 's' : '') + '</div>';
+            html += '</div></div>';
+
+            // Review Form
+            if (isLoggedIn) {
+                html += '<div class="review-form">';
+                html += '<h3>Leave a Review</h3>';
+                html += '<div class="star-rating" id="starRating">' + renderStars(0, true) + '</div>';
+                html += '<textarea class="review-textarea" id="reviewComment" placeholder="Share your experience..."></textarea>';
+                html += '<button class="btn btn-primary" onclick="submitReview()"><i class="fas fa-paper-plane"></i> Submit Review</button>';
+                html += '</div>';
+            } else {
+                html += '<div class="login-prompt">';
+                html += '<p>Sign in to leave a review</p>';
+                html += '<a href="/account/login" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i> Sign In</a>';
+                html += '</div>';
+            }
+
+            // Reviews List
+            if (reviews.length > 0) {
+                html += '<div class="reviews-list">';
+                reviews.forEach(function(r) {
+                    var initials = r.userName ? r.userName.split(' ').map(function(n) { return n[0]; }).join('').substring(0, 2) : 'U';
+                    html += '<div class="review-item">';
+                    html += '<div class="review-item-header">';
+                    html += '<div class="reviewer">';
+                    html += '<div class="reviewer-avatar">' + initials + '</div>';
+                    html += '<div><div class="reviewer-name">' + (r.userName || 'Anonymous') + '</div>';
+                    html += '<div class="review-date">' + formatDate(r.createdAt) + '</div></div>';
+                    html += '</div>';
+                    html += '<div class="review-stars">' + renderStars(r.rating, false) + '</div>';
+                    html += '</div>';
+                    html += '<div class="review-text">' + r.comment + '</div>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            } else {
+                html += '<div class="no-reviews"><i class="fas fa-comment-slash"></i><p>No reviews yet. Be the first to review!</p></div>';
+            }
+
+            document.getElementById('reviewsContent').innerHTML = html;
+        }
+
+        async function submitReview() {
+            if (selectedRating === 0) {
+                showToast('Please select a rating', 'error');
+                return;
+            }
+
+            var comment = document.getElementById('reviewComment').value.trim();
+            if (!comment) {
+                showToast('Please write a comment', 'error');
+                return;
+            }
+
             var token = localStorage.getItem('token');
             if (!token) {
-                showToast('Please login to add to wishlist', 'error');
-                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
+                showToast('Please sign in to leave a review', 'error');
                 return;
             }
 
             try {
-                var response = await fetch('/api/wishlist/' + pkgId, {
+                var response = await fetch('/api/review/package', {
                     method: 'POST',
                     headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        packageId: packageId,
+                        rating: selectedRating,
+                        comment: comment
+                    })
                 });
 
-                if (response.ok) {
-                    showToast('Added to wishlist!', 'success');
+                var result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast('Review submitted! It will appear after approval.');
+                    document.getElementById('reviewComment').value = '';
+                    selectedRating = 0;
+                    var stars = document.querySelectorAll('.star-rating i');
+                    stars.forEach(function(star) { star.classList.remove('active'); });
                 } else {
-                    var error = await response.json();
-                    showToast(error.message || 'Failed to add to wishlist', 'error');
+                    showToast(result.message || 'Failed to submit review', 'error');
                 }
             } catch (error) {
-                showToast('Error adding to wishlist', 'error');
+                console.error('Error:', error);
+                showToast('An error occurred', 'error');
             }
         }
 
-        // Initialize
+        function updateHeader() {
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
+
+            if (token && user) {
+                isLoggedIn = true;
+                try {
+                    var userData = JSON.parse(user);
+                    var firstName = userData.firstName || 'User';
+                    document.getElementById('headerActions').innerHTML =
+                        '<a href="/account/dashboard" class="btn btn-outline"><i class="fas fa-user"></i> ' + firstName + '</a>';
+                } catch (e) {}
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            updateNav();
+            updateHeader();
             loadPackage();
         });
     </script>
