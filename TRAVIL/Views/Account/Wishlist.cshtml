@@ -39,11 +39,7 @@
             --sidebar-width: 260px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-main);
@@ -99,26 +95,26 @@
             align-items: center;
             gap: var(--space-3);
             padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
             color: var(--color-silver);
             text-decoration: none;
-            border-radius: var(--radius-md);
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
-            .nav-item:hover, .nav-item.active {
-                background: var(--color-surface-2);
-                color: var(--color-white);
-            }
+        .nav-item:hover {
+            background: var(--color-surface-2);
+            color: var(--color-white);
+        }
 
-            .nav-item.active {
-                background: linear-gradient(135deg, rgba(212, 168, 83, 0.2), rgba(212, 168, 83, 0.1));
-                color: var(--color-gold);
-            }
+        .nav-item.active {
+            background: rgba(212, 168, 83, 0.15);
+            color: var(--color-gold);
+        }
 
-            .nav-item i {
-                width: 20px;
-                text-align: center;
-            }
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
 
         .sidebar-footer {
             padding: var(--space-4);
@@ -135,16 +131,12 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--color-gold), #b8934a);
+            background: var(--color-gold);
+            color: var(--color-bg);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: var(--color-bg);
-        }
-
-        .user-details {
-            flex: 1;
         }
 
         .user-name {
@@ -153,33 +145,60 @@
         }
 
         .user-email {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--color-silver);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
         }
 
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
-            padding: var(--space-6);
+            min-height: 100vh;
         }
 
         .header {
+            padding: var(--space-5) var(--space-6);
+            border-bottom: 1px solid var(--color-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-6);
             flex-wrap: wrap;
             gap: var(--space-4);
         }
 
-            .header h2 {
-                font-size: 1.75rem;
-                font-weight: 700;
-            }
+        .header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
 
         .subtitle {
             color: var(--color-silver);
+            font-size: 0.9rem;
             margin-top: var(--space-1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.25rem;
+            cursor: pointer;
+            margin-right: var(--space-3);
         }
 
         .btn {
@@ -188,22 +207,22 @@
             gap: var(--space-2);
             padding: var(--space-3) var(--space-4);
             border-radius: var(--radius-md);
+            font-size: 0.875rem;
             font-weight: 500;
-            text-decoration: none;
             cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
             border: none;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--color-gold), #b8934a);
+            background: var(--color-gold);
             color: var(--color-bg);
         }
 
-            .btn-primary:hover {
-                transform: translateY(-2px);
-            }
+        .btn-primary:hover {
+            background: var(--color-gold-hover);
+        }
 
         .btn-outline {
             background: transparent;
@@ -211,26 +230,60 @@
             color: var(--color-white);
         }
 
-            .btn-outline:hover {
-                background: var(--color-surface-2);
-                border-color: var(--color-gold);
-            }
+        .btn-outline:hover {
+            border-color: var(--color-gold);
+            color: var(--color-gold);
+        }
 
         .btn-sm {
             padding: var(--space-2) var(--space-3);
-            font-size: 0.85rem;
+            font-size: 0.8125rem;
         }
 
-        .btn-danger {
-            background: rgba(248, 81, 73, 0.2);
+        #content {
+            padding: var(--space-6);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            padding: var(--space-6);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--space-6);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
             color: var(--color-danger);
-            border: 1px solid var(--color-danger);
+            margin-bottom: var(--space-4);
+            opacity: 0.5;
         }
 
-            .btn-danger:hover {
-                background: var(--color-danger);
-                color: white;
-            }
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-2);
+        }
+
+        .empty-state p {
+            color: var(--color-silver);
+            margin-bottom: var(--space-5);
+        }
 
         .wishlist-grid {
             display: grid;
@@ -246,11 +299,11 @@
             transition: all 0.3s;
         }
 
-            .wishlist-card:hover {
-                border-color: var(--color-gold);
-                transform: translateY(-4px);
-                box-shadow: 0 10px 40px rgba(212, 168, 83, 0.1);
-            }
+        .wishlist-card:hover {
+            border-color: var(--color-gold);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
 
         .wishlist-image-container {
             position: relative;
@@ -273,10 +326,10 @@
             position: absolute;
             top: var(--space-3);
             left: var(--space-3);
-            background: var(--color-gold);
-            color: var(--color-bg);
-            padding: 4px 12px;
-            border-radius: 20px;
+            background: var(--color-danger);
+            color: white;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-sm);
             font-size: 0.75rem;
             font-weight: 600;
         }
@@ -287,10 +340,10 @@
             right: var(--space-3);
             width: 36px;
             height: 36px;
-            background: rgba(0,0,0,0.6);
-            border: none;
             border-radius: 50%;
-            color: var(--color-danger);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -298,39 +351,39 @@
             transition: all 0.2s;
         }
 
-            .wishlist-remove:hover {
-                background: var(--color-danger);
-                color: white;
-            }
+        .wishlist-remove:hover {
+            background: var(--color-danger);
+        }
 
         .wishlist-content {
             padding: var(--space-4);
         }
 
         .wishlist-location {
+            font-size: 0.8125rem;
+            color: var(--color-gold);
+            margin-bottom: var(--space-2);
             display: flex;
             align-items: center;
             gap: var(--space-2);
-            color: var(--color-gold);
-            font-size: 0.85rem;
-            margin-bottom: var(--space-2);
         }
 
         .wishlist-title {
-            font-size: 1.1rem;
+            font-size: 1.125rem;
             font-weight: 600;
             margin-bottom: var(--space-3);
         }
 
         .wishlist-meta {
             display: flex;
-            gap: var(--space-4);
+            flex-wrap: wrap;
+            gap: var(--space-3);
             margin-bottom: var(--space-4);
-            color: var(--color-silver);
-            font-size: 0.85rem;
         }
 
         .wishlist-meta-item {
+            font-size: 0.8125rem;
+            color: var(--color-silver);
             display: flex;
             align-items: center;
             gap: var(--space-1);
@@ -351,124 +404,51 @@
         }
 
         .wishlist-price-old {
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             color: var(--color-silver);
             text-decoration: line-through;
             margin-right: var(--space-2);
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--color-silver);
-        }
-
-            .empty-state i {
-                font-size: 5rem;
-                margin-bottom: var(--space-5);
-                opacity: 0.3;
-                color: var(--color-danger);
-            }
-
-            .empty-state h3 {
-                font-size: 1.5rem;
-                color: var(--color-white);
-                margin-bottom: var(--space-3);
-            }
-
-            .empty-state p {
-                margin-bottom: var(--space-5);
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-        .loading {
-            display: flex;
-            justify-content: center;
-            padding: 80px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--color-border);
-            border-top-color: var(--color-gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @@keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
         .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: var(--space-5);
+            right: var(--space-5);
             background: var(--color-surface-2);
             border: 1px solid var(--color-border);
-            padding: var(--space-4) var(--space-5);
             border-radius: var(--radius-md);
+            padding: var(--space-3) var(--space-4);
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            transform: translateY(100px);
+            gap: var(--space-2);
             opacity: 0;
-            transition: all 0.3s ease;
+            transform: translateY(20px);
+            transition: all 0.3s;
             z-index: 1000;
         }
 
-            .toast.show {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .toast.success {
-                border-color: var(--color-success);
-            }
-
-            .toast.error {
-                border-color: var(--color-danger);
-            }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--color-white);
-            font-size: 1.5rem;
-            cursor: pointer;
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 99;
-        }
+        .toast.success i { color: var(--color-success); }
+        .toast.error i { color: var(--color-danger); }
 
         @@media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
             }
 
-                .sidebar.active {
-                    transform: translateX(0);
-                }
-
-            .sidebar-overlay.active {
-                display: block;
+            .sidebar.active {
+                transform: translateX(0);
             }
 
             .main-content {
                 margin-left: 0;
+            }
+
+            .header {
                 padding: var(--space-4);
             }
 
@@ -478,6 +458,10 @@
 
             .wishlist-grid {
                 grid-template-columns: 1fr;
+            }
+
+            #content {
+                padding: var(--space-4);
             }
         }
     </style>
@@ -576,24 +560,25 @@
             navigateTo('/account/login');
         }
 
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
-            toast.className = `toast ${type} show`;
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
         function formatDate(dateString) {
             if (!dateString) return 'N/A';
-            const date = new Date(dateString);
+            var date = new Date(dateString);
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
         function calculateDuration(start, end) {
             if (!start || !end) return 0;
-            const startDate = new Date(start);
-            const endDate = new Date(end);
-            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            var startDate = new Date(start);
+            var endDate = new Date(end);
+            var days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
             return days > 0 ? days : 1;
         }
 
@@ -609,14 +594,14 @@
         });
 
         async function removeFromWishlist(packageId) {
-            const token = localStorage.getItem('token');
+            var token = localStorage.getItem('token');
             if (!token) {
                 showToast('Please login first', 'error');
                 return;
             }
 
             try {
-                const response = await fetch('/api/wishlist/' + packageId, {
+                var response = await fetch('/api/wishlist/' + packageId, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -628,7 +613,7 @@
                     showToast('Removed from wishlist');
                     loadWishlist();
                 } else {
-                    const error = await response.json();
+                    var error = await response.json();
                     showToast(error.message || 'Failed to remove', 'error');
                 }
             } catch (error) {
@@ -638,10 +623,10 @@
         }
 
         async function loadWishlist() {
-            const token = localStorage.getItem('token');
-            const loader = document.getElementById('loader');
-            const emptyState = document.getElementById('emptyState');
-            const grid = document.getElementById('wishlistGrid');
+            var token = localStorage.getItem('token');
+            var loader = document.getElementById('loader');
+            var emptyState = document.getElementById('emptyState');
+            var grid = document.getElementById('wishlistGrid');
 
             if (!token) {
                 console.log('No token found, redirecting to login');
@@ -649,10 +634,10 @@
                 return;
             }
 
-            console.log('Token found, loading wishlist...');
+            console.log('Loading wishlist...');
 
             try {
-                const response = await fetch('/api/wishlist', {
+                var response = await fetch('/api/wishlist', {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -666,35 +651,38 @@
                 if (response.status === 401) {
                     console.log('Token expired or invalid');
                     showToast('Session expired. Please login again.', 'error');
-                    setTimeout(function() {
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('user');
-                        navigateTo('/account/login');
-                    }, 2000);
+                    setTimeout(function() { navigateTo('/account/login'); }, 1500);
                     return;
                 }
 
                 if (response.ok) {
-                    const result = await response.json();
-                    console.log('Wishlist result:', result);
-                    const wishlist = result.data || [];
+                    var result = await response.json();
+                    console.log('Wishlist data:', result);
 
-                    if (wishlist.length === 0) {
+                    // Check if we have data
+                    if (!result.data || result.data.length === 0) {
+                        console.log('No items in wishlist');
                         emptyState.style.display = 'block';
                         grid.innerHTML = '';
                         return;
                     }
 
-                    emptyState.style.display = 'none';
+                    var html = '';
+                    for (var i = 0; i < result.data.length; i++) {
+                        var item = result.data[i];
 
-                    let html = '';
-                    for (let i = 0; i < wishlist.length; i++) {
-                        const item = wishlist[i];
-                        const pkg = item.package || {};
-                        const imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
-                        const hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
-                        const duration = calculateDuration(pkg.startDate, pkg.endDate);
-                        const price = hasDiscount ? pkg.discountedPrice : pkg.price;
+                        // FIX: Access the nested 'package' object
+                        var pkg = item.package;
+
+                        if (!pkg) {
+                            console.log('No package data for item:', item);
+                            continue;
+                        }
+
+                        var imageUrl = pkg.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
+                        var duration = calculateDuration(pkg.startDate, pkg.endDate);
+                        var hasDiscount = pkg.discountedPrice && pkg.discountedPrice < pkg.price;
+                        var price = hasDiscount ? pkg.discountedPrice : pkg.price;
 
                         html += '<div class="wishlist-card">';
                         html += '<div class="wishlist-image-container">';
@@ -724,7 +712,11 @@
                         html += '</div>';
                     }
 
-                    grid.innerHTML = html;
+                    if (html === '') {
+                        emptyState.style.display = 'block';
+                    } else {
+                        grid.innerHTML = html;
+                    }
                 } else {
                     console.log('Error response');
                     emptyState.style.display = 'block';
@@ -738,27 +730,27 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
 
             console.log('Page loaded, checking auth...');
-            console.log('Token exists:', !!token);
 
             if (!token || !user) {
+                console.log('Not logged in, redirecting...');
                 navigateTo('/account/login');
                 return;
             }
 
             try {
-                const userData = JSON.parse(user);
-                document.getElementById('userName').textContent = ((userData.firstName || '') + ' ' + (userData.lastName || '')).trim() || 'User';
+                var userData = JSON.parse(user);
+                document.getElementById('userName').textContent = (userData.firstName || '') + ' ' + (userData.lastName || '');
                 document.getElementById('userEmail').textContent = userData.email || '';
                 document.getElementById('userAvatar').textContent = (userData.firstName || 'U').charAt(0).toUpperCase();
-
-                loadWishlist();
-            } catch (error) {
-                console.error('Error:', error);
+            } catch (e) {
+                console.error('Error parsing user data:', e);
             }
+
+            loadWishlist();
         });
     </script>
 </body>

@@ -1,4 +1,17 @@
-﻿@page
-@model TRAVEL.Views.Shared._LoginPartialModel
+﻿@* Login Partial View - displays login/logout links *@
 @{
+    var isAuthenticated = false;
 }
+
+<div class="auth-links">
+    @if (isAuthenticated)
+    {
+        <a href="/account/dashboard" class="btn btn-ghost">Dashboard</a>
+        <a href="/account/logout" class="btn btn-outline">Logout</a>
+    }
+    else
+    {
+        <a href="/account/login" class="btn btn-ghost">Login</a>
+        <a href="/account/register" class="btn btn-primary">Sign Up</a>
+    }
+</div>

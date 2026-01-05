@@ -41,7 +41,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         .header {
             background: var(--color-navy);
             border-bottom: 1px solid var(--color-slate);
@@ -83,7 +82,6 @@
             letter-spacing: 0.1em;
         }
 
-        /* Main Content */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -102,14 +100,12 @@
             margin-bottom: 32px;
         }
 
-        /* Grid */
         .booking-grid {
             display: grid;
             grid-template-columns: 1fr 400px;
             gap: 32px;
         }
 
-        /* Cards */
         .card {
             background: var(--color-navy);
             border: 1px solid var(--color-slate);
@@ -142,7 +138,6 @@
             font-weight: 600;
         }
 
-        /* Form */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -181,7 +176,6 @@
             resize: vertical;
         }
 
-        /* Guest Selector */
         .guests-selector {
             display: flex;
             align-items: center;
@@ -218,7 +212,6 @@
             text-align: center;
         }
 
-        /* Booking Summary */
         .summary-card {
             position: sticky;
             top: 24px;
@@ -286,7 +279,6 @@
                     color: var(--color-gold);
                 }
 
-        /* Button */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -328,7 +320,6 @@
             color: var(--color-success);
         }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -359,7 +350,6 @@
                 color: var(--color-error);
             }
 
-        /* Page Transition */
         .page-transition {
             position: fixed;
             inset: 0;
@@ -393,7 +383,6 @@
             }
         }
 
-        /* Responsive */
         @@media (max-width: 900px) {
             .booking-grid {
                 grid-template-columns: 1fr;
@@ -412,11 +401,7 @@
     </style>
 </head>
 <body>
-    <div class="page-transition" id="pageTransition">
-        <div class="loader"></div>
-    </div>
-
-    <!-- Header -->
+    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
     <header class="header">
         <div class="header-content">
             <a href="/" class="logo">
@@ -425,16 +410,11 @@
             </a>
         </div>
     </header>
-
-    <!-- Main Content -->
     <div class="container">
         <h1 class="page-title">Complete Your Booking</h1>
         <p class="page-subtitle">You're just a few steps away from your dream vacation</p>
-
         <form id="bookingForm" class="booking-grid">
-            <!-- Left Column - Forms -->
             <div>
-                <!-- Traveler Details -->
                 <div class="card">
                     <div class="section-header">
                         <div class="section-number">1</div>
@@ -461,8 +441,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Trip Details -->
                 <div class="card">
                     <div class="section-header">
                         <div class="section-number">2</div>
@@ -476,30 +454,21 @@
                         <div class="form-group">
                             <label>Number of Guests</label>
                             <div class="guests-selector">
-                                <button type="button" class="guest-btn" onclick="updateGuests(-1)">
-                                    <i class="fas fa-minus"></i>
-                                </button>
+                                <button type="button" class="guest-btn" onclick="updateGuests(-1)"><i class="fas fa-minus"></i></button>
                                 <span class="guest-count" id="guestCount">2</span>
-                                <button type="button" class="guest-btn" onclick="updateGuests(1)">
-                                    <i class="fas fa-plus"></i>
-                                </button>
+                                <button type="button" class="guest-btn" onclick="updateGuests(1)"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="specialRequests">Special Requests (Optional)</label>
-                        <textarea id="specialRequests" class="form-control" placeholder="Dietary requirements, accessibility needs, celebrations..."></textarea>
+                        <textarea id="specialRequests" class="form-control" placeholder="Dietary requirements, accessibility needs..."></textarea>
                     </div>
                 </div>
             </div>
-
-            <!-- Right Column - Summary -->
             <div>
                 <div class="card summary-card">
-                    <div class="summary-header">
-                        <h3>Booking Summary</h3>
-                    </div>
-
+                    <div class="summary-header"><h3>Booking Summary</h3></div>
                     <div class="package-preview">
                         <img id="packageImage" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80" alt="Package">
                         <div class="package-preview-info">
@@ -507,65 +476,37 @@
                             <p><i class="fas fa-map-marker-alt"></i> <span id="packageLocation">Loading...</span></p>
                         </div>
                     </div>
-
                     <div class="price-row">
                         <span class="label">$<span id="pricePerPerson">0</span> × <span id="guestCountDisplay">2</span> guests</span>
                         <span class="value" id="subtotal">$0</span>
                     </div>
-                    <div class="price-row">
-                        <span class="label">Service fee</span>
-                        <span class="value">$150</span>
-                    </div>
-                    <div class="price-row">
-                        <span class="label">Taxes</span>
-                        <span class="value" id="taxes">$0</span>
-                    </div>
-                    <div class="price-row total">
-                        <span class="label">Total</span>
-                        <span class="value" id="totalPrice">$0</span>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" id="submitBtn">
-                        <i class="fas fa-lock"></i>
-                        Proceed to Payment
-                    </button>
-
-                    <div class="secure-notice">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Secure SSL encrypted payment</span>
-                    </div>
+                    <div class="price-row"><span class="label">Service fee</span><span class="value">$150</span></div>
+                    <div class="price-row"><span class="label">Taxes</span><span class="value" id="taxes">$0</span></div>
+                    <div class="price-row total"><span class="label">Total</span><span class="value" id="totalPrice">$0</span></div>
+                    <button type="submit" class="btn btn-primary" id="submitBtn"><i class="fas fa-lock"></i> Proceed to Payment</button>
+                    <div class="secure-notice"><i class="fas fa-shield-alt"></i><span>Secure SSL encrypted payment</span></div>
                 </div>
             </div>
         </form>
     </div>
-
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Message</span>
-    </div>
-
+    <div id="toast" class="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Message</span></div>
     <script>
         var guests = 2;
         var serviceFee = 150;
-        var packageId = @packageId;
+        var packageId = @(packageId);
         var packageData = null;
 
-        // Load package data from API
         async function loadPackage() {
             try {
                 var response = await fetch('/api/packages/' + packageId);
                 if (response.ok) {
                     var result = await response.json();
                     packageData = result.data || result;
-
                     document.getElementById('packageTitle').textContent = packageData.destination || 'Travel Package';
                     document.getElementById('packageLocation').textContent = (packageData.destination || '') + ', ' + (packageData.country || '');
-
                     var imageUrl = packageData.imageUrl || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80';
                     document.getElementById('packageImage').src = imageUrl;
-
                     document.getElementById('pricePerPerson').textContent = Math.round(packageData.discountedPrice || packageData.price || 0).toLocaleString();
-
                     updatePriceBreakdown();
                 } else {
                     showToast('Failed to load package details', 'error');
@@ -584,12 +525,10 @@
 
         function updatePriceBreakdown() {
             if (!packageData) return;
-
             var price = packageData.discountedPrice || packageData.price || 0;
             var subtotal = price * guests;
             var taxes = Math.round(subtotal * 0.1);
             var total = subtotal + serviceFee + taxes;
-
             document.getElementById('guestCountDisplay').textContent = guests;
             document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString();
             document.getElementById('taxes').textContent = '$' + taxes.toLocaleString();
@@ -611,23 +550,18 @@
             setTimeout(function() { window.location.href = url; }, 400);
         }
 
-        // Form submission - Create booking via API
         document.getElementById('bookingForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             var token = localStorage.getItem('token');
             if (!token) {
                 showToast('Please login to book', 'error');
                 setTimeout(function() { navigateTo('/account/login'); }, 1500);
                 return;
             }
-
             var btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Booking...';
-
             try {
-                // Create booking via API
                 var response = await fetch('/api/booking', {
                     method: 'POST',
                     headers: {
@@ -640,17 +574,11 @@
                         numberOfGuests: guests
                     })
                 });
-
                 var result = await response.json();
-
                 if (response.ok && result.success) {
                     showToast('Booking created! Redirecting to payment...');
-
-                    // Redirect to payment page with the ACTUAL booking ID
                     var bookingId = result.data.bookingId;
-                    setTimeout(function() {
-                        navigateTo('/booking/payment/' + bookingId);
-                    }, 1500);
+                    setTimeout(function() { navigateTo('/booking/payment/' + bookingId); }, 1500);
                 } else {
                     showToast(result.message || 'Failed to create booking', 'error');
                     btn.disabled = false;
@@ -664,36 +592,27 @@
             }
         });
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             var token = localStorage.getItem('token');
             var userStr = localStorage.getItem('user');
-
             if (!token || !userStr) {
                 showToast('Please login to book', 'error');
                 setTimeout(function() { navigateTo('/account/login'); }, 1500);
                 return;
             }
-
-            // Pre-fill user data
             try {
                 var userData = JSON.parse(userStr);
                 document.getElementById('firstName').value = userData.firstName || '';
                 document.getElementById('lastName').value = userData.lastName || '';
                 document.getElementById('email').value = userData.email || '';
-                document.getElementById('phone').value = userData.phone || '';
+                document.getElementById('phone').value = userData.phoneNumber || '';
             } catch (e) {}
-
-            // Set minimum date to tomorrow
             var tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             document.getElementById('travelDate').min = tomorrow.toISOString().split('T')[0];
-
-            // Load package data
             loadPackage();
         });
 
-        // Page transition on load
         window.addEventListener('pageshow', function() {
             document.getElementById('pageTransition').classList.remove('active');
         });
