@@ -9,178 +9,237 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile - TRAVIL Admin</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="/css/admin.css" rel="stylesheet" />
-    
     <style>
-        .page-transition {
+        :root {
+            --color-bg: #0a0a0f;
+            --color-surface: #12121a;
+            --color-surface-2: #1a1a24;
+            --color-border: #2a2a3a;
+            --color-gold: #d4a853;
+            --color-gold-hover: #e4b863;
+            --color-white: #ffffff;
+            --color-silver: #a0a0b0;
+            --color-success: #3fb950;
+            --color-danger: #f85149;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --sidebar-width: 260px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--color-bg);
+            color: var(--color-white);
+            min-height: 100vh;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--color-surface);
+            border-right: 1px solid var(--color-border);
             position: fixed;
-            inset: 0;
-            background: #0d1117;
-            z-index: 10000;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            flex-direction: column;
         }
 
-        .page-transition.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .page-transition .loader {
-            width: 48px;
-            height: 48px;
-            border: 3px solid #21262d;
-            border-top-color: #d4a853;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @@keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 99;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        /* Profile Specific Styles */
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 32px;
-            background: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 16px;
-            margin-bottom: 32px;
-        }
-
-        @@media (max-width: 768px) {
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: 600;
-            color: #0d1117;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .avatar-upload {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 36px;
-            height: 36px;
-            background: #21262d;
-            border: 2px solid #161b22;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #c9d1d9;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .avatar-upload:hover {
-            background: #d4a853;
-            color: #0d1117;
-        }
-
-        .profile-info h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 500;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-
-        .profile-info .role {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            background: rgba(212, 168, 83, 0.15);
-            border-radius: 9999px;
-            color: #d4a853;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .profile-info .email {
-            color: #8b949e;
-            font-size: 0.9375rem;
-        }
-
-        /* Profile Form */
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-        }
-
-        @@media (max-width: 1024px) {
-            .profile-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-section {
-            background: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .form-section-header {
+        .sidebar-header {
             padding: 24px;
-            border-bottom: 1px solid #21262d;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .form-section-header h3 {
-            font-family: 'Cormorant Garamond', serif;
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), #b8943f);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.25rem;
-            font-weight: 500;
-            color: #ffffff;
+            color: var(--color-bg);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-gold);
+        }
+
+        .sidebar-header span {
+            font-size: 0.75rem;
+            color: var(--color-silver);
+        }
+
+        .nav-section {
+            padding: 16px;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-silver);
+            margin-bottom: 12px;
+            padding-left: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--color-silver);
+            text-decoration: none;
+            transition: all 0.2s;
             margin-bottom: 4px;
         }
 
-        .form-section-header p {
-            font-size: 0.875rem;
-            color: #8b949e;
+            .nav-item:hover {
+                background: var(--color-surface-2);
+                color: var(--color-white);
+            }
+
+            .nav-item.active {
+                background: rgba(212, 168, 83, 0.15);
+                color: var(--color-gold);
+            }
+
+            .nav-item i {
+                width: 20px;
+                text-align: center;
+            }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 32px;
         }
 
-        .form-section-body {
+        .header {
+            margin-bottom: 32px;
+        }
+
+            .header h2 {
+                font-size: 1.5rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+        .subtitle {
+            color: var(--color-silver);
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-gold), #b8943f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-bg);
+            flex-shrink: 0;
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .profile-role {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(212, 168, 83, 0.15);
+            color: var(--color-gold);
+            border-radius: 20px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            color: var(--color-silver);
+            font-size: 0.9375rem;
+        }
+
+        /* Profile Grid */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+        }
+
+        .form-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .form-card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+            .form-card-header h3 {
+                font-size: 1rem;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+
+            .form-card-header p {
+                font-size: 0.8125rem;
+                color: var(--color-silver);
+            }
+
+        .form-card-body {
             padding: 24px;
         }
 
@@ -188,127 +247,111 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-        }
-
-        @@media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            margin-bottom: 16px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
+            .form-group:last-child {
+                margin-bottom: 0;
+            }
 
-        .form-group label {
-            display: block;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: #c9d1d9;
-            margin-bottom: 8px;
-        }
+            .form-group label {
+                display: block;
+                font-size: 0.8125rem;
+                font-weight: 500;
+                color: var(--color-silver);
+                margin-bottom: 8px;
+            }
 
         .form-control {
             width: 100%;
             padding: 12px 16px;
-            background: #21262d;
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            font-family: 'Outfit', sans-serif;
+            background: var(--color-surface-2);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
             font-size: 0.9375rem;
-            color: #ffffff;
-            transition: all 0.2s;
+            font-family: var(--font-main);
+            transition: border-color 0.2s;
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: #d4a853;
-            background: #30363d;
-        }
-
-        .form-control::placeholder {
-            color: #484f58;
-        }
+            .form-control:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
 
         .form-actions {
             display: flex;
             justify-content: flex-end;
             gap: 12px;
-            padding-top: 24px;
-            border-top: 1px solid #21262d;
             margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--color-border);
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Outfit', sans-serif;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            border: none;
             text-decoration: none;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
-            color: #0d1117;
+            background: var(--color-gold);
+            color: var(--color-bg);
         }
 
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(212, 168, 83, 0.25);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+            .btn-primary:hover {
+                background: var(--color-gold-hover);
+            }
 
         .btn-secondary {
-            background: #21262d;
-            color: #c9d1d9;
-            border: 1px solid #30363d;
+            background: var(--color-surface-2);
+            color: var(--color-silver);
+            border: 1px solid var(--color-border);
         }
 
-        .btn-secondary:hover {
-            background: #30363d;
-        }
+            .btn-secondary:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
 
         .btn-danger {
             background: rgba(248, 81, 73, 0.15);
-            color: #f85149;
-            border: 1px solid rgba(248, 81, 73, 0.3);
+            color: var(--color-danger);
         }
 
-        .btn-danger:hover {
-            background: rgba(248, 81, 73, 0.25);
-        }
+            .btn-danger:hover {
+                background: rgba(248, 81, 73, 0.25);
+            }
 
-        /* Activity List */
+        /* Activity Card */
         .activity-list {
-            padding: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         .activity-item {
             display: flex;
+            align-items: flex-start;
             gap: 12px;
-            padding: 16px 24px;
-            border-bottom: 1px solid #21262d;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--color-border);
         }
 
-        .activity-item:last-child {
-            border-bottom: none;
-        }
+            .activity-item:last-child {
+                border-bottom: none;
+            }
 
         .activity-icon {
             width: 36px;
@@ -321,95 +364,141 @@
             flex-shrink: 0;
         }
 
-        .activity-icon.login {
-            background: rgba(63, 185, 80, 0.15);
-            color: #3fb950;
-        }
+            .activity-icon.login {
+                background: rgba(63, 185, 80, 0.15);
+                color: var(--color-success);
+            }
 
-        .activity-icon.update {
-            background: rgba(88, 166, 255, 0.15);
-            color: #58a6ff;
-        }
+            .activity-icon.package {
+                background: rgba(212, 168, 83, 0.15);
+                color: var(--color-gold);
+            }
 
-        .activity-icon.package {
-            background: rgba(212, 168, 83, 0.15);
-            color: #d4a853;
-        }
+            .activity-icon.edit {
+                background: rgba(56, 139, 253, 0.15);
+                color: #388bfd;
+            }
 
-        .activity-content {
-            flex: 1;
-        }
+            .activity-icon.booking {
+                background: rgba(163, 113, 247, 0.15);
+                color: #a371f7;
+            }
 
         .activity-content p {
-            font-size: 0.875rem;
-            color: #c9d1d9;
+            font-size: 0.9375rem;
             margin-bottom: 4px;
         }
 
         .activity-content time {
-            font-size: 0.75rem;
-            color: #8b949e;
+            font-size: 0.8125rem;
+            color: var(--color-silver);
         }
 
-        /* Alert */
-        .alert {
-            padding: 16px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.875rem;
-        }
-
-        .alert-success {
-            background: rgba(63, 185, 80, 0.1);
-            border: 1px solid rgba(63, 185, 80, 0.3);
-            color: #3fb950;
-        }
-
-        .alert-danger {
-            background: rgba(248, 81, 73, 0.1);
+        /* Danger Zone */
+        .danger-card {
+            background: var(--color-surface);
             border: 1px solid rgba(248, 81, 73, 0.3);
-            color: #f85149;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-top: 24px;
         }
+
+            .danger-card .form-card-header h3 {
+                color: var(--color-danger);
+            }
 
         /* Toast */
         .toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: #30363d;
-            border: 1px solid #21262d;
-            border-radius: 16px;
-            padding: 16px 24px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
-            color: #ffffff;
-            font-size: 0.9375rem;
-            z-index: 10000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(100px);
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            z-index: 2000;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-danger);
+            }
+
+        /* Responsive */
+        @@media (max-width: 1200px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .toast.success i { color: #3fb950; }
-        .toast.error i { color: #f85149; }
+        @@media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+                .sidebar.open {
+                    transform: translateX(0);
+                }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 16px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
     </style>
 </head>
 <body>
-    <!-- Page Transition -->
-    <div class="page-transition" id="pageTransition">
-        <div class="loader"></div>
-    </div>
-
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -423,50 +512,23 @@
 
             <nav class="nav-section">
                 <div class="nav-section-title">Main</div>
-                <a href="/admin/dashboard" class="nav-item" onclick="navigateTo('/admin/dashboard', event)">
-                    <i class="fas fa-th-large"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="/admin/packages" class="nav-item" onclick="navigateTo('/admin/packages', event)">
-                    <i class="fas fa-suitcase"></i>
-                    <span>Packages</span>
-                </a>
-                <a href="/admin/bookings" class="nav-item" onclick="navigateTo('/admin/bookings', event)">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Bookings</span>
-                </a>
+                <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="/admin/packages" class="nav-item"><i class="fas fa-suitcase"></i><span>Packages</span></a>
+                <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
             </nav>
 
             <nav class="nav-section">
                 <div class="nav-section-title">Management</div>
-                <a href="/admin/users" class="nav-item" onclick="navigateTo('/admin/users', event)">
-                    <i class="fas fa-users"></i>
-                    <span>Users</span>
-                </a>
-                <a href="/admin/reviews" class="nav-item" onclick="navigateTo('/admin/reviews', event)">
-                    <i class="fas fa-star"></i>
-                    <span>Reviews</span>
-                </a>
+                <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+                <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
+                <a href="/admin/prices" class="nav-item"><i class="fas fa-tags"></i><span>Discounts</span></a>
             </nav>
 
             <nav class="nav-section">
                 <div class="nav-section-title">Settings</div>
-                <a href="/admin/profile" class="nav-item active" onclick="navigateTo('/admin/profile', event)">
-                    <i class="fas fa-user-cog"></i>
-                    <span>Profile</span>
-                </a>
-                <a href="/admin/settings" class="nav-item" onclick="navigateTo('/admin/settings', event)">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-                <a href="/" class="nav-item" onclick="navigateTo('/', event)">
-                    <i class="fas fa-globe"></i>
-                    <span>View Site</span>
-                </a>
-                <a href="#" class="nav-item" onclick="logout(event)">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </a>
+                <a href="/admin/profile" class="nav-item active"><i class="fas fa-user-cog"></i><span>Profile</span></a>
+                <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
+                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
             </nav>
         </aside>
 
@@ -476,54 +538,41 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="header">
-                <div>
-                    <button class="mobile-menu-btn" id="mobileMenuBtn">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h2>Profile Settings</h2>
-                    <p class="subtitle">Manage your account information</p>
-                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                <h2><i class="fas fa-user-cog" style="color: var(--color-gold);"></i> Profile Settings</h2>
+                <p class="subtitle">Manage your account information</p>
             </div>
 
             <!-- Profile Header -->
             <div class="profile-header">
-                <div class="profile-avatar" id="profileAvatar">
-                    A
-                    <label class="avatar-upload" for="avatarInput">
-                        <i class="fas fa-camera"></i>
-                    </label>
-                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-                </div>
+                <div class="profile-avatar" id="profileAvatar">A</div>
                 <div class="profile-info">
                     <h1 id="profileName">Admin User</h1>
-                    <div class="role">
-                        <i class="fas fa-shield-alt"></i>
-                        Super Admin
-                    </div>
-                    <p class="email" id="profileEmail">admin@travil.com</p>
+                    <div class="profile-role"><i class="fas fa-shield-alt"></i> Super Admin</div>
+                    <p class="profile-email" id="profileEmail">admin@travil.com</p>
                 </div>
             </div>
 
             <!-- Profile Grid -->
             <div class="profile-grid">
-                <!-- Personal Information -->
+                <!-- Left Column -->
                 <div>
-                    <div class="form-section">
-                        <div class="form-section-header">
+                    <!-- Personal Information -->
+                    <div class="form-card">
+                        <div class="form-card-header">
                             <h3>Personal Information</h3>
                             <p>Update your personal details</p>
                         </div>
-                        <div class="form-section-body">
-                            <div id="personalAlert"></div>
+                        <div class="form-card-body">
                             <form id="personalForm">
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="firstName">First Name</label>
-                                        <input type="text" id="firstName" class="form-control" placeholder="John">
+                                        <input type="text" id="firstName" class="form-control" placeholder="Admin">
                                     </div>
                                     <div class="form-group">
                                         <label for="lastName">Last Name</label>
-                                        <input type="text" id="lastName" class="form-control" placeholder="Doe">
+                                        <input type="text" id="lastName" class="form-control" placeholder="User">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -535,108 +584,64 @@
                                     <input type="tel" id="phone" class="form-control" placeholder="+1 (555) 123-4567">
                                 </div>
                                 <div class="form-actions">
-                                    <button type="button" class="btn btn-secondary" onclick="resetPersonalForm()">Cancel</button>
-                                    <button type="submit" class="btn btn-primary" id="savePersonalBtn">
-                                        <i class="fas fa-save"></i>
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Change Password -->
-                    <div class="form-section" style="margin-top: 24px;">
-                        <div class="form-section-header">
-                            <h3>Change Password</h3>
-                            <p>Update your account password</p>
-                        </div>
-                        <div class="form-section-body">
-                            <div id="passwordAlert"></div>
-                            <form id="passwordForm">
-                                <div class="form-group">
-                                    <label for="currentPassword">Current Password</label>
-                                    <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="newPassword">New Password</label>
-                                        <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="confirmPassword">Confirm Password</label>
-                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
-                                    </div>
-                                </div>
-                                <div class="form-actions">
-                                    <button type="button" class="btn btn-secondary" onclick="resetPasswordForm()">Cancel</button>
-                                    <button type="submit" class="btn btn-primary" id="changePasswordBtn">
-                                        <i class="fas fa-key"></i>
-                                        Change Password
-                                    </button>
+                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sidebar -->
+                <!-- Right Column -->
                 <div>
                     <!-- Recent Activity -->
-                    <div class="form-section">
-                        <div class="form-section-header">
+                    <div class="form-card">
+                        <div class="form-card-header">
                             <h3>Recent Activity</h3>
                         </div>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon login">
-                                    <i class="fas fa-sign-in-alt"></i>
+                        <div class="form-card-body">
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon login"><i class="fas fa-sign-in-alt"></i></div>
+                                    <div class="activity-content">
+                                        <p>Logged in from new device</p>
+                                        <time>Today, 9:45 AM</time>
+                                    </div>
                                 </div>
-                                <div class="activity-content">
-                                    <p>Logged in from new device</p>
-                                    <time>Today, 9:45 AM</time>
+                                <div class="activity-item">
+                                    <div class="activity-icon package"><i class="fas fa-plus"></i></div>
+                                    <div class="activity-content">
+                                        <p>Created new package "Bali Paradise"</p>
+                                        <time>Yesterday, 3:20 PM</time>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon package">
-                                    <i class="fas fa-plus"></i>
+                                <div class="activity-item">
+                                    <div class="activity-icon edit"><i class="fas fa-edit"></i></div>
+                                    <div class="activity-content">
+                                        <p>Updated profile information</p>
+                                        <time>2 days ago</time>
+                                    </div>
                                 </div>
-                                <div class="activity-content">
-                                    <p>Created new package "Bali Paradise"</p>
-                                    <time>Yesterday, 3:20 PM</time>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon update">
-                                    <i class="fas fa-edit"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p>Updated profile information</p>
-                                    <time>2 days ago</time>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon package">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p>Approved booking #TRV-A8K2M9</p>
-                                    <time>3 days ago</time>
+                                <div class="activity-item">
+                                    <div class="activity-icon booking"><i class="fas fa-check"></i></div>
+                                    <div class="activity-content">
+                                        <p>Approved booking #TRV-A8K2M9</p>
+                                        <time>3 days ago</time>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Danger Zone -->
-                    <div class="form-section" style="margin-top: 24px; border-color: rgba(248, 81, 73, 0.3);">
-                        <div class="form-section-header">
-                            <h3 style="color: #f85149;">Danger Zone</h3>
+                    <div class="danger-card">
+                        <div class="form-card-header">
+                            <h3>Danger Zone</h3>
                             <p>Irreversible actions</p>
                         </div>
-                        <div class="form-section-body">
+                        <div class="form-card-body">
                             <button type="button" class="btn btn-danger" style="width: 100%;" onclick="confirmDeleteAccount()">
-                                <i class="fas fa-trash-alt"></i>
-                                Delete Account
+                                <i class="fas fa-trash-alt"></i> Delete Account
                             </button>
                         </div>
                     </div>
@@ -646,145 +651,28 @@
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="toast">
+    <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Message</span>
+        <span id="toastMessage">Success!</span>
     </div>
 
     <script>
-        // Load user data
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
-
-            if (!token || !user) {
-                navigateTo('/account/login');
-                return;
-            }
-
-            try {
-                const userData = JSON.parse(user);
-                
-                // Check admin
-                if (userData.role !== 'Admin' && userData.role !== 0 && userData.role !== 'admin') {
-                    showToast('Access denied', 'error');
-                    setTimeout(() => navigateTo('/'), 2000);
-                    return;
-                }
-
-                // Populate form
-                const firstName = userData.firstName || userData.name?.split(' ')[0] || 'Admin';
-                const lastName = userData.lastName || userData.name?.split(' ').slice(1).join(' ') || 'User';
-                
-                document.getElementById('firstName').value = firstName;
-                document.getElementById('lastName').value = lastName;
-                document.getElementById('email').value = userData.email || 'admin@travil.com';
-                document.getElementById('phone').value = userData.phone || '';
-                
-                document.getElementById('profileName').textContent = `${firstName} ${lastName}`;
-                document.getElementById('profileEmail').textContent = userData.email || 'admin@travil.com';
-                document.getElementById('profileAvatar').textContent = firstName.charAt(0).toUpperCase();
-                
-            } catch (error) {
-                console.error('Error:', error);
-                navigateTo('/account/login');
-            }
-        });
-
-        // Personal form submission
-        document.getElementById('personalForm').addEventListener('submit', async function(e) {
+        function logout(e) {
             e.preventDefault();
-            
-            const btn = document.getElementById('savePersonalBtn');
-            const originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            
-            // Simulate API call
-            setTimeout(() => {
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-                const email = document.getElementById('email').value;
-                const phone = document.getElementById('phone').value;
-                
-                // Update local storage
-                const user = JSON.parse(localStorage.getItem('user') || '{}');
-                user.firstName = firstName;
-                user.lastName = lastName;
-                user.email = email;
-                user.phone = phone;
-                localStorage.setItem('user', JSON.stringify(user));
-                
-                // Update UI
-                document.getElementById('profileName').textContent = `${firstName} ${lastName}`;
-                document.getElementById('profileEmail').textContent = email;
-                document.getElementById('profileAvatar').textContent = firstName.charAt(0).toUpperCase();
-                
-                showToast('Profile updated successfully');
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }, 1000);
-        });
-
-        // Password form submission
-        document.getElementById('passwordForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (!currentPassword || !newPassword || !confirmPassword) {
-                showAlert('passwordAlert', 'All fields are required', 'danger');
-                return;
-            }
-            
-            if (newPassword !== confirmPassword) {
-                showAlert('passwordAlert', 'New passwords do not match', 'danger');
-                return;
-            }
-            
-            if (newPassword.length < 8) {
-                showAlert('passwordAlert', 'Password must be at least 8 characters', 'danger');
-                return;
-            }
-            
-            const btn = document.getElementById('changePasswordBtn');
-            const originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
-            
-            setTimeout(() => {
-                showToast('Password updated successfully');
-                resetPasswordForm();
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }, 1000);
-        });
-
-        function resetPersonalForm() {
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            document.getElementById('firstName').value = user.firstName || '';
-            document.getElementById('lastName').value = user.lastName || '';
-            document.getElementById('email').value = user.email || '';
-            document.getElementById('phone').value = user.phone || '';
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            showToast('Logged out successfully');
+            setTimeout(function() { window.location.href = '/account/login'; }, 1000);
         }
 
-        function resetPasswordForm() {
-            document.getElementById('currentPassword').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-            document.getElementById('passwordAlert').innerHTML = '';
-        }
-
-        function showAlert(containerId, message, type) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = `
-                <div class="alert alert-${type}">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-                    ${message}
-                </div>
-            `;
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
         function confirmDeleteAccount() {
@@ -793,59 +681,79 @@
             }
         }
 
-        // Navigation
-        function navigateTo(url, event) {
-            if (event) event.preventDefault();
-            const transition = document.getElementById('pageTransition');
-            transition.classList.add('active');
-            setTimeout(() => {
-                window.location.href = url;
-            }, 400);
-        }
-
-        function logout(event) {
-            if (event) event.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            showToast('Logged out successfully');
-            setTimeout(() => navigateTo('/account/login'), 1000);
-        }
-
         // Mobile Menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
 
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('open');
-                sidebarOverlay.classList.toggle('active');
-            });
-        }
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+            this.classList.remove('active');
+        });
 
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', function() {
-                sidebar.classList.remove('open');
-                sidebarOverlay.classList.remove('active');
-            });
-        }
+        // Form submission
+        document.getElementById('personalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        // Toast
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = toast.querySelector('i');
-            
-            toastMessage.textContent = message;
-            toast.className = 'toast ' + type;
-            toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+            var email = document.getElementById('email').value;
+            var phone = document.getElementById('phone').value;
 
-        window.addEventListener('pageshow', function() {
-            document.getElementById('pageTransition').classList.remove('active');
+            // Update local storage
+            var user = JSON.parse(localStorage.getItem('user') || '{}');
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.email = email;
+            user.phone = phone;
+            localStorage.setItem('user', JSON.stringify(user));
+
+            // Update UI
+            document.getElementById('profileName').textContent = firstName + ' ' + lastName;
+            document.getElementById('profileEmail').textContent = email;
+            document.getElementById('profileAvatar').textContent = firstName.charAt(0).toUpperCase();
+
+            showToast('Profile updated successfully');
+        });
+
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                window.location.href = '/account/login';
+                return;
+            }
+
+            try {
+                var userData = JSON.parse(user);
+
+                // Check admin
+                if (userData.role !== 'Admin' && userData.role !== 0 && userData.role !== 'admin') {
+                    showToast('Access denied', 'error');
+                    setTimeout(function() { window.location.href = '/'; }, 2000);
+                    return;
+                }
+
+                // Populate form
+                var firstName = userData.firstName || 'Admin';
+                var lastName = userData.lastName || 'User';
+
+                document.getElementById('firstName').value = firstName;
+                document.getElementById('lastName').value = lastName;
+                document.getElementById('email').value = userData.email || 'admin@travil.com';
+                document.getElementById('phone').value = userData.phone || userData.phoneNumber || '';
+
+                document.getElementById('profileName').textContent = firstName + ' ' + lastName;
+                document.getElementById('profileEmail').textContent = userData.email || 'admin@travil.com';
+                document.getElementById('profileAvatar').textContent = firstName.charAt(0).toUpperCase();
+
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = '/account/login';
+            }
         });
     </script>
 </body>
