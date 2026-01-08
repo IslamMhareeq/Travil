@@ -2,33 +2,35 @@
     ViewData["Title"] = "Travel Packages";
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Travel Packages - TRAVIL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-midnight: #0d1117;
-            --color-navy: #161b22;
-            --color-charcoal: #21262d;
-            --color-slate: #30363d;
-            --color-silver: #8b949e;
-            --color-white: #f0f6fc;
+            --color-bg: #0a0a0f;
+            --color-navy: #0d1117;
+            --color-charcoal: #161b22;
+            --color-slate: #21262d;
+            --color-border: #30363d;
             --color-gold: #d4a853;
-            --color-gold-muted: rgba(212, 168, 83, 0.3);
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-white: #ffffff;
+            --color-silver: #8b949e;
             --color-success: #3fb950;
             --color-error: #f85149;
-            --font-display: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-full: 9999px;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
             --space-4: 16px;
@@ -44,57 +46,48 @@
         }
 
         body {
-            font-family: var(--font-body);
-            background: var(--color-midnight);
+            font-family: var(--font-main);
+            background: var(--color-bg);
             color: var(--color-white);
             line-height: 1.6;
         }
 
-        .navbar {
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-5);
+        }
+
+        /* Header */
+        .site-header {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            padding: var(--space-4) var(--space-6);
-            background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-slate);
+            z-index: 100;
         }
 
-            .navbar .container {
-                max-width: 1400px;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) var(--space-5);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
 
-        .nav-brand {
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            text-decoration: none;
+            gap: var(--space-2);
         }
-
-            .nav-brand .logo {
-                width: 42px;
-                height: 42px;
-                background: linear-gradient(135deg, var(--color-gold), #b8934a);
-                border-radius: var(--radius-md);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.25rem;
-                color: var(--color-midnight);
-            }
-
-            .nav-brand span {
-                font-family: var(--font-display);
-                font-size: 1.5rem;
-                font-weight: 600;
-                color: var(--color-gold);
-            }
 
         .nav-links {
             display: flex;
@@ -105,15 +98,16 @@
                 color: var(--color-silver);
                 text-decoration: none;
                 font-size: 0.9375rem;
-                font-weight: 500;
+                transition: color 0.2s;
             }
 
                 .nav-links a:hover, .nav-links a.active {
                     color: var(--color-gold);
                 }
 
-        .nav-auth {
+        .header-actions {
             display: flex;
+            align-items: center;
             gap: var(--space-3);
         }
 
@@ -121,103 +115,122 @@
             display: inline-flex;
             align-items: center;
             gap: var(--space-2);
-            padding: var(--space-3) var(--space-5);
+            padding: var(--space-3) var(--space-4);
             border-radius: var(--radius-md);
+            font-size: 0.875rem;
             font-weight: 500;
-            text-decoration: none;
             cursor: pointer;
-            border: none;
             transition: all 0.2s;
-            font-size: 0.9375rem;
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--color-white);
+            border: none;
+            text-decoration: none;
         }
 
         .btn-primary {
             background: var(--color-gold);
-            color: var(--color-midnight);
+            color: var(--color-bg);
         }
 
             .btn-primary:hover {
                 background: #e4b863;
+                transform: translateY(-1px);
             }
 
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--color-slate);
+            border: 1px solid var(--color-border);
             color: var(--color-white);
         }
 
-        .btn-sm {
-            padding: var(--space-2) var(--space-4);
-            font-size: 0.875rem;
-        }
-
-        .page-header {
-            padding: 140px var(--space-6) var(--space-7);
-            background: var(--color-navy);
-            border-bottom: 1px solid var(--color-slate);
-        }
-
-            .page-header .container {
-                max-width: 1400px;
-                margin: 0 auto;
+            .btn-outline:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
             }
 
+        .btn-success {
+            background: var(--color-success);
+            color: white;
+        }
+
+            .btn-success:hover {
+                background: #4fc760;
+            }
+
+        .btn-sm {
+            padding: var(--space-2) var(--space-3);
+            font-size: 0.8125rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--color-navy), var(--color-charcoal));
+            padding: calc(var(--space-7) + 70px) 0 var(--space-7);
+            text-align: center;
+            border-bottom: 1px solid var(--color-border);
+        }
+
             .page-header h1 {
-                font-family: var(--font-display);
-                font-size: 3rem;
-                font-weight: 500;
+                font-size: 2.5rem;
+                font-weight: 700;
                 margin-bottom: var(--space-3);
             }
 
             .page-header p {
-                font-size: 1.125rem;
                 color: var(--color-silver);
-                max-width: 600px;
+                font-size: 1.125rem;
+                margin-bottom: var(--space-4);
             }
 
-        .filters-section {
-            padding: var(--space-5) var(--space-6);
-            background: var(--color-midnight);
-            border-bottom: 1px solid var(--color-slate);
-            position: sticky;
-            top: 74px;
-            z-index: 100;
+        .package-count {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-gold-muted);
+            border-radius: 20px;
+            color: var(--color-gold);
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
-            .filters-section .container {
-                max-width: 1400px;
-                margin: 0 auto;
-                display: flex;
-                gap: var(--space-4);
-                flex-wrap: wrap;
-            }
+        /* Filters Section */
+        .filters-section {
+            background: var(--color-navy);
+            padding: var(--space-5) 0;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: 1fr repeat(6, auto);
+            gap: var(--space-3);
+            align-items: end;
+        }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: var(--space-2);
+            gap: var(--space-1);
         }
 
             .filter-group label {
                 font-size: 0.75rem;
-                font-weight: 600;
                 color: var(--color-silver);
                 text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
 
         .filter-control {
             padding: var(--space-3) var(--space-4);
             background: var(--color-charcoal);
-            border: 1px solid var(--color-slate);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
-            font-size: 0.875rem;
             color: var(--color-white);
-            min-width: 180px;
+            font-size: 0.875rem;
+            font-family: var(--font-main);
+            min-width: 140px;
         }
 
             .filter-control:focus {
@@ -225,38 +238,105 @@
                 border-color: var(--color-gold);
             }
 
-        .packages-section {
-            padding: var(--space-7) var(--space-6);
+        .search-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-4) var(--space-3) 40px;
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-size: 0.875rem;
         }
 
-            .packages-section .container {
-                max-width: 1400px;
-                margin: 0 auto;
+            .search-input:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+            .search-wrapper i {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--color-silver);
+            }
+
+        .filter-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-silver);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .filter-toggle:hover {
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+            .filter-toggle.active {
+                background: var(--color-gold-muted);
+                border-color: var(--color-gold);
+                color: var(--color-gold);
+            }
+
+        /* Packages Section */
+        .packages-section {
+            padding: var(--space-6) 0 var(--space-7);
+        }
+
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .results-count {
+            color: var(--color-silver);
+            font-size: 0.9375rem;
+        }
+
+            .results-count span {
+                color: var(--color-gold);
+                font-weight: 600;
             }
 
         .packages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: var(--space-5);
         }
 
+        /* Package Card */
         .package-card {
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             overflow: hidden;
             transition: all 0.3s;
         }
 
             .package-card:hover {
-                transform: translateY(-8px);
-                border-color: var(--color-gold-muted);
-                box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+                transform: translateY(-4px);
+                border-color: var(--color-gold);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
             }
 
         .package-image {
             position: relative;
-            height: 220px;
+            height: 200px;
             overflow: hidden;
         }
 
@@ -268,182 +348,185 @@
             }
 
         .package-card:hover .package-image img {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
-        .package-badge {
+        .package-badges {
             position: absolute;
-            top: var(--space-4);
-            left: var(--space-4);
-            padding: var(--space-2) var(--space-4);
-            background: var(--color-gold);
-            color: var(--color-midnight);
-            font-size: 0.75rem;
-            font-weight: 700;
-            border-radius: var(--radius-full);
-        }
-
-        .package-wishlist {
-            position: absolute;
-            top: var(--space-4);
-            right: var(--space-4);
-            width: 40px;
-            height: 40px;
+            top: var(--space-3);
+            left: var(--space-3);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.5);
-            border: none;
-            border-radius: 50%;
-            color: var(--color-white);
-            cursor: pointer;
+            flex-direction: column;
+            gap: var(--space-2);
         }
 
-            .package-wishlist:hover, .package-wishlist.active {
-                background: var(--color-error);
-            }
+        .badge {
+            padding: var(--space-1) var(--space-3);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-sale {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .badge-category {
+            background: var(--color-gold);
+            color: var(--color-bg);
+        }
+
+        .badge-age {
+            background: rgba(0,0,0,0.7);
+            color: white;
+        }
 
         .package-content {
-            padding: var(--space-5);
+            padding: var(--space-4);
         }
 
         .package-location {
             display: flex;
             align-items: center;
             gap: var(--space-2);
-            font-size: 0.8125rem;
             color: var(--color-gold);
+            font-size: 0.8125rem;
             margin-bottom: var(--space-2);
         }
 
         .package-title {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 600;
             margin-bottom: var(--space-3);
+            line-height: 1.3;
         }
-
-            .package-title a {
-                color: inherit;
-                text-decoration: none;
-            }
-
-                .package-title a:hover {
-                    color: var(--color-gold);
-                }
 
         .package-meta {
             display: flex;
-            gap: var(--space-4);
+            flex-wrap: wrap;
+            gap: var(--space-3);
             margin-bottom: var(--space-4);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-border);
         }
 
-        .package-meta-item {
+        .meta-item {
             display: flex;
             align-items: center;
-            gap: var(--space-2);
-            font-size: 0.875rem;
+            gap: var(--space-1);
+            font-size: 0.8125rem;
             color: var(--color-silver);
         }
 
-            .package-meta-item i {
+            .meta-item i {
                 color: var(--color-gold);
+                font-size: 0.75rem;
             }
-
-        .package-description {
-            font-size: 0.9375rem;
-            color: var(--color-silver);
-            margin-bottom: var(--space-4);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
 
         .package-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: var(--space-4);
-            border-top: 1px solid var(--color-slate);
         }
 
-        .package-price-label {
-            font-size: 0.75rem;
-            color: var(--color-silver);
+        .package-price {
         }
 
-        .package-price-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-gold);
-        }
-
-            .package-price-value span {
+            .package-price .old-price {
                 font-size: 0.875rem;
-                font-weight: 400;
                 color: var(--color-silver);
-            }
-
-            .package-price-value .old-price {
                 text-decoration: line-through;
-                color: var(--color-silver);
-                font-size: 1rem;
                 margin-right: var(--space-2);
             }
 
-        .loading {
+            .package-price .current-price {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: var(--color-gold);
+            }
+
+            .package-price .per-person {
+                font-size: 0.75rem;
+                color: var(--color-silver);
+            }
+
+        .package-actions {
             display: flex;
+            gap: var(--space-2);
+        }
+
+        /* Wishlist Button */
+        .wishlist-btn {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            padding: var(--space-7);
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--color-slate);
-            border-top-color: var(--color-gold);
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2;
         }
 
+            .wishlist-btn:hover {
+                background: var(--color-error);
+                transform: scale(1.1);
+            }
+
+            .wishlist-btn.active {
+                background: var(--color-error);
+                color: white;
+            }
+
+                .wishlist-btn.active i {
+                    font-weight: 900;
+                }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: var(--space-7);
-            color: var(--color-silver);
             grid-column: 1 / -1;
         }
 
             .empty-state i {
-                font-size: 4rem;
+                font-size: 3rem;
+                color: var(--color-silver);
                 margin-bottom: var(--space-4);
                 opacity: 0.5;
             }
 
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-slate);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4) var(--space-5);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            z-index: 10000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s;
+            .empty-state h3 {
+                margin-bottom: var(--space-2);
+            }
+
+            .empty-state p {
+                color: var(--color-silver);
+            }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: var(--space-7);
+            grid-column: 1 / -1;
         }
 
-            .toast.show {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            .toast.success {
-                border-color: var(--color-success);
-            }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto var(--space-4);
+        }
 
         @@keyframes spin {
             to {
@@ -451,9 +534,55 @@
             }
         }
 
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-4) var(--space-5);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast.success i {
+                color: var(--color-success);
+            }
+
+            .toast.error i {
+                color: var(--color-error);
+            }
+
+        /* Responsive */
+        @@media (max-width: 1024px) {
+            .filters-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         @@media (max-width: 768px) {
-            .nav-links, .nav-auth {
+            .nav-links {
                 display: none;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
             }
 
             .packages-grid {
@@ -463,47 +592,433 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="nav-brand"><div class="logo"><i class="fas fa-compass"></i></div><span>TRAVIL</span></a>
-            <div class="nav-links"><a href="/">Home</a><a href="/packages" class="active">Packages</a><a href="/#destinations">Destinations</a></div>
-            <div class="nav-auth" id="navAuth"><a href="/account/login" class="btn btn-ghost">Sign In</a><a href="/account/register" class="btn btn-primary">Get Started</a></div>
+    <header class="site-header">
+        <div class="header-content">
+            <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVIL</a>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/packages" class="active">Packages</a>
+                <a href="/#about">About</a>
+                <a href="/#contact">Contact</a>
+            </nav>
+            <div class="header-actions" id="navAuth">
+                <a href="/account/login" class="btn btn-outline">Sign In</a>
+                <a href="/account/register" class="btn btn-primary">Get Started</a>
+            </div>
         </div>
-    </nav>
+    </header>
 
     <section class="page-header">
         <div class="container">
             <h1>Travel Packages</h1>
-            <p>Discover handcrafted journeys to the world's most incredible destinations.</p>
+            <p>Discover handcrafted journeys to the world's most incredible destinations</p>
+            <div class="package-count">
+                <i class="fas fa-suitcase"></i>
+                <span id="totalPackages">0</span> packages available
+            </div>
         </div>
     </section>
 
     <section class="filters-section">
         <div class="container">
-            <div class="filter-group"><label>Search</label><input type="text" class="filter-control" id="searchInput" placeholder="Search..." oninput="filterPackages()"></div>
-            <div class="filter-group"><label>Country</label><select class="filter-control" id="countryFilter" onchange="filterPackages()"><option value="">All</option></select></div>
-            <div class="filter-group"><label>Price</label><select class="filter-control" id="priceFilter" onchange="filterPackages()"><option value="">All</option><option value="0-1000">Under $1,000</option><option value="1000-2000">$1,000-$2,000</option><option value="2000-99999">$2,000+</option></select></div>
-            <div class="filter-group"><label>Sort</label><select class="filter-control" id="sortFilter" onchange="filterPackages()"><option value="default">Default</option><option value="price-low">Price: Low</option><option value="price-high">Price: High</option></select></div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Search</label>
+                    <div class="search-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search destinations..." oninput="filterPackages()">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Country</label>
+                    <select class="filter-control" id="countryFilter" onchange="filterPackages()">
+                        <option value="">All Countries</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select class="filter-control" id="categoryFilter" onchange="filterPackages()">
+                        <option value="">All Categories</option>
+                        <option value="0">Family</option>
+                        <option value="1">Honeymoon</option>
+                        <option value="2">Adventure</option>
+                        <option value="3">Cruise</option>
+                        <option value="4">Luxury</option>
+                        <option value="5">Budget</option>
+                        <option value="6">Cultural</option>
+                        <option value="7">Beach</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Price Range</label>
+                    <select class="filter-control" id="priceFilter" onchange="filterPackages()">
+                        <option value="">All Prices</option>
+                        <option value="0-1000">Under $1,000</option>
+                        <option value="1000-2000">$1,000 - $2,000</option>
+                        <option value="2000-3500">$2,000 - $3,500</option>
+                        <option value="3500-5000">$3,500 - $5,000</option>
+                        <option value="5000-99999">$5,000+</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Travel Date</label>
+                    <input type="month" class="filter-control" id="dateFilter" onchange="filterPackages()">
+                </div>
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select class="filter-control" id="sortFilter" onchange="filterPackages()">
+                        <option value="default">Default</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="date">Travel Date</option>
+                        <option value="category">Category</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="filter-toggle" id="saleToggle" onclick="toggleSaleFilter()">
+                        <i class="fas fa-tag"></i> On Sale
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="packages-section"><div class="container"><div class="packages-grid" id="packagesGrid"><div class="loading"><div class="spinner"></div></div></div></div></section>
-    <div id="toast" class="toast"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
+    <section class="packages-section">
+        <div class="container">
+            <div class="results-info">
+                <div class="results-count">Showing <span id="resultsCount">0</span> packages</div>
+                <button class="btn btn-outline btn-sm" onclick="resetFilters()"><i class="fas fa-redo"></i> Reset Filters</button>
+            </div>
+            <div class="packages-grid" id="packagesGrid">
+                <div class="loading"><div class="spinner"></div><p>Loading packages...</p></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
 
     <script>
-        var allPackages = [], filteredPackages = [];
-        function showToast(m,t){var toast=document.getElementById('toast');document.getElementById('toastMessage').textContent=m;toast.className='toast '+(t||'success')+' show';setTimeout(function(){toast.classList.remove('show');},3000);}
-        function updateNav(){var token=localStorage.getItem('token'),user=localStorage.getItem('user'),nav=document.getElementById('navAuth');if(token&&user){try{var u=JSON.parse(user);var isAdmin=u.role===0||u.role==='0'||u.role==='Admin';nav.innerHTML='<a href="'+(isAdmin?'/admin/dashboard':'/account/dashboard')+'" class="btn btn-ghost"><i class="fas fa-user"></i> Dashboard</a><a href="#" class="btn btn-outline" onclick="logout(event)">Logout</a>';}catch(e){}}}
-        function logout(e){if(e)e.preventDefault();localStorage.removeItem('token');localStorage.removeItem('user');location.href='/';}
-        function calcDuration(s,e){if(!s||!e)return 7;return Math.max(1,Math.ceil((new Date(e)-new Date(s))/(1000*60*60*24)));}
-        function getImg(i){var imgs=['https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80','https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80','https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80','https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80'];return imgs[i%imgs.length];}
-        async function loadPackages(){var grid=document.getElementById('packagesGrid');try{var r=await fetch('/api/travelpackage');if(r.ok){var res=await r.json();allPackages=res.data||res||[];filteredPackages=allPackages.slice();populateCountries();renderPackages();}else{showEmpty();}}catch(e){showEmpty();}}
-        function populateCountries(){var sel=document.getElementById('countryFilter'),countries=[];for(var i=0;i<allPackages.length;i++){var c=allPackages[i].country;if(c&&countries.indexOf(c)<0)countries.push(c);}countries.sort();for(var j=0;j<countries.length;j++){var o=document.createElement('option');o.value=countries[j];o.textContent=countries[j];sel.appendChild(o);}}
-        function filterPackages(){var search=document.getElementById('searchInput').value.toLowerCase(),country=document.getElementById('countryFilter').value,price=document.getElementById('priceFilter').value,sort=document.getElementById('sortFilter').value;filteredPackages=[];for(var i=0;i<allPackages.length;i++){var p=allPackages[i],ms=!search||(p.destination&&p.destination.toLowerCase().indexOf(search)>=0)||(p.country&&p.country.toLowerCase().indexOf(search)>=0),mc=!country||p.country===country,mp=true;if(price){var r=price.split('-'),pr=p.discountedPrice||p.price||0;mp=pr>=parseInt(r[0])&&pr<=parseInt(r[1]);}if(ms&&mc&&mp)filteredPackages.push(p);}if(sort==='price-low')filteredPackages.sort(function(a,b){return(a.discountedPrice||a.price)-(b.discountedPrice||b.price);});else if(sort==='price-high')filteredPackages.sort(function(a,b){return(b.discountedPrice||b.price)-(a.discountedPrice||a.price);});renderPackages();}
-        function renderPackages(){var grid=document.getElementById('packagesGrid');if(filteredPackages.length===0){grid.innerHTML='<div class="empty-state"><i class="fas fa-search"></i><h3>No Packages Found</h3></div>';return;}var html='';for(var i=0;i<filteredPackages.length;i++){var p=filteredPackages[i],img=p.imageUrl||getImg(i),dur=calcDuration(p.startDate,p.endDate),disc=p.discountedPrice&&p.discountedPrice<p.price,price=disc?p.discountedPrice:p.price;html+='<div class="package-card"><div class="package-image"><img src="'+img+'" alt="'+p.destination+'" onerror="this.src=\''+getImg(i)+'\'">';if(disc)html+='<span class="package-badge">Sale</span>';html+='<button class="package-wishlist" onclick="toggleWish(event,'+p.packageId+')"><i class="far fa-heart"></i></button></div><div class="package-content"><div class="package-location"><i class="fas fa-map-marker-alt"></i> '+(p.country||'')+'</div><h3 class="package-title"><a href="/packages/'+p.packageId+'">'+(p.destination||'Package')+'</a></h3><div class="package-meta"><div class="package-meta-item"><i class="far fa-clock"></i> '+dur+' Days</div><div class="package-meta-item"><i class="fas fa-bed"></i> '+(p.availableRooms||0)+' Rooms</div></div><div class="package-footer"><div><span class="package-price-label">From</span><div class="package-price-value">';if(disc)html+='<span class="old-price">$'+Math.round(p.price)+'</span>';html+='$'+Math.round(price)+' <span>/person</span></div></div><a href="/packages/'+p.packageId+'" class="btn btn-primary btn-sm">View</a></div></div></div>';}grid.innerHTML=html;}
-        function showEmpty(){document.getElementById('packagesGrid').innerHTML='<div class="empty-state"><i class="fas fa-suitcase"></i><h3>No Packages</h3></div>';}
-        async function toggleWish(e,id){e.preventDefault();e.stopPropagation();var t=localStorage.getItem('token');if(!t){showToast('Please login','error');return;}try{var r=await fetch('/api/wishlist/'+id,{method:'POST',headers:{'Authorization':'Bearer '+t}});if(r.ok){e.currentTarget.classList.add('active');showToast('Added to wishlist!');}else{showToast('Already in wishlist','error');}}catch(err){showToast('Error','error');}}
-        document.addEventListener('DOMContentLoaded',function(){updateNav();loadPackages();});
+        var allPackages = [];
+        var filteredPackages = [];
+        var saleOnly = false;
+        var categoryNames = ['Family', 'Honeymoon', 'Adventure', 'Cruise', 'Luxury', 'Budget', 'Cultural', 'Beach'];
+
+        function showToast(message, type) {
+            type = type || 'success';
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
+        }
+
+        function updateNav() {
+            var token = localStorage.getItem('token');
+            var user = localStorage.getItem('user');
+            var nav = document.getElementById('navAuth');
+
+            if (token && user) {
+                try {
+                    var userData = JSON.parse(user);
+                    var isAdmin = userData.role === 0 || userData.role === '0' || userData.role === 'Admin';
+                    var dashUrl = isAdmin ? '/admin/dashboard' : '/account/dashboard';
+                    var name = userData.firstName || 'Account';
+                    nav.innerHTML = '<a href="/cart" class="btn btn-outline"><i class="fas fa-shopping-cart"></i></a>' +
+                                   '<a href="' + dashUrl + '" class="btn btn-primary"><i class="fas fa-user"></i> ' + name + '</a>';
+                } catch (e) { }
+            }
+        }
+
+        function getDefaultImage(index) {
+            var images = [
+                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+                'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800',
+                'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
+                'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800'
+            ];
+            return images[index % images.length];
+        }
+
+        function calcDuration(start, end) {
+            if (!start || !end) return 7;
+            var s = new Date(start);
+            var e = new Date(end);
+            return Math.ceil((e - s) / (1000 * 60 * 60 * 24)) || 7;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        async function loadPackages() {
+            try {
+                var response = await fetch('/api/packages');
+                if (!response.ok) throw new Error('Failed to load');
+
+                var result = await response.json();
+                allPackages = result.data || result || [];
+
+                // Update total count
+                document.getElementById('totalPackages').textContent = allPackages.length;
+
+                // Populate country filter
+                var countries = {};
+                allPackages.forEach(function(p) {
+                    if (p.country && !countries[p.country]) {
+                        countries[p.country] = true;
+                    }
+                });
+
+                var countrySelect = document.getElementById('countryFilter');
+                Object.keys(countries).sort().forEach(function(country) {
+                    var option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    countrySelect.appendChild(option);
+                });
+
+                filterPackages();
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('packagesGrid').innerHTML =
+                    '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error Loading Packages</h3><p>Please try again later</p></div>';
+            }
+        }
+
+        function toggleSaleFilter() {
+            saleOnly = !saleOnly;
+            var btn = document.getElementById('saleToggle');
+            if (saleOnly) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+            filterPackages();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('countryFilter').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('priceFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('sortFilter').value = 'default';
+            saleOnly = false;
+            document.getElementById('saleToggle').classList.remove('active');
+            filterPackages();
+        }
+
+        function filterPackages() {
+            var search = document.getElementById('searchInput').value.toLowerCase();
+            var country = document.getElementById('countryFilter').value;
+            var category = document.getElementById('categoryFilter').value;
+            var price = document.getElementById('priceFilter').value;
+            var dateFilter = document.getElementById('dateFilter').value;
+            var sort = document.getElementById('sortFilter').value;
+
+            filteredPackages = allPackages.filter(function(p) {
+                // Search
+                var matchesSearch = !search ||
+                    (p.destination && p.destination.toLowerCase().indexOf(search) >= 0) ||
+                    (p.country && p.country.toLowerCase().indexOf(search) >= 0) ||
+                    (p.description && p.description.toLowerCase().indexOf(search) >= 0);
+
+                // Country
+                var matchesCountry = !country || p.country === country;
+
+                // Category
+                var matchesCategory = !category || p.packageType === parseInt(category);
+
+                // Price
+                var matchesPrice = true;
+                if (price) {
+                    var range = price.split('-');
+                    var pkgPrice = p.discountedPrice || p.price || 0;
+                    matchesPrice = pkgPrice >= parseInt(range[0]) && pkgPrice <= parseInt(range[1]);
+                }
+
+                // Date
+                var matchesDate = true;
+                if (dateFilter && p.startDate) {
+                    var startMonth = p.startDate.substring(0, 7);
+                    matchesDate = startMonth === dateFilter;
+                }
+
+                // On Sale
+                var matchesSale = !saleOnly || (p.discountedPrice && p.discountedPrice < p.price);
+
+                return matchesSearch && matchesCountry && matchesCategory && matchesPrice && matchesDate && matchesSale;
+            });
+
+            // Sort
+            if (sort === 'price-low') {
+                filteredPackages.sort(function(a, b) {
+                    return (a.discountedPrice || a.price) - (b.discountedPrice || b.price);
+                });
+            } else if (sort === 'price-high') {
+                filteredPackages.sort(function(a, b) {
+                    return (b.discountedPrice || b.price) - (a.discountedPrice || a.price);
+                });
+            } else if (sort === 'popular') {
+                filteredPackages.sort(function(a, b) {
+                    var aBookings = (a.bookings ? a.bookings.length : 0) + (a.reviews ? a.reviews.length : 0);
+                    var bBookings = (b.bookings ? b.bookings.length : 0) + (b.reviews ? b.reviews.length : 0);
+                    return bBookings - aBookings;
+                });
+            } else if (sort === 'date') {
+                filteredPackages.sort(function(a, b) {
+                    return new Date(a.startDate) - new Date(b.startDate);
+                });
+            } else if (sort === 'category') {
+                filteredPackages.sort(function(a, b) {
+                    return (a.packageType || 0) - (b.packageType || 0);
+                });
+            }
+
+            renderPackages();
+        }
+
+        function renderPackages() {
+            var grid = document.getElementById('packagesGrid');
+            document.getElementById('resultsCount').textContent = filteredPackages.length;
+
+            if (filteredPackages.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h3>No Packages Found</h3><p>Try adjusting your filters</p></div>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < filteredPackages.length; i++) {
+                var p = filteredPackages[i];
+                var img = p.imageUrl || getDefaultImage(i);
+                var duration = calcDuration(p.startDate, p.endDate);
+                var hasDiscount = p.discountedPrice && p.discountedPrice < p.price;
+                var displayPrice = hasDiscount ? p.discountedPrice : p.price;
+                var categoryName = categoryNames[p.packageType] || 'Travel';
+                var ageText = '';
+                if (p.minimumAge || p.maximumAge) {
+                    if (p.minimumAge && p.maximumAge) {
+                        ageText = p.minimumAge + '-' + p.maximumAge + ' yrs';
+                    } else if (p.minimumAge) {
+                        ageText = p.minimumAge + '+ yrs';
+                    } else {
+                        ageText = 'Up to ' + p.maximumAge + ' yrs';
+                    }
+                }
+
+                html += '<div class="package-card">';
+                html += '<div class="package-image">';
+                html += '<img src="' + img + '" alt="' + (p.destination || 'Package') + '" onerror="this.src=\'' + getDefaultImage(i) + '\'">';
+                html += '<button class="wishlist-btn" onclick="toggleWishlist(event, ' + p.packageId + ')" title="Add to Wishlist"><i class="far fa-heart"></i></button>';
+                html += '<div class="package-badges">';
+                if (hasDiscount) {
+                    var discount = Math.round((1 - p.discountedPrice / p.price) * 100);
+                    html += '<span class="badge badge-sale">' + discount + '% OFF</span>';
+                }
+                html += '<span class="badge badge-category">' + categoryName + '</span>';
+                if (ageText) {
+                    html += '<span class="badge badge-age"><i class="fas fa-user"></i> ' + ageText + '</span>';
+                }
+                html += '</div></div>';
+
+                html += '<div class="package-content">';
+                html += '<div class="package-location"><i class="fas fa-map-marker-alt"></i> ' + (p.country || 'Unknown') + '</div>';
+                html += '<h3 class="package-title"><a href="/packages/' + p.packageId + '" style="color: inherit; text-decoration: none;">' + (p.destination || 'Travel Package') + '</a></h3>';
+
+                html += '<div class="package-meta">';
+                html += '<span class="meta-item"><i class="far fa-clock"></i> ' + duration + ' Days</span>';
+                html += '<span class="meta-item"><i class="fas fa-bed"></i> ' + (p.availableRooms || 0) + ' Rooms</span>';
+                html += '<span class="meta-item"><i class="far fa-calendar"></i> ' + formatDate(p.startDate) + '</span>';
+                html += '</div>';
+
+                html += '<div class="package-footer">';
+                html += '<div class="package-price">';
+                if (hasDiscount) {
+                    html += '<span class="old-price">$' + Math.round(p.price) + '</span>';
+                }
+                html += '<span class="current-price">$' + Math.round(displayPrice) + '</span>';
+                html += '<span class="per-person"> /person</span>';
+                html += '</div>';
+
+                html += '<div class="package-actions">';
+                html += '<a href="/packages/' + p.packageId + '" class="btn btn-outline btn-sm" title="View Details"><i class="fas fa-eye"></i></a>';
+                if (p.availableRooms > 0) {
+                    html += '<a href="/booking/create/' + p.packageId + '" class="btn btn-primary btn-sm" title="Book"><i class="fas fa-calendar-check"></i></a>';
+                    html += '<a href="/booking/buynow/' + p.packageId + '" class="btn btn-success btn-sm" title="Buy Now"><i class="fas fa-bolt"></i></a>';
+                } else {
+                    html += '<span class="btn btn-outline btn-sm" style="opacity: 0.5;">Sold Out</span>';
+                }
+                html += '</div>';
+                html += '</div></div></div>';
+            }
+
+            grid.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNav();
+            loadPackages();
+        });
+
+        // Wishlist functionality
+        async function toggleWishlist(event, packageId) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login to add to wishlist', 'error');
+                setTimeout(function() { window.location.href = '/account/login'; }, 1500);
+                return;
+            }
+
+            var btn = event.currentTarget;
+            var icon = btn.querySelector('i');
+
+            try {
+                var response = await fetch('/api/wishlist/' + packageId, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    btn.classList.add('active');
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    showToast('Added to wishlist!', 'success');
+                } else {
+                    var error = await response.json();
+                    if (error.message && error.message.indexOf('already') >= 0) {
+                        // Already in wishlist, try to remove
+                        var removeResponse = await fetch('/api/wishlist/' + packageId, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': 'Bearer ' + token
+                            }
+                        });
+                        if (removeResponse.ok) {
+                            btn.classList.remove('active');
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                            showToast('Removed from wishlist', 'success');
+                        }
+                    } else {
+                        showToast(error.message || 'Failed to update wishlist', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Wishlist error:', error);
+                showToast('Error updating wishlist', 'error');
+            }
+        }
     </script>
 </body>
 </html>

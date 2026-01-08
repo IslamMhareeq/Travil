@@ -60,7 +60,7 @@ namespace TRAVEL.Data
         /// <summary>
         /// Shopping carts table
         /// </summary>
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartModels> Carts { get; set; }
 
         /// <summary>
         /// Cart items table
@@ -269,53 +269,79 @@ namespace TRAVEL.Data
                 entity.ToTable("WaitingListEntries");
             });
 
-            // ===== CART CONFIGURATION =====
+            /* // ===== CART CONFIGURATION =====
+             modelBuilder.Entity<CartModels>(entity =>
+             {
+                 entity.HasKey(e => e.CartId);
+
+                 entity.HasOne(e => e.User)
+                     .WithMany()
+                     .HasForeignKey(e => e.UserId)
+                     .OnDelete(DeleteBehavior.Cascade);
+
+                 entity.Property(e => e.CreatedAt)
+                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                 entity.Property(e => e.UpdatedAt)
+                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                 entity.HasIndex(e => new { e.UserId, e.IsActive });
+
+                 entity.ToTable("Carts");
+             });
+
+             // ===== CART ITEM CONFIGURATION =====
+             modelBuilder.Entity<CartItem>(entity =>
+             {
+                 entity.HasKey(e => e.CartItemId);
+
+                 entity.HasOne(e => e.Cart)
+                     .WithMany(c => c.Items)
+                     .HasForeignKey(e => e.CartId)
+                     .OnDelete(DeleteBehavior.Cascade);
+
+                 entity.HasOne(e => e.TravelPackage)
+                     .WithMany()
+                     .HasForeignKey(e => e.PackageId)
+                     .OnDelete(DeleteBehavior.Cascade);
+
+                 entity.Property(e => e.UnitPrice)
+                     .HasPrecision(10, 2);
+
+                 entity.Property(e => e.DateAdded)
+                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                 entity.HasIndex(e => new { e.CartId, e.PackageId }).IsUnique();
+
+                 entity.ToTable("CartItems");
+             });*/
+
+            // Cart Configuration
             modelBuilder.Entity<Cart>(entity =>
             {
                 entity.HasKey(e => e.CartId);
-
                 entity.HasOne(e => e.User)
                     .WithMany()
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.Property(e => e.CreatedAt)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                entity.Property(e => e.UpdatedAt)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                entity.HasIndex(e => new { e.UserId, e.IsActive });
-
                 entity.ToTable("Carts");
             });
 
-            // ===== CART ITEM CONFIGURATION =====
+            // CartItem Configuration
             modelBuilder.Entity<CartItem>(entity =>
             {
                 entity.HasKey(e => e.CartItemId);
-
                 entity.HasOne(e => e.Cart)
                     .WithMany(c => c.Items)
                     .HasForeignKey(e => e.CartId)
                     .OnDelete(DeleteBehavior.Cascade);
-
                 entity.HasOne(e => e.TravelPackage)
                     .WithMany()
                     .HasForeignKey(e => e.PackageId)
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.Property(e => e.UnitPrice)
-                    .HasPrecision(10, 2);
-
-                entity.Property(e => e.DateAdded)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                entity.HasIndex(e => new { e.CartId, e.PackageId }).IsUnique();
-
+                entity.Property(e => e.UnitPrice).HasPrecision(10, 2);
                 entity.ToTable("CartItems");
             });
-
             // ===== INDEXES =====
 
             // User indexes

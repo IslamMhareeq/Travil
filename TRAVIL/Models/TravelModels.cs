@@ -133,6 +133,7 @@ namespace TRAVEL.Models
         public virtual TravelPackage TravelPackage { get; set; } = null!;
     }
 
+
     [Table("PackageImages")]
     public class PackageImage
     {
@@ -272,6 +273,9 @@ namespace TRAVEL.Models
         public virtual TravelPackage? TravelPackage { get; set; }
     }
 
+    // Add this to TravelModels.cs (after WishlistItem class)
+
+   
     // ===== WAITING LIST =====
 
     [Table("WaitingListEntries")]
