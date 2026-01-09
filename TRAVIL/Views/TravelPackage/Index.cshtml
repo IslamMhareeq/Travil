@@ -566,11 +566,21 @@
             return Math.ceil(Math.abs(new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
         }
 
-        function getPackageImage(pkg, index) {
+                function getPackageImage(pkg, index) {
+            // Check for images array with objects
             if (pkg.images && pkg.images.length > 0) {
                 var img = pkg.images[0];
-                return img.startsWith('http') ? img : '/images/travel-packages/' + img;
+                // Handle both object format and string format
+                var imageUrl = typeof img === 'object' ? (img.imageUrl || img.ImageUrl) : img;
+                if (imageUrl && imageUrl.startsWith('http')) return imageUrl;
+                if (imageUrl) return '/images/travel-packages/' + imageUrl;
             }
+            // Check for single imageUrl property
+            if (pkg.imageUrl) {
+                if (pkg.imageUrl.startsWith('http')) return pkg.imageUrl;
+                return '/images/travel-packages/' + pkg.imageUrl;
+            }
+            // Fallback to default images
             return defaultImages[index % defaultImages.length];
         }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,11 +12,11 @@ namespace TRAVEL.Controllers
 {
     [ApiController]
     [Route("api/review")]
-    public class SiteReviewController : ControllerBase
+    public class SiteReviewControllersss : ControllerBase
     {
         private readonly TravelDbContext _context;
 
-        public SiteReviewController(TravelDbContext context)
+        public SiteReviewControllersss(TravelDbContext context)
         {
             _context = context;
         }
@@ -288,4 +288,4 @@ namespace TRAVEL.Controllers
         public string Field { get; set; } = string.Empty; // "approved" or "visible"
         public bool Value { get; set; }
     }
-}
+}*/
