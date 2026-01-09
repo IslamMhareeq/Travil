@@ -47,6 +47,7 @@ namespace TRAVEL.Data
         /// </summary>
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<SiteReview> SiteReviews { get; set; }
         /// <summary>
         /// Waiting list entries table
         /// </summary>
@@ -60,7 +61,7 @@ namespace TRAVEL.Data
         /// <summary>
         /// Shopping carts table
         /// </summary>
-        public DbSet<CartModels> Carts { get; set; }
+        public DbSet<Cart> Carts { get; set; }
 
         /// <summary>
         /// Cart items table

@@ -8,15 +8,34 @@ namespace TRAVEL.Controllers
     public class HomeController : Controller
     {
         /// <summary>
-        /// Home page - route: /
+        /// Homepage - route: /
         /// </summary>
         [HttpGet]
         [Route("/")]
         [Route("/home")]
-        [Route("/index")]
         public IActionResult Index()
         {
             return View("~/Views/Home/Index.cshtml");
+        }
+
+        /// <summary>
+        /// About page - route: /about
+        /// </summary>
+        [HttpGet]
+        [Route("/about")]
+        public IActionResult About()
+        {
+            return View("~/Views/Home/About.cshtml");
+        }
+
+        /// <summary>
+        /// Contact page - route: /contact
+        /// </summary>
+        [HttpGet]
+        [Route("/contact")]
+        public IActionResult Contact()
+        {
+            return View("~/Views/Home/Contact.cshtml");
         }
     }
 }

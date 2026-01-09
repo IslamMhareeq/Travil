@@ -1,0 +1,658 @@
+﻿@{
+    ViewData["Title"] = "Buy Now";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buy Now - TRAVIL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root {
+            --color-bg: #0a0a0f;
+            --color-navy: #0d1117;
+            --color-charcoal: #161b22;
+            --color-slate: #21262d;
+            --color-border: #30363d;
+            --color-gold: #d4a853;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-white: #ffffff;
+            --color-silver: #8b949e;
+            --color-success: #3fb950;
+            --color-error: #f85149;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-main); background: var(--color-bg); color: var(--color-white); line-height: 1.6; min-height: 100vh; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 var(--space-5); }
+
+        /* Header */
+        .site-header {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-4) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 var(--space-5);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary { background: var(--color-gold); color: var(--color-bg); }
+        .btn-primary:hover { background: #e4b863; }
+        .btn-outline { background: transparent; border: 1px solid var(--color-border); color: var(--color-white); }
+        .btn-outline:hover { border-color: var(--color-gold); color: var(--color-gold); }
+        .btn-success { background: var(--color-success); color: white; }
+        .btn-success:hover { background: #4fc760; }
+        .btn-lg { padding: var(--space-4) var(--space-5); font-size: 1rem; }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: var(--space-6) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            margin-bottom: var(--space-2);
+        }
+
+        .page-header p {
+            color: var(--color-silver);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--space-6) 0 var(--space-7);
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: var(--space-5);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--space-5);
+        }
+
+        .card-header {
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .card-header h3 {
+            font-size: 1.125rem;
+        }
+
+        .card-header i {
+            color: var(--color-gold);
+        }
+
+        .card-body {
+            padding: var(--space-5);
+        }
+
+        /* Package Preview */
+        .package-preview {
+            display: flex;
+            gap: var(--space-4);
+        }
+
+        .package-preview img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+        }
+
+        .package-info h4 {
+            font-size: 1.125rem;
+            margin-bottom: var(--space-2);
+        }
+
+        .package-location {
+            color: var(--color-gold);
+            font-size: 0.875rem;
+            margin-bottom: var(--space-2);
+        }
+
+        .package-meta {
+            display: flex;
+            gap: var(--space-4);
+            color: var(--color-silver);
+            font-size: 0.8125rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-2);
+            font-size: 0.875rem;
+            color: var(--color-silver);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-navy);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-size: 0.9375rem;
+            font-family: var(--font-main);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-gold);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+        }
+
+        /* Order Summary */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-row.total {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-gold);
+            padding-top: var(--space-4);
+            margin-top: var(--space-3);
+            border-top: 2px solid var(--color-border);
+        }
+
+        .summary-label {
+            color: var(--color-silver);
+        }
+
+        /* Security Note */
+        .security-note {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--color-gold-muted);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-4);
+            font-size: 0.8125rem;
+            color: var(--color-gold);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--color-charcoal);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-4) var(--space-5);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success i { color: var(--color-success); }
+        .toast.error i { color: var(--color-error); }
+
+        /* Loading */
+        .loading { text-align: center; padding: var(--space-7); }
+        .spinner { width: 40px; height: 40px; border: 3px solid var(--color-border); border-top-color: var(--color-gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto var(--space-4); }
+        @@keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVIL</a>
+            <a href="/packages" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Packages</a>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-bolt" style="color: var(--color-gold);"></i> Quick Checkout</h1>
+            <p>Complete your purchase in seconds</p>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div id="loadingState" class="loading">
+                <div class="spinner"></div>
+                <p>Loading package details...</p>
+            </div>
+
+            <div id="checkoutContent" class="checkout-grid" style="display: none;">
+                <!-- Left Column -->
+                <div>
+                    <!-- Package Details -->
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-suitcase"></i>
+                            <h3>Package Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="package-preview">
+                                <img id="packageImage" src="" alt="Package">
+                                <div class="package-info">
+                                    <h4 id="packageTitle">Loading...</h4>
+                                    <div class="package-location"><i class="fas fa-map-marker-alt"></i> <span id="packageLocation">-</span></div>
+                                    <div class="package-meta">
+                                        <span><i class="far fa-calendar"></i> <span id="packageDates">-</span></span>
+                                        <span><i class="far fa-clock"></i> <span id="packageDuration">-</span> Days</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Options -->
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-users"></i>
+                            <h3>Booking Options</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Number of Rooms</label>
+                                    <select class="form-control" id="numRooms" onchange="updateTotal()">
+                                        <option value="1">1 Room</option>
+                                        <option value="2">2 Rooms</option>
+                                        <option value="3">3 Rooms</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Number of Guests</label>
+                                    <select class="form-control" id="numGuests">
+                                        <option value="1">1 Guest</option>
+                                        <option value="2">2 Guests</option>
+                                        <option value="3">3 Guests</option>
+                                        <option value="4">4 Guests</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Details -->
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-credit-card"></i>
+                            <h3>Payment Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Cardholder Name</label>
+                                <input type="text" class="form-control" id="cardName" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="text" class="form-control" id="cardCvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                            <div class="security-note">
+                                <i class="fas fa-lock"></i>
+                                <span>Your payment information is secure. Card details are NOT stored.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Order Summary -->
+                <div>
+                    <div class="card" style="position: sticky; top: 100px;">
+                        <div class="card-header">
+                            <i class="fas fa-receipt"></i>
+                            <h3>Order Summary</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="summary-row">
+                                <span class="summary-label">Package Price</span>
+                                <span id="summaryPrice">$0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Rooms</span>
+                                <span id="summaryRooms">1</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Subtotal</span>
+                                <span id="summarySubtotal">$0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Taxes & Fees</span>
+                                <span id="summaryTax">$0</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total</span>
+                                <span id="summaryTotal">$0</span>
+                            </div>
+
+                            <button class="btn btn-success btn-lg btn-block" id="payBtn" onclick="processPayment()" style="margin-top: var(--space-5);">
+                                <i class="fas fa-lock"></i> Pay Now
+                            </button>
+
+                            <p style="text-align: center; margin-top: var(--space-4); font-size: 0.8125rem; color: var(--color-silver);">
+                                By clicking Pay Now, you agree to our Terms of Service
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
+
+    <script>
+        var packageData = null;
+        var unitPrice = 0;
+
+        function showToast(message, type) {
+            var toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = 'toast ' + (type || 'success');
+            toast.querySelector('i').className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
+        }
+
+        function getPackageId() {
+            var path = window.location.pathname;
+            var match = path.match(/\/booking\/buynow\/(\d+)/);
+            return match ? parseInt(match[1]) : null;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function calcDuration(start, end) {
+            if (!start || !end) return 7;
+            return Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24));
+        }
+
+        async function loadPackage() {
+            var packageId = getPackageId();
+            if (!packageId) {
+                showToast('Invalid package', 'error');
+                return;
+            }
+
+            // Check if user is logged in
+            var token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login to continue', 'error');
+                setTimeout(function() { window.location.href = '/account/login?returnUrl=/booking/buynow/' + packageId; }, 1500);
+                return;
+            }
+
+            try {
+                var response = await fetch('/api/packages/' + packageId);
+                if (!response.ok) throw new Error('Package not found');
+
+                var result = await response.json();
+                packageData = result.data || result;
+
+                // Check availability
+                if (packageData.availableRooms <= 0) {
+                    showToast('This package is sold out', 'error');
+                    setTimeout(function() { window.location.href = '/packages/' + packageId; }, 1500);
+                    return;
+                }
+
+                // Set unit price
+                unitPrice = packageData.discountedPrice || packageData.price;
+
+                // Populate UI
+                document.getElementById('packageImage').src = packageData.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400';
+                document.getElementById('packageTitle').textContent = packageData.destination || 'Travel Package';
+                document.getElementById('packageLocation').textContent = packageData.country || 'Unknown';
+                document.getElementById('packageDates').textContent = formatDate(packageData.startDate) + ' - ' + formatDate(packageData.endDate);
+                document.getElementById('packageDuration').textContent = calcDuration(packageData.startDate, packageData.endDate);
+
+                // Update room options based on availability
+                var roomSelect = document.getElementById('numRooms');
+                roomSelect.innerHTML = '';
+                var maxRooms = Math.min(packageData.availableRooms, 3);
+                for (var i = 1; i <= maxRooms; i++) {
+                    var option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i + ' Room' + (i > 1 ? 's' : '');
+                    roomSelect.appendChild(option);
+                }
+
+                updateTotal();
+
+                // Show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('checkoutContent').style.display = 'grid';
+
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Failed to load package', 'error');
+            }
+        }
+
+        function updateTotal() {
+            var rooms = parseInt(document.getElementById('numRooms').value) || 1;
+            var subtotal = unitPrice * rooms;
+            var tax = subtotal * 0.1; // 10% tax
+            var total = subtotal + tax;
+
+            document.getElementById('summaryPrice').textContent = '$' + unitPrice.toLocaleString();
+            document.getElementById('summaryRooms').textContent = rooms;
+            document.getElementById('summarySubtotal').textContent = '$' + subtotal.toLocaleString();
+            document.getElementById('summaryTax').textContent = '$' + tax.toLocaleString();
+            document.getElementById('summaryTotal').textContent = '$' + total.toLocaleString();
+        }
+
+        // Format card number with spaces
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            var value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+            var formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formatted;
+        });
+
+        // Format expiry date
+        document.getElementById('cardExpiry').addEventListener('input', function(e) {
+            var value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        async function processPayment() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please login', 'error');
+                window.location.href = '/account/login';
+                return;
+            }
+
+            // Validate form
+            var cardName = document.getElementById('cardName').value.trim();
+            var cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            var cardExpiry = document.getElementById('cardExpiry').value;
+            var cardCvv = document.getElementById('cardCvv').value;
+
+            if (!cardName) { showToast('Please enter cardholder name', 'error'); return; }
+            if (cardNumber.length < 13) { showToast('Please enter valid card number', 'error'); return; }
+            if (cardExpiry.length < 5) { showToast('Please enter expiry date', 'error'); return; }
+            if (cardCvv.length < 3) { showToast('Please enter CVV', 'error'); return; }
+
+            var btn = document.getElementById('payBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                var rooms = parseInt(document.getElementById('numRooms').value);
+                var guests = parseInt(document.getElementById('numGuests').value);
+
+                // Step 1: Create booking
+                var bookingResponse = await fetch('/api/booking', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        packageId: packageData.packageId,
+                        numberOfRooms: rooms,
+                        numberOfGuests: guests
+                    })
+                });
+
+                if (!bookingResponse.ok) {
+                    var bookingError = await bookingResponse.json();
+                    throw new Error(bookingError.message || 'Failed to create booking');
+                }
+
+                var bookingResult = await bookingResponse.json();
+                var bookingId = bookingResult.data?.bookingId || bookingResult.bookingId;
+
+                // Step 2: Process payment
+                var paymentResponse = await fetch('/api/payment', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        bookingId: bookingId,
+                        cardNumber: cardNumber,
+                        cardHolderName: cardName,
+                        expiryDate: cardExpiry,
+                        cvv: cardCvv,
+                        paymentMethod: 0 // Credit Card
+                    })
+                });
+
+                if (!paymentResponse.ok) {
+                    var paymentError = await paymentResponse.json();
+                    throw new Error(paymentError.message || 'Payment failed');
+                }
+
+                // Success!
+                showToast('Payment successful! Redirecting...', 'success');
+                setTimeout(function() {
+                    window.location.href = '/booking/' + bookingId;
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showToast(error.message || 'Payment failed', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay Now';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadPackage);
+    </script>
+</body>
+</html>
