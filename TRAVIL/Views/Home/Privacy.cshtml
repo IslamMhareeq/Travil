@@ -1,6 +1,369 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+    Layout = null;
 }
-<h1>@ViewData["Title"]</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy - TRAVIL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+            --max-width: 900px;
+        }
 
-<p>Use this page to detail your site's privacy policy.</p>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-mist);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--color-navy);
+            border-bottom: 1px solid var(--color-slate);
+            padding: var(--space-4) var(--space-6);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-midnight);
+            font-size: 1rem;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--color-white);
+            letter-spacing: 0.1em;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-silver);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color var(--transition-fast);
+        }
+
+            .back-link:hover {
+                color: var(--color-gold);
+            }
+
+        .content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: var(--space-7) var(--space-6);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: var(--space-7);
+        }
+
+            .page-title h1 {
+                font-family: var(--font-display);
+                font-size: 3rem;
+                font-weight: 500;
+                color: var(--color-white);
+                margin-bottom: var(--space-4);
+            }
+
+            .page-title p {
+                color: var(--color-silver);
+                font-size: 1rem;
+            }
+
+        .last-updated {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-slate);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8125rem;
+            color: var(--color-silver);
+            margin-top: var(--space-4);
+        }
+
+            .last-updated i {
+                color: var(--color-gold);
+            }
+
+        .policy-section {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-5);
+        }
+
+            .policy-section h2 {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: var(--color-white);
+                margin-bottom: var(--space-4);
+                display: flex;
+                align-items: center;
+                gap: var(--space-4);
+            }
+
+                .policy-section h2 i {
+                    color: var(--color-gold);
+                    font-size: 1.25rem;
+                }
+
+            .policy-section p {
+                margin-bottom: var(--space-4);
+            }
+
+                .policy-section p:last-child {
+                    margin-bottom: 0;
+                }
+
+            .policy-section ul {
+                margin: var(--space-4) 0;
+                padding-left: var(--space-5);
+            }
+
+            .policy-section li {
+                margin-bottom: var(--space-4);
+                color: var(--color-mist);
+            }
+
+                .policy-section li::marker {
+                    color: var(--color-gold);
+                }
+
+        .highlight-box {
+            background: var(--color-gold-muted);
+            border-left: 3px solid var(--color-gold);
+            padding: var(--space-4) var(--space-5);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: var(--space-5) 0;
+        }
+
+            .highlight-box p {
+                color: var(--color-mist);
+                margin: 0;
+            }
+
+        .contact-card {
+            background: linear-gradient(135deg, var(--color-gold-muted), transparent);
+            border: 1px solid var(--color-gold);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            text-align: center;
+            margin-top: var(--space-7);
+        }
+
+            .contact-card h3 {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                color: var(--color-white);
+                margin-bottom: var(--space-4);
+            }
+
+            .contact-card p {
+                color: var(--color-silver);
+                margin-bottom: var(--space-4);
+            }
+
+            .contact-card a {
+                color: var(--color-gold);
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+                .contact-card a:hover {
+                    text-decoration: underline;
+                }
+
+        .footer {
+            text-align: center;
+            padding: var(--space-6);
+            border-top: 1px solid var(--color-slate);
+            margin-top: var(--space-7);
+        }
+
+            .footer p {
+                color: var(--color-steel);
+                font-size: 0.875rem;
+            }
+
+        @@media (max-width: 768px) {
+            .content {
+                padding: var(--space-5) var(--space-4);
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .policy-section {
+                padding: var(--space-4);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                <span class="logo-text">TRAVIL</span>
+            </a>
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="page-title">
+            <h1>Privacy Policy</h1>
+            <p>Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
+            <div class="last-updated"><i class="fas fa-calendar-alt"></i> Last updated: January 2026</div>
+        </div>
+
+        <section class="policy-section">
+            <h2><i class="fas fa-database"></i> Information We Collect</h2>
+            <p>We collect information you provide directly to us when you:</p>
+            <ul>
+                <li>Create an account or make a booking</li>
+                <li>Contact our customer support team</li>
+                <li>Subscribe to our newsletter</li>
+                <li>Participate in surveys or promotions</li>
+            </ul>
+            <p>This may include your name, email address, phone number, payment information, travel preferences, and any other information you choose to provide.</p>
+        </section>
+
+        <section class="policy-section">
+            <h2><i class="fas fa-cog"></i> How We Use Your Information</h2>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Process and manage your travel bookings</li>
+                <li>Send you booking confirmations and travel updates</li>
+                <li>Provide customer support and respond to inquiries</li>
+                <li>Send promotional communications (with your consent)</li>
+                <li>Improve our services and user experience</li>
+                <li>Comply with legal obligations</li>
+            </ul>
+        </section>
+
+        <section class="policy-section">
+            <h2><i class="fas fa-shield-alt"></i> Data Security</h2>
+            <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+            <div class="highlight-box">
+                <p><strong>Important:</strong> We do not store your payment card details. All payment transactions are processed through secure, PCI-compliant payment processors.</p>
+            </div>
+            <p>While we strive to protect your personal information, no method of transmission over the Internet is 100% secure. We cannot guarantee absolute security.</p>
+        </section>
+
+        <section class="policy-section">
+            <h2><i class="fas fa-share-alt"></i> Information Sharing</h2>
+            <p>We may share your information with:</p>
+            <ul>
+                <li><strong>Travel Partners:</strong> Airlines, hotels, and tour operators necessary to fulfill your bookings</li>
+                <li><strong>Service Providers:</strong> Companies that help us operate our platform</li>
+                <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
+            </ul>
+            <p>We do not sell your personal information to third parties for marketing purposes.</p>
+        </section>
+
+        <section class="policy-section">
+            <h2><i class="fas fa-user-check"></i> Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access and receive a copy of your personal data</li>
+                <li>Rectify inaccurate or incomplete information</li>
+                <li>Request deletion of your personal data</li>
+                <li>Object to or restrict processing of your data</li>
+                <li>Withdraw consent at any time</li>
+                <li>Lodge a complaint with a supervisory authority</li>
+            </ul>
+        </section>
+
+        <section class="policy-section">
+            <h2><i class="fas fa-cookie-bite"></i> Cookies</h2>
+            <p>We use cookies and similar technologies to enhance your experience on our website. Cookies help us remember your preferences, analyze site traffic, and personalize content.</p>
+            <p>You can control cookie settings through your browser. However, disabling certain cookies may limit your ability to use some features of our service.</p>
+        </section>
+
+        <section class="policy-section">
+            <h2><i class="fas fa-sync-alt"></i> Policy Updates</h2>
+            <p>We may update this Privacy Policy from time to time. We will notify you of any significant changes by posting the new policy on this page and updating the "Last updated" date.</p>
+            <p>We encourage you to review this policy periodically to stay informed about how we protect your information.</p>
+        </section>
+
+        <div class="contact-card">
+            <h3>Questions About Privacy?</h3>
+            <p>If you have any questions or concerns about this Privacy Policy, please contact us.</p>
+            <a href="mailto:privacy@travil.com"><i class="fas fa-envelope"></i> privacy@travil.com</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 TRAVIL. All rights reserved.</p>
+    </footer>
+</body>
+</html>

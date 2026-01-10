@@ -5,37 +5,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management - Admin | TRAVIL</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users - TRAVIL Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-bg: #0a0a0f;
-            --color-surface: #12121a;
-            --color-surface-2: #1a1a24;
-            --color-border: #2a2a3a;
-            --color-gold: #d4a853;
-            --color-gold-hover: #e4b863;
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
             --color-white: #ffffff;
-            --color-silver: #a0a0b0;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
             --color-success: #3fb950;
+            --color-success-muted: rgba(63, 185, 80, 0.15);
             --color-warning: #d29922;
-            --color-danger: #f85149;
+            --color-warning-muted: rgba(210, 153, 34, 0.15);
+            --color-error: #f85149;
+            --color-error-muted: rgba(248, 81, 73, 0.15);
             --color-info: #58a6ff;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
+            --color-info-muted: rgba(88, 166, 255, 0.15);
+            --sidebar-width: 280px;
+            --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
             --space-4: 16px;
             --space-5: 24px;
             --space-6: 32px;
-            --sidebar-width: 260px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --shadow-gold: 0 4px 20px rgba(212, 168, 83, 0.3);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
         }
 
         * {
@@ -45,9 +58,10 @@
         }
 
         body {
-            font-family: var(--font-main);
-            background: var(--color-bg);
+            font-family: var(--font-body);
+            background: var(--color-midnight);
             color: var(--color-white);
+            line-height: 1.6;
             min-height: 100vh;
         }
 
@@ -56,10 +70,11 @@
             min-height: 100vh;
         }
 
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--color-surface);
-            border-right: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border-right: 1px solid var(--color-slate);
             position: fixed;
             top: 0;
             left: 0;
@@ -67,48 +82,70 @@
             display: flex;
             flex-direction: column;
             z-index: 100;
+            transition: transform var(--transition-normal);
         }
 
         .sidebar-header {
             padding: var(--space-5);
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+        .sidebar-logo {
             display: flex;
             align-items: center;
             gap: var(--space-3);
+            text-decoration: none;
         }
 
-            .sidebar-header .logo {
-                width: 40px;
-                height: 40px;
-                background: linear-gradient(135deg, var(--color-gold), #b8934a);
+            .sidebar-logo .logo-icon {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
                 border-radius: var(--radius-md);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-size: 1.25rem;
+                color: var(--color-midnight);
             }
 
-            .sidebar-header h1 {
-                font-size: 1.25rem;
-                color: var(--color-gold);
+            .sidebar-logo .logo-text {
+                display: flex;
+                flex-direction: column;
             }
 
-            .sidebar-header span {
-                font-size: 0.75rem;
-                color: var(--color-silver);
-            }
+                .sidebar-logo .logo-text span:first-child {
+                    font-family: var(--font-display);
+                    font-size: 1.5rem;
+                    font-weight: 500;
+                    color: var(--color-white);
+                    letter-spacing: 0.1em;
+                }
+
+                .sidebar-logo .logo-text span:last-child {
+                    font-size: 0.75rem;
+                    color: var(--color-gold);
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-4);
+            overflow-y: auto;
+        }
 
         .nav-section {
-            padding: var(--space-4);
+            margin-bottom: var(--space-5);
         }
 
         .nav-section-title {
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--color-silver);
-            margin-bottom: var(--space-3);
-            padding-left: var(--space-3);
+            letter-spacing: 0.1em;
+            color: var(--color-steel);
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-2);
         }
 
         .nav-item {
@@ -119,52 +156,63 @@
             color: var(--color-silver);
             text-decoration: none;
             border-radius: var(--radius-md);
-            transition: all 0.2s;
-            margin-bottom: 4px;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
         }
 
-            .nav-item:hover, .nav-item.active {
-                background: var(--color-surface-2);
+            .nav-item:hover {
+                background: var(--color-slate);
                 color: var(--color-white);
             }
 
             .nav-item.active {
-                background: linear-gradient(135deg, rgba(212, 168, 83, 0.2), rgba(212, 168, 83, 0.1));
+                background: var(--color-gold-muted);
                 color: var(--color-gold);
             }
 
             .nav-item i {
                 width: 20px;
                 text-align: center;
+                font-size: 0.9375rem;
             }
 
+        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
             padding: var(--space-6);
+            min-height: 100vh;
         }
 
-        .header {
+        .page-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-6);
+            align-items: flex-start;
+            margin-bottom: var(--space-5);
             flex-wrap: wrap;
             gap: var(--space-4);
         }
 
-            .header h2 {
-                font-size: 1.5rem;
-                font-weight: 700;
+            .page-header h1 {
+                font-family: var(--font-display);
+                font-size: 2rem;
+                font-weight: 500;
+                margin-bottom: var(--space-1);
+                display: flex;
+                align-items: center;
+                gap: var(--space-3);
             }
 
-        .subtitle {
-            color: var(--color-silver);
-            margin-top: 4px;
-            font-size: 0.9rem;
-        }
+                .page-header h1 i {
+                    color: var(--color-gold);
+                }
 
-        .stats-row {
+            .page-header p {
+                color: var(--color-silver);
+            }
+
+        /* Stats */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: var(--space-4);
@@ -172,8 +220,8 @@
         }
 
         .stat-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             padding: var(--space-4);
             display: flex;
@@ -181,57 +229,60 @@
             gap: var(--space-4);
         }
 
-            .stat-card .icon {
-                width: 48px;
-                height: 48px;
-                border-radius: var(--radius-md);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.25rem;
-                background: rgba(212, 168, 83, 0.2);
-                color: var(--color-gold);
-            }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--color-gold-muted);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-gold);
+        }
 
-            .stat-card .value {
-                font-size: 1.5rem;
-                font-weight: 700;
-            }
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 500;
+        }
 
-            .stat-card .label {
-                font-size: 0.85rem;
-                color: var(--color-silver);
-            }
+        .stat-label {
+            font-size: 0.8125rem;
+            color: var(--color-silver);
+        }
 
+        /* Filters */
         .filters {
             display: flex;
-            gap: var(--space-3);
+            gap: var(--space-4);
             margin-bottom: var(--space-5);
             flex-wrap: wrap;
         }
 
         .search-box {
             flex: 1;
-            min-width: 250px;
+            min-width: 280px;
             position: relative;
         }
 
             .search-box i {
                 position: absolute;
-                left: 14px;
+                left: var(--space-4);
                 top: 50%;
                 transform: translateY(-50%);
-                color: var(--color-silver);
+                color: var(--color-steel);
             }
 
             .search-box input {
                 width: 100%;
-                padding: var(--space-3) var(--space-4) var(--space-3) 42px;
-                background: var(--color-surface);
-                border: 1px solid var(--color-border);
+                padding: var(--space-3) var(--space-4) var(--space-3) 44px;
+                background: var(--color-navy);
+                border: 1px solid var(--color-slate);
                 border-radius: var(--radius-md);
                 color: var(--color-white);
-                font-size: 0.9rem;
+                font-family: var(--font-body);
+                font-size: 0.9375rem;
             }
 
                 .search-box input:focus {
@@ -239,19 +290,31 @@
                     border-color: var(--color-gold);
                 }
 
+                .search-box input::placeholder {
+                    color: var(--color-steel);
+                }
+
         .filter-select {
             padding: var(--space-3) var(--space-4);
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-md);
             color: var(--color-white);
-            font-size: 0.9rem;
-            min-width: 150px;
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            cursor: pointer;
+            min-width: 140px;
         }
 
-        .table-container {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            .filter-select:focus {
+                outline: none;
+                border-color: var(--color-gold);
+            }
+
+        /* Table */
+        .card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             overflow: hidden;
         }
@@ -264,24 +327,28 @@
             .data-table th, .data-table td {
                 padding: var(--space-4);
                 text-align: left;
-                border-bottom: 1px solid var(--color-border);
+                border-bottom: 1px solid var(--color-slate);
             }
 
             .data-table th {
-                background: var(--color-surface-2);
-                font-weight: 600;
-                font-size: 0.85rem;
-                color: var(--color-silver);
+                font-size: 0.75rem;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
+                letter-spacing: 0.05em;
+                color: var(--color-silver);
+                font-weight: 500;
+                background: var(--color-slate);
             }
 
-            .data-table tr:hover {
-                background: var(--color-surface-2);
+            .data-table td {
+                font-size: 0.875rem;
             }
 
             .data-table tr:last-child td {
                 border-bottom: none;
+            }
+
+            .data-table tr:hover td {
+                background: rgba(255, 255, 255, 0.02);
             }
 
         .user-cell {
@@ -293,55 +360,55 @@
         .user-avatar {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--color-gold), #b8934a);
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-full);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: var(--color-bg);
+            color: var(--color-midnight);
         }
 
         .user-name {
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .user-email {
-            font-size: 0.85rem;
+            font-size: 0.8125rem;
             color: var(--color-silver);
         }
 
         .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
+            display: inline-flex;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 500;
         }
 
             .badge.admin {
-                background: rgba(212, 168, 83, 0.2);
+                background: var(--color-gold-muted);
                 color: var(--color-gold);
             }
 
             .badge.user {
-                background: rgba(88, 166, 255, 0.2);
+                background: var(--color-info-muted);
                 color: var(--color-info);
             }
 
             .badge.active {
-                background: rgba(63, 185, 80, 0.2);
+                background: var(--color-success-muted);
                 color: var(--color-success);
             }
 
             .badge.inactive {
-                background: rgba(160, 160, 176, 0.2);
-                color: var(--color-silver);
+                background: var(--color-warning-muted);
+                color: var(--color-warning);
             }
 
             .badge.suspended {
-                background: rgba(248, 81, 73, 0.2);
-                color: var(--color-danger);
+                background: var(--color-error-muted);
+                color: var(--color-error);
             }
 
         .action-btns {
@@ -350,109 +417,77 @@
         }
 
         .action-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: var(--radius-sm);
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-charcoal);
+            background: var(--color-slate);
+            color: var(--color-mist);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
-            .action-btn.edit {
-                background: rgba(88, 166, 255, 0.2);
-                color: var(--color-info);
+            .action-btn:hover {
+                background: var(--color-charcoal);
             }
 
-                .action-btn.edit:hover {
-                    background: var(--color-info);
-                    color: white;
-                }
-
-            .action-btn.delete {
-                background: rgba(248, 81, 73, 0.2);
-                color: var(--color-danger);
+            .action-btn.delete:hover {
+                background: var(--color-error);
+                color: var(--color-white);
+                border-color: var(--color-error);
             }
 
-                .action-btn.delete:hover {
-                    background: var(--color-danger);
-                    color: white;
-                }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-gold), #b8934a);
-            color: var(--color-bg);
-        }
-
-            .btn-primary:hover {
-                transform: translateY(-2px);
-            }
-
-        .btn-secondary {
-            background: var(--color-surface-2);
-            border: 1px solid var(--color-border);
-            color: var(--color-white);
-        }
-
-        .btn-danger {
-            background: var(--color-danger);
-            color: white;
-        }
-
+        /* Modal */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: none;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
         }
 
             .modal-overlay.active {
-                display: flex;
+                opacity: 1;
+                visibility: visible;
             }
 
         .modal {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             width: 100%;
             max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
+            margin: var(--space-4);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--space-5);
-            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
         }
 
             .modal-header h3 {
-                font-size: 1.1rem;
+                font-family: var(--font-display);
+                font-size: 1.25rem;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: var(--space-2);
             }
+
+                .modal-header h3 i {
+                    color: var(--color-gold);
+                }
 
         .modal-close {
             background: none;
@@ -462,10 +497,6 @@
             cursor: pointer;
         }
 
-            .modal-close:hover {
-                color: var(--color-white);
-            }
-
         .modal-body {
             padding: var(--space-5);
         }
@@ -474,8 +505,8 @@
             display: flex;
             justify-content: flex-end;
             gap: var(--space-3);
-            padding: var(--space-5);
-            border-top: 1px solid var(--color-border);
+            padding: var(--space-4) var(--space-5);
+            border-top: 1px solid var(--color-slate);
         }
 
         .form-group {
@@ -484,20 +515,21 @@
 
         .form-label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             font-weight: 500;
-            color: var(--color-silver);
+            color: var(--color-mist);
             margin-bottom: var(--space-2);
         }
 
         .form-control {
             width: 100%;
             padding: var(--space-3) var(--space-4);
-            background: var(--color-surface-2);
-            border: 1px solid var(--color-border);
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
             border-radius: var(--radius-md);
             color: var(--color-white);
-            font-size: 0.95rem;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
         }
 
             .form-control:focus {
@@ -511,19 +543,116 @@
             gap: var(--space-4);
         }
 
-        .loading {
-            display: flex;
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            color: var(--color-midnight);
+            box-shadow: var(--shadow-gold);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+            }
+
+        .btn-secondary {
+            background: var(--color-slate);
+            color: var(--color-mist);
+            border: 1px solid var(--color-charcoal);
+        }
+
+        .btn-danger {
+            background: var(--color-error);
+            color: var(--color-white);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-md);
+            padding: var(--space-4) var(--space-5);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            transform: translateX(calc(100% + var(--space-6)));
+            transition: transform var(--transition-normal);
+            z-index: 2000;
+        }
+
+            .toast.show {
+                transform: translateX(0);
+            }
+
+            .toast.success {
+                border-color: var(--color-success);
+            }
+
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
+            }
+
+                .toast.error i {
+                    color: var(--color-error);
+                }
+
+        /* Mobile */
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-size: 1.125rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        .loading {
+            text-align: center;
             padding: var(--space-6);
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--color-border);
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--color-slate);
             border-top-color: var(--color-gold);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
         }
 
         .empty-state {
@@ -533,39 +662,9 @@
         }
 
             .empty-state i {
-                font-size: 3rem;
-                margin-bottom: var(--space-4);
+                font-size: 2rem;
+                margin-bottom: var(--space-3);
                 opacity: 0.5;
-            }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--color-surface-2);
-            border: 1px solid var(--color-border);
-            padding: var(--space-4) var(--space-5);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 1001;
-        }
-
-            .toast.show {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .toast.success {
-                border-color: var(--color-success);
-            }
-
-            .toast.error {
-                border-color: var(--color-danger);
             }
 
         @@keyframes spin {
@@ -574,43 +673,13 @@
             }
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--color-white);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 99;
-        }
-
-        .hide-mobile {
-        }
-
         @@media (max-width: 1024px) {
-            .stats-row {
+            .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .hide-mobile {
-                display: none;
-            }
-        }
-
-        @@media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s;
             }
 
                 .sidebar.active {
@@ -623,15 +692,28 @@
 
             .main-content {
                 margin-left: 0;
-                padding: var(--space-4);
             }
 
             .mobile-menu-btn {
-                display: block;
+                display: flex;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .main-content {
+                padding: var(--space-4);
             }
 
-            .stats-row {
-                grid-template-columns: 1fr 1fr;
+            .filters {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .hide-mobile {
+                display: none;
             }
 
             .form-row {
@@ -644,57 +726,58 @@
     <div class="admin-layout">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="logo"><i class="fas fa-compass"></i></div>
-                <div>
-                    <h1>TRAVIL</h1>
-                    <span>Admin Panel</span>
-                </div>
+                <a href="/admin/dashboard" class="sidebar-logo">
+                    <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                    <div class="logo-text"><span>TRAVIL</span><span>Admin Panel</span></div>
+                </a>
             </div>
-            <nav class="nav-section">
-                <div class="nav-section-title">Main</div>
-                <a href="/admin/dashboard" class="nav-item" onclick="navigateTo('/admin/dashboard', event)"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="/admin/packages" class="nav-item" onclick="navigateTo('/admin/packages', event)"><i class="fas fa-suitcase"></i><span>Packages</span></a>
-                <a href="/admin/bookings" class="nav-item" onclick="navigateTo('/admin/bookings', event)"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-section-title">Management</div>
-                <a href="/admin/users" class="nav-item active"><i class="fas fa-users"></i><span>Users</span></a>
-                <a href="/admin/reviews" class="nav-item" onclick="navigateTo('/admin/reviews', event)"><i class="fas fa-star"></i><span>Reviews</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-section-title">Settings</div>
-                <a href="/" class="nav-item" onclick="navigateTo('/', event)"><i class="fas fa-globe"></i><span>View Site</span></a>
-                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                    <a href="/admin/packages" class="nav-item"><i class="fas fa-suitcase-rolling"></i><span>Packages</span></a>
+                    <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="/admin/users" class="nav-item active"><i class="fas fa-users"></i><span>Users</span></a>
+                    <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
+                    <a href="/admin/prices" class="nav-item"><i class="fas fa-tags"></i><span>Discounts</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
+                    <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+                </div>
             </nav>
         </aside>
-
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <main class="main-content">
-            <div class="header">
+            <div class="page-header">
                 <div>
                     <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
-                    <h2><i class="fas fa-users" style="color: var(--color-gold); margin-right: 12px;"></i>User Management</h2>
-                    <p class="subtitle">Manage registered users and their accounts</p>
+                    <h1><i class="fas fa-users"></i> User Management</h1>
+                    <p>Manage registered users and their accounts</p>
                 </div>
             </div>
 
-            <div class="stats-row">
+            <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="icon"><i class="fas fa-users"></i></div>
-                    <div><div class="value" id="totalUsers">0</div><div class="label">Total Users</div></div>
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div><div class="stat-value" id="totalUsers">0</div><div class="stat-label">Total Users</div></div>
                 </div>
                 <div class="stat-card">
-                    <div class="icon"><i class="fas fa-user-check"></i></div>
-                    <div><div class="value" id="activeUsers">0</div><div class="label">Active Users</div></div>
+                    <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                    <div><div class="stat-value" id="activeUsers">0</div><div class="stat-label">Active Users</div></div>
                 </div>
                 <div class="stat-card">
-                    <div class="icon"><i class="fas fa-user-shield"></i></div>
-                    <div><div class="value" id="adminUsers">0</div><div class="label">Administrators</div></div>
+                    <div class="stat-icon"><i class="fas fa-user-shield"></i></div>
+                    <div><div class="stat-value" id="adminUsers">0</div><div class="stat-label">Administrators</div></div>
                 </div>
                 <div class="stat-card">
-                    <div class="icon"><i class="fas fa-user-plus"></i></div>
-                    <div><div class="value" id="newUsers">0</div><div class="label">New This Month</div></div>
+                    <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
+                    <div><div class="stat-value" id="newUsers">0</div><div class="stat-label">New This Month</div></div>
                 </div>
             </div>
 
@@ -716,7 +799,7 @@
                 </select>
             </div>
 
-            <div class="table-container">
+            <div class="card">
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -736,50 +819,25 @@
         </main>
     </div>
 
-    <!-- Edit User Modal -->
+    <!-- Edit Modal -->
     <div class="modal-overlay" id="editModal">
         <div class="modal">
             <div class="modal-header">
-                <h3><i class="fas fa-user-edit" style="color: var(--color-gold); margin-right: 8px;"></i>Edit User</h3>
+                <h3><i class="fas fa-user-edit"></i> Edit User</h3>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <form id="editUserForm" onsubmit="saveUser(event)">
                 <div class="modal-body">
                     <input type="hidden" id="editUserId">
                     <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="editFirstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="editLastName" required>
-                        </div>
+                        <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-control" id="editFirstName" required></div>
+                        <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-control" id="editLastName" required></div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" id="editEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" id="editPhone" placeholder="Enter phone number">
-                    </div>
+                    <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" id="editEmail" required></div>
+                    <div class="form-group"><label class="form-label">Phone Number</label><input type="text" class="form-control" id="editPhone"></div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Role</label>
-                            <select class="form-control" id="editRole">
-                                <option value="0">Admin</option>
-                                <option value="1">User</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <select class="form-control" id="editStatus">
-                                <option value="0">Active</option>
-                                <option value="1">Inactive</option>
-                                <option value="2">Suspended</option>
-                            </select>
-                        </div>
+                        <div class="form-group"><label class="form-label">Role</label><select class="form-control" id="editRole"><option value="0">Admin</option><option value="1">User</option></select></div>
+                        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="editStatus"><option value="0">Active</option><option value="1">Inactive</option><option value="2">Suspended</option></select></div>
                     </div>
                 </div>
                 <div class="modal-actions">
@@ -790,11 +848,11 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
+    <!-- Delete Modal -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal">
             <div class="modal-header">
-                <h3><i class="fas fa-exclamation-triangle" style="color: var(--color-danger); margin-right: 8px;"></i>Delete User</h3>
+                <h3><i class="fas fa-exclamation-triangle" style="color: var(--color-error);"></i> Delete User</h3>
                 <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -812,217 +870,81 @@
     <div id="toast" class="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Message</span></div>
 
     <script>
-        let allUsers = [];
-        let filteredUsers = [];
+        let allUsers = [], filteredUsers = [];
 
-        // Role: 0 = Admin, 1 = User
-        // Status: 0 = Active, 1 = Inactive, 2 = Suspended, 3 = Deleted
-
-        function getRoleName(role) {
-            var r = parseInt(role);
-            if (r === 0) return 'Admin';
-            if (r === 1) return 'User';
-            return 'User';
-        }
-
-        function getRoleClass(role) {
-            var r = parseInt(role);
-            if (r === 0) return 'admin';
-            return 'user';
-        }
-
-        function getStatusName(status) {
-            var s = parseInt(status);
-            if (s === 0) return 'Active';
-            if (s === 1) return 'Inactive';
-            if (s === 2) return 'Suspended';
-            if (s === 3) return 'Deleted';
-            return 'Active';
-        }
-
-        function getStatusClass(status) {
-            var s = parseInt(status);
-            if (s === 0) return 'active';
-            if (s === 1) return 'inactive';
-            if (s === 2) return 'suspended';
-            if (s === 3) return 'suspended';
-            return 'active';
-        }
+        function getRoleName(role) { return parseInt(role) === 0 ? 'Admin' : 'User'; }
+        function getRoleClass(role) { return parseInt(role) === 0 ? 'admin' : 'user'; }
+        function getStatusName(status) { var s = parseInt(status); return s === 0 ? 'Active' : s === 1 ? 'Inactive' : s === 2 ? 'Suspended' : 'Active'; }
+        function getStatusClass(status) { var s = parseInt(status); return s === 0 ? 'active' : s === 1 ? 'inactive' : 'suspended'; }
+        function formatDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); }
 
         function navigateTo(url, event) { if (event) event.preventDefault(); window.location.href = url; }
         function logout(event) { if (event) event.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); navigateTo('/account/login'); }
+        function showToast(message, type) { type = type || 'success'; var toast = document.getElementById('toast'); document.getElementById('toastMessage').textContent = message; toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'; toast.className = 'toast ' + type + ' show'; setTimeout(function() { toast.classList.remove('show'); }, 3000); }
 
-        function showToast(message, type) {
-            type = type || 'success';
-            var toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.className = 'toast ' + type + ' show';
-            setTimeout(function() { toast.classList.remove('show'); }, 3000);
-        }
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); });
+        document.getElementById('sidebarOverlay').addEventListener('click', function() { document.getElementById('sidebar').classList.remove('active'); this.classList.remove('active'); });
 
-        function formatDate(dateStr) {
-            if (!dateStr) return 'N/A';
-            return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-        }
-
-        // Mobile menu
-        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
-        });
-        document.getElementById('sidebarOverlay').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.remove('active');
-            this.classList.remove('active');
-        });
-
-        // Load Users
         async function loadUsers() {
             var token = localStorage.getItem('token');
-            if (!token) { navigateTo('/account/login'); return; }
-
             try {
-                var response = await fetch('/api/admin/users', {
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
-                });
-
-                if (response.status === 401) {
-                    showToast('Session expired. Please login again.', 'error');
-                    setTimeout(function() { navigateTo('/account/login'); }, 2000);
-                    return;
-                }
-
-                if (response.ok) {
-                    var result = await response.json();
-                    allUsers = result.data || [];
-                    filteredUsers = allUsers.slice();
-                    renderUsers();
-                    updateStats();
-                } else {
-                    showToast('Failed to load users', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('Error loading users', 'error');
-            }
+                var response = await fetch('/api/admin/users', { headers: { 'Authorization': 'Bearer ' + token } });
+                if (response.status === 401) { showToast('Session expired', 'error'); setTimeout(function() { navigateTo('/account/login'); }, 2000); return; }
+                if (response.ok) { var result = await response.json(); allUsers = result.data || []; filteredUsers = allUsers.slice(); updateStats(); renderUsers(); }
+                else { showToast('Failed to load users', 'error'); }
+            } catch (error) { console.error('Error:', error); showToast('Error loading users', 'error'); }
         }
 
-        // Update Stats
         function updateStats() {
             document.getElementById('totalUsers').textContent = allUsers.length;
-
-            // Count active users (status = 0 or status = "Active")
-            var activeCount = 0;
-            var adminCount = 0;
-            var newCount = 0;
-            var now = new Date();
-            var thisMonth = now.getMonth();
-            var thisYear = now.getFullYear();
-
+            var activeCount = 0, adminCount = 0, newCount = 0, now = new Date(), thisMonth = now.getMonth(), thisYear = now.getFullYear();
             for (var i = 0; i < allUsers.length; i++) {
                 var u = allUsers[i];
-                var status = u.status;
-                var role = u.role;
-
-                // Check status
-                if (status === 0 || status === '0' || status === 'Active') {
-                    activeCount++;
-                }
-
-                // Check role
-                if (role === 0 || role === '0' || role === 'Admin') {
-                    adminCount++;
-                }
-
-                // Check new this month
-                if (u.createdAt) {
-                    var created = new Date(u.createdAt);
-                    if (created.getMonth() === thisMonth && created.getFullYear() === thisYear) {
-                        newCount++;
-                    }
-                }
+                if (u.status === 0 || u.status === '0' || u.status === 'Active') activeCount++;
+                if (u.role === 0 || u.role === '0' || u.role === 'Admin') adminCount++;
+                if (u.createdAt) { var created = new Date(u.createdAt); if (created.getMonth() === thisMonth && created.getFullYear() === thisYear) newCount++; }
             }
-
             document.getElementById('activeUsers').textContent = activeCount;
             document.getElementById('adminUsers').textContent = adminCount;
             document.getElementById('newUsers').textContent = newCount;
         }
 
-        // Render Users Table
         function renderUsers() {
             var tbody = document.getElementById('usersTableBody');
-
-            if (filteredUsers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-users"></i><p>No users found</p></div></td></tr>';
-                return;
-            }
-
+            if (filteredUsers.length === 0) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-users"></i><p>No users found</p></div></td></tr>'; return; }
             var html = '';
             for (var i = 0; i < filteredUsers.length; i++) {
                 var user = filteredUsers[i];
                 var initial = (user.firstName || 'U').charAt(0).toUpperCase();
                 var fullName = ((user.firstName || '') + ' ' + (user.lastName || '')).trim() || 'Unknown';
-                var roleName = getRoleName(user.role);
-                var roleClass = getRoleClass(user.role);
-                var statusName = getStatusName(user.status);
-                var statusClass = getStatusClass(user.status);
-
-                html += '<tr>';
-                html += '<td><div class="user-cell"><div class="user-avatar">' + initial + '</div><div><div class="user-name">' + fullName + '</div><div class="user-email">' + (user.email || '') + '</div></div></div></td>';
+                html += '<tr><td><div class="user-cell"><div class="user-avatar">' + initial + '</div><div><div class="user-name">' + fullName + '</div><div class="user-email">' + (user.email || '') + '</div></div></div></td>';
                 html += '<td class="hide-mobile">' + (user.phoneNumber || '-') + '</td>';
-                html += '<td><span class="badge ' + roleClass + '">' + roleName + '</span></td>';
-                html += '<td><span class="badge ' + statusClass + '">' + statusName + '</span></td>';
+                html += '<td><span class="badge ' + getRoleClass(user.role) + '">' + getRoleName(user.role) + '</span></td>';
+                html += '<td><span class="badge ' + getStatusClass(user.status) + '">' + getStatusName(user.status) + '</span></td>';
                 html += '<td class="hide-mobile">' + formatDate(user.createdAt) + '</td>';
-                html += '<td><div class="action-btns">';
-                html += '<button class="action-btn edit" onclick="editUser(' + user.userId + ')" title="Edit"><i class="fas fa-edit"></i></button>';
-                html += '<button class="action-btn delete" onclick="deleteUser(' + user.userId + ')" title="Delete"><i class="fas fa-trash"></i></button>';
-                html += '</div></td>';
-                html += '</tr>';
+                html += '<td><div class="action-btns"><button class="action-btn" onclick="editUser(' + user.userId + ')" title="Edit"><i class="fas fa-edit"></i></button><button class="action-btn delete" onclick="deleteUser(' + user.userId + ')" title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>';
             }
             tbody.innerHTML = html;
         }
 
-        // Filter Users
         function filterUsers() {
             var search = document.getElementById('searchInput').value.toLowerCase();
             var roleFilter = document.getElementById('roleFilter').value;
             var statusFilter = document.getElementById('statusFilter').value;
-
-            filteredUsers = [];
-            for (var i = 0; i < allUsers.length; i++) {
-                var user = allUsers[i];
+            filteredUsers = allUsers.filter(function(user) {
                 var fullName = ((user.firstName || '') + ' ' + (user.lastName || '')).toLowerCase();
                 var email = (user.email || '').toLowerCase();
-
-                // Search match
                 var matchSearch = !search || fullName.indexOf(search) >= 0 || email.indexOf(search) >= 0;
-
-                // Role match - compare as strings
-                var userRole = String(user.role);
-                var matchRole = !roleFilter || userRole === roleFilter;
-
-                // Status match - compare as strings
-                var userStatus = String(user.status);
-                var matchStatus = !statusFilter || userStatus === statusFilter;
-
-                if (matchSearch && matchRole && matchStatus) {
-                    filteredUsers.push(user);
-                }
-            }
-
+                var matchRole = !roleFilter || String(user.role) === roleFilter;
+                var matchStatus = !statusFilter || String(user.status) === statusFilter;
+                return matchSearch && matchRole && matchStatus;
+            });
             renderUsers();
         }
 
-        // Edit User
         function editUser(userId) {
-            var user = null;
-            for (var i = 0; i < allUsers.length; i++) {
-                if (allUsers[i].userId === userId) {
-                    user = allUsers[i];
-                    break;
-                }
-            }
+            var user = allUsers.find(function(u) { return u.userId === userId; });
             if (!user) return;
-
             document.getElementById('editUserId').value = user.userId;
             document.getElementById('editFirstName').value = user.firstName || '';
             document.getElementById('editLastName').value = user.lastName || '';
@@ -1033,113 +955,48 @@
             document.getElementById('editModal').classList.add('active');
         }
 
-        function closeModal() {
-            document.getElementById('editModal').classList.remove('active');
-        }
+        function closeModal() { document.getElementById('editModal').classList.remove('active'); }
 
-        // Save User
         async function saveUser(event) {
             event.preventDefault();
             var token = localStorage.getItem('token');
             var userId = document.getElementById('editUserId').value;
-
-            var userData = {
-                firstName: document.getElementById('editFirstName').value,
-                lastName: document.getElementById('editLastName').value,
-                email: document.getElementById('editEmail').value,
-                phoneNumber: document.getElementById('editPhone').value,
-                role: parseInt(document.getElementById('editRole').value),
-                status: parseInt(document.getElementById('editStatus').value)
-            };
-
+            var userData = { firstName: document.getElementById('editFirstName').value, lastName: document.getElementById('editLastName').value, email: document.getElementById('editEmail').value, phoneNumber: document.getElementById('editPhone').value, role: parseInt(document.getElementById('editRole').value), status: parseInt(document.getElementById('editStatus').value) };
             try {
-                var response = await fetch('/api/admin/users/' + userId, {
-                    method: 'PUT',
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(userData)
-                });
-
-                if (response.ok) {
-                    showToast('User updated successfully');
-                    closeModal();
-                    loadUsers();
-                } else {
-                    var error = await response.json();
-                    showToast(error.message || 'Failed to update user', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('Error updating user', 'error');
-            }
+                var response = await fetch('/api/admin/users/' + userId, { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify(userData) });
+                if (response.ok) { showToast('User updated successfully'); closeModal(); loadUsers(); }
+                else { var error = await response.json(); showToast(error.message || 'Failed to update user', 'error'); }
+            } catch (error) { console.error('Error:', error); showToast('Error updating user', 'error'); }
         }
 
-        // Delete User
         function deleteUser(userId) {
-            var user = null;
-            for (var i = 0; i < allUsers.length; i++) {
-                if (allUsers[i].userId === userId) {
-                    user = allUsers[i];
-                    break;
-                }
-            }
+            var user = allUsers.find(function(u) { return u.userId === userId; });
             if (!user) return;
-
             document.getElementById('deleteUserId').value = userId;
             document.getElementById('deleteUserName').textContent = (user.firstName || '') + ' ' + (user.lastName || '') + ' (' + user.email + ')';
             document.getElementById('deleteModal').classList.add('active');
         }
 
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
-        }
+        function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('active'); }
 
         async function confirmDelete() {
             var token = localStorage.getItem('token');
             var userId = document.getElementById('deleteUserId').value;
-
             try {
-                var response = await fetch('/api/admin/users/' + userId, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
-                });
-
-                if (response.ok) {
-                    showToast('User deleted successfully');
-                    closeDeleteModal();
-                    loadUsers();
-                } else {
-                    var error = await response.json();
-                    showToast(error.message || 'Failed to delete user', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('Error deleting user', 'error');
-            }
+                var response = await fetch('/api/admin/users/' + userId, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+                if (response.ok) { showToast('User deleted successfully'); closeDeleteModal(); loadUsers(); }
+                else { var error = await response.json(); showToast(error.message || 'Failed to delete user', 'error'); }
+            } catch (error) { console.error('Error:', error); showToast('Error deleting user', 'error'); }
         }
 
-        // Check admin auth and load users
         document.addEventListener('DOMContentLoaded', function() {
-            var token = localStorage.getItem('token');
-            var user = localStorage.getItem('user');
-
-            if (!token || !user) {
-                navigateTo('/account/login');
-                return;
-            }
-
+            var token = localStorage.getItem('token'), user = localStorage.getItem('user');
+            if (!token || !user) { navigateTo('/account/login'); return; }
             try {
                 var userData = JSON.parse(user);
-                // Check if admin (role = 0 or role = "Admin")
-                if (userData.role !== 0 && userData.role !== '0' && userData.role !== 'Admin') {
-                    showToast('Admin access required', 'error');
-                    setTimeout(function() { navigateTo('/'); }, 2000);
-                    return;
-                }
+                if (userData.role !== 0 && userData.role !== '0' && userData.role !== 'Admin') { showToast('Admin access required', 'error'); setTimeout(function() { navigateTo('/'); }, 2000); return; }
                 loadUsers();
-            } catch (error) {
-                console.error('Error:', error);
-                navigateTo('/account/login');
-            }
+            } catch (error) { console.error('Error:', error); navigateTo('/account/login'); }
         });
     </script>
 </body>

@@ -9,124 +9,187 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Buy Now - TRAVIL</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <style>
         :root {
-            --color-bg: #0a0a0f;
-            --color-navy: #0d1117;
-            --color-charcoal: #161b22;
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
             --color-slate: #21262d;
-            --color-border: #30363d;
-            --color-gold: #d4a853;
-            --color-gold-muted: rgba(212, 168, 83, 0.15);
-            --color-white: #ffffff;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
             --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
             --color-success: #3fb950;
+            --color-success-muted: rgba(63, 185, 80, 0.15);
+            --color-warning: #d29922;
             --color-error: #f85149;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --radius-md: 10px;
-            --radius-lg: 16px;
+            --color-error-muted: rgba(248, 81, 73, 0.15);
+            --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
             --space-4: 16px;
             --space-5: 24px;
             --space-6: 32px;
             --space-7: 48px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-gold: 0 4px 20px rgba(212, 168, 83, 0.3);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-main); background: var(--color-bg); color: var(--color-white); line-height: 1.6; min-height: 100vh; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 0 var(--space-5); }
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-        /* Header */
-        .site-header {
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border);
-            padding: var(--space-4) 0;
+        /* Navbar */
+        .navbar {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-slate);
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .header-content {
+        .navbar-brand {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 var(--space-5);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-gold);
+            gap: var(--space-3);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
         }
 
-        .btn {
-            display: inline-flex;
+            .navbar-brand .logo {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
+
+            .navbar-brand span {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: var(--color-white);
+                letter-spacing: 0.1em;
+            }
+
+        .btn-back {
+            display: flex;
             align-items: center;
             gap: var(--space-2);
             padding: var(--space-3) var(--space-4);
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
             border-radius: var(--radius-md);
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
+            color: var(--color-mist);
             text-decoration: none;
+            font-size: 0.875rem;
+            transition: all var(--transition-fast);
         }
 
-        .btn-primary { background: var(--color-gold); color: var(--color-bg); }
-        .btn-primary:hover { background: #e4b863; }
-        .btn-outline { background: transparent; border: 1px solid var(--color-border); color: var(--color-white); }
-        .btn-outline:hover { border-color: var(--color-gold); color: var(--color-gold); }
-        .btn-success { background: var(--color-success); color: white; }
-        .btn-success:hover { background: #4fc760; }
-        .btn-lg { padding: var(--space-4) var(--space-5); font-size: 1rem; }
-        .btn-block { width: 100%; justify-content: center; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+            .btn-back:hover {
+                background: var(--color-charcoal);
+                border-color: var(--color-steel);
+            }
 
-        /* Page Header */
+        /* Main Container */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: var(--space-6) var(--space-5);
+        }
+
         .page-header {
             text-align: center;
-            padding: var(--space-6) 0;
-            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--space-6);
         }
 
-        .page-header h1 {
-            font-size: 2rem;
-            margin-bottom: var(--space-2);
+            .page-header h1 {
+                font-family: var(--font-display);
+                font-size: 2.5rem;
+                font-weight: 500;
+                margin-bottom: var(--space-2);
+            }
+
+            .page-header p {
+                color: var(--color-silver);
+            }
+
+        /* Loading State */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-7);
         }
 
-        .page-header p {
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--color-slate);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: var(--space-4);
+        }
+
+        .loading-state p {
             color: var(--color-silver);
         }
 
-        /* Main Content */
-        .main-content {
-            padding: var(--space-6) 0 var(--space-7);
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
+        /* Checkout Grid */
         .checkout-grid {
             display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: var(--space-5);
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-6);
         }
 
-        /* Cards */
+        /* Card Styles */
         .card {
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-lg);
             overflow: hidden;
             margin-bottom: var(--space-5);
@@ -134,19 +197,21 @@
 
         .card-header {
             padding: var(--space-4) var(--space-5);
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-slate);
             display: flex;
             align-items: center;
             gap: var(--space-3);
         }
 
-        .card-header h3 {
-            font-size: 1.125rem;
-        }
+            .card-header h3 {
+                font-family: var(--font-display);
+                font-size: 1.25rem;
+                font-weight: 500;
+            }
 
-        .card-header i {
-            color: var(--color-gold);
-        }
+            .card-header i {
+                color: var(--color-gold);
+            }
 
         .card-body {
             padding: var(--space-5);
@@ -158,15 +223,17 @@
             gap: var(--space-4);
         }
 
-        .package-preview img {
-            width: 120px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: var(--radius-md);
-        }
+            .package-preview img {
+                width: 140px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: var(--radius-md);
+            }
 
         .package-info h4 {
-            font-size: 1.125rem;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 500;
             margin-bottom: var(--space-2);
         }
 
@@ -174,6 +241,9 @@
             color: var(--color-gold);
             font-size: 0.875rem;
             margin-bottom: var(--space-2);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
         }
 
         .package-meta {
@@ -183,33 +253,46 @@
             font-size: 0.8125rem;
         }
 
-        /* Form */
+            .package-meta span {
+                display: flex;
+                align-items: center;
+                gap: var(--space-1);
+            }
+
+        /* Form Styles */
         .form-group {
             margin-bottom: var(--space-4);
         }
 
-        .form-group label {
+        .form-label {
             display: block;
-            margin-bottom: var(--space-2);
             font-size: 0.875rem;
-            color: var(--color-silver);
+            font-weight: 500;
+            color: var(--color-mist);
+            margin-bottom: var(--space-2);
         }
 
         .form-control {
             width: 100%;
             padding: var(--space-3) var(--space-4);
-            background: var(--color-navy);
-            border: 1px solid var(--color-border);
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
             border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
             color: var(--color-white);
-            font-size: 0.9375rem;
-            font-family: var(--font-main);
+            transition: all var(--transition-fast);
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--color-gold);
-        }
+            .form-control:focus {
+                outline: none;
+                border-color: var(--color-gold);
+                box-shadow: 0 0 0 3px var(--color-gold-muted);
+            }
+
+            .form-control::placeholder {
+                color: var(--color-steel);
+            }
 
         .form-row {
             display: grid;
@@ -217,234 +300,447 @@
             gap: var(--space-4);
         }
 
+        /* Booking Options */
+        .booking-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+        /* Card Preview */
+        .card-visual {
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            margin-bottom: var(--space-5);
+            position: relative;
+            overflow: hidden;
+            min-height: 160px;
+        }
+
+            .card-visual::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -50%;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            }
+
+            .card-visual .chip {
+                width: 40px;
+                height: 30px;
+                background: linear-gradient(135deg, #f0c57a 0%, #c99d45 100%);
+                border-radius: 4px;
+                margin-bottom: var(--space-4);
+            }
+
+            .card-visual .number {
+                font-family: 'Courier New', monospace;
+                font-size: 1.125rem;
+                letter-spacing: 2px;
+                color: var(--color-midnight);
+                margin-bottom: var(--space-4);
+            }
+
+            .card-visual .info {
+                display: flex;
+                justify-content: space-between;
+                color: var(--color-midnight);
+                font-size: 0.75rem;
+            }
+
+                .card-visual .info span {
+                    opacity: 0.7;
+                    text-transform: uppercase;
+                    display: block;
+                    margin-bottom: 2px;
+                }
+
+                .card-visual .info p {
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                }
+
         /* Order Summary */
+        .order-summary {
+            position: sticky;
+            top: 100px;
+        }
+
         .summary-row {
             display: flex;
             justify-content: space-between;
             padding: var(--space-3) 0;
-            border-bottom: 1px solid var(--color-border);
+            font-size: 0.9375rem;
+            color: var(--color-mist);
         }
 
-        .summary-row:last-child {
-            border-bottom: none;
+            .summary-row.total {
+                border-top: 1px solid var(--color-slate);
+                margin-top: var(--space-3);
+                padding-top: var(--space-4);
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: var(--color-white);
+            }
+
+                .summary-row.total span:last-child {
+                    font-family: var(--font-display);
+                    color: var(--color-gold);
+                }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-6);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-decoration: none;
+            width: 100%;
         }
 
-        .summary-row.total {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--color-gold);
-            padding-top: var(--space-4);
-            margin-top: var(--space-3);
-            border-top: 2px solid var(--color-border);
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            color: var(--color-midnight);
+            box-shadow: var(--shadow-gold);
         }
 
-        .summary-label {
-            color: var(--color-silver);
+            .btn-primary:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 24px rgba(212, 168, 83, 0.4);
+            }
+
+            .btn-primary:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        /* Alerts */
+        .alert {
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-5);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
         }
 
-        /* Security Note */
-        .security-note {
+        .alert-danger {
+            background: var(--color-error-muted);
+            color: var(--color-error);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+        }
+
+        .alert-success {
+            background: var(--color-success-muted);
+            color: var(--color-success);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+        }
+
+        .alert-warning {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--color-warning);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        /* Security Notice */
+        .security-notice {
             display: flex;
             align-items: center;
             gap: var(--space-3);
             padding: var(--space-4);
-            background: var(--color-gold-muted);
+            background: var(--color-slate);
             border-radius: var(--radius-md);
-            margin-top: var(--space-4);
+            margin-top: var(--space-5);
             font-size: 0.8125rem;
-            color: var(--color-gold);
+            color: var(--color-silver);
         }
+
+            .security-notice i {
+                font-size: 1.25rem;
+                color: var(--color-success);
+            }
 
         /* Toast */
         .toast {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--color-charcoal);
-            border: 1px solid var(--color-border);
+            bottom: var(--space-6);
+            right: var(--space-6);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-md);
             padding: var(--space-4) var(--space-5);
             display: flex;
             align-items: center;
             gap: var(--space-3);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
+            box-shadow: var(--shadow-lg);
+            transform: translateX(calc(100% + var(--space-6)));
+            transition: transform var(--transition-normal);
             z-index: 2000;
         }
 
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .toast.success i { color: var(--color-success); }
-        .toast.error i { color: var(--color-error); }
+            .toast.show {
+                transform: translateX(0);
+            }
 
-        /* Loading */
-        .loading { text-align: center; padding: var(--space-7); }
-        .spinner { width: 40px; height: 40px; border: 3px solid var(--color-border); border-top-color: var(--color-gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto var(--space-4); }
-        @@keyframes spin { to { transform: rotate(360deg); } }
+            .toast.success {
+                border-color: var(--color-success);
+            }
+
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
+            }
+
+                .toast.error i {
+                    color: var(--color-error);
+                }
 
         /* Responsive */
-        @@media (max-width: 768px) {
+        @@media (max-width: 1024px) {
             .checkout-grid {
                 grid-template-columns: 1fr;
             }
-            .form-row {
+
+            .order-summary {
+                position: static;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .navbar {
+                padding: var(--space-3) var(--space-4);
+            }
+
+            .navbar-brand span {
+                display: none;
+            }
+
+            .main-container {
+                padding: var(--space-4);
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .package-preview {
+                flex-direction: column;
+            }
+
+                .package-preview img {
+                    width: 100%;
+                    height: 180px;
+                }
+
+            .form-row,
+            .booking-options {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <header class="site-header">
-        <div class="header-content">
-            <a href="/" class="logo"><i class="fas fa-compass"></i> TRAVIL</a>
-            <a href="/packages" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Packages</a>
-        </div>
-    </header>
-
-    <section class="page-header">
-        <div class="container">
-            <h1><i class="fas fa-bolt" style="color: var(--color-gold);"></i> Quick Checkout</h1>
-            <p>Complete your purchase in seconds</p>
-        </div>
-    </section>
-
-    <main class="main-content">
-        <div class="container">
-            <div id="loadingState" class="loading">
-                <div class="spinner"></div>
-                <p>Loading package details...</p>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <div class="logo">
+                <i class="fas fa-paper-plane"></i>
             </div>
+            <span>TRAVIL</span>
+        </a>
+        <a href="/packages" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Back to Packages
+        </a>
+    </nav>
 
-            <div id="checkoutContent" class="checkout-grid" style="display: none;">
-                <!-- Left Column -->
-                <div>
-                    <!-- Package Details -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-suitcase"></i>
-                            <h3>Package Details</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="package-preview">
-                                <img id="packageImage" src="" alt="Package">
-                                <div class="package-info">
-                                    <h4 id="packageTitle">Loading...</h4>
-                                    <div class="package-location"><i class="fas fa-map-marker-alt"></i> <span id="packageLocation">-</span></div>
-                                    <div class="package-meta">
-                                        <span><i class="far fa-calendar"></i> <span id="packageDates">-</span></span>
-                                        <span><i class="far fa-clock"></i> <span id="packageDuration">-</span> Days</span>
-                                    </div>
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="page-header">
+            <h1>Complete Your Purchase</h1>
+            <p>Secure checkout with instant booking confirmation</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading package details...</p>
+        </div>
+
+        <!-- Alert -->
+        <div id="alertBox" class="alert d-none">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="alertMessage"></span>
+        </div>
+
+        <!-- Checkout Content -->
+        <div id="checkoutContent" class="checkout-grid" style="display: none;">
+            <!-- Left Column -->
+            <div>
+                <!-- Package Details Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-suitcase-rolling"></i>
+                        <h3>Your Trip</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="package-preview">
+                            <img id="packageImage" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80" alt="Package">
+                            <div class="package-info">
+                                <h4 id="packageTitle">Loading...</h4>
+                                <div class="package-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="packageLocation">-</span>
+                                </div>
+                                <div class="package-meta">
+                                    <span><i class="far fa-calendar"></i> <span id="packageDates">-</span></span>
+                                    <span><i class="fas fa-clock"></i> <span id="packageDuration">-</span> days</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Booking Options -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-users"></i>
-                            <h3>Booking Options</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Number of Rooms</label>
-                                    <select class="form-control" id="numRooms" onchange="updateTotal()">
-                                        <option value="1">1 Room</option>
-                                        <option value="2">2 Rooms</option>
-                                        <option value="3">3 Rooms</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Number of Guests</label>
-                                    <select class="form-control" id="numGuests">
-                                        <option value="1">1 Guest</option>
-                                        <option value="2">2 Guests</option>
-                                        <option value="3">3 Guests</option>
-                                        <option value="4">4 Guests</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Payment Details -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-credit-card"></i>
-                            <h3>Payment Details</h3>
-                        </div>
-                        <div class="card-body">
+                        <div class="booking-options" style="margin-top: var(--space-5);">
                             <div class="form-group">
-                                <label>Cardholder Name</label>
-                                <input type="text" class="form-control" id="cardName" placeholder="John Doe" required>
+                                <label class="form-label">Number of Rooms</label>
+                                <select id="numRooms" class="form-control" onchange="updateTotal()">
+                                    <option value="1">1 Room</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>Card Number</label>
-                                <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Expiry Date</label>
-                                    <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>CVV</label>
-                                    <input type="text" class="form-control" id="cardCvv" placeholder="123" maxlength="4" required>
-                                </div>
-                            </div>
-                            <div class="security-note">
-                                <i class="fas fa-lock"></i>
-                                <span>Your payment information is secure. Card details are NOT stored.</span>
+                                <label class="form-label">Number of Guests</label>
+                                <select id="numGuests" class="form-control">
+                                    <option value="1">1 Guest</option>
+                                    <option value="2" selected>2 Guests</option>
+                                    <option value="3">3 Guests</option>
+                                    <option value="4">4 Guests</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column - Order Summary -->
-                <div>
-                    <div class="card" style="position: sticky; top: 100px;">
-                        <div class="card-header">
-                            <i class="fas fa-receipt"></i>
-                            <h3>Order Summary</h3>
+                <!-- Payment Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-credit-card"></i>
+                        <h3>Payment Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Card Preview -->
+                        <div class="card-visual">
+                            <div class="chip"></div>
+                            <div class="number" id="cardPreviewNumber">•••• •••• •••• ••••</div>
+                            <div class="info">
+                                <div>
+                                    <span>Card Holder</span>
+                                    <p id="cardPreviewName">YOUR NAME</p>
+                                </div>
+                                <div>
+                                    <span>Expires</span>
+                                    <p id="cardPreviewExpiry">MM/YY</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="summary-row">
-                                <span class="summary-label">Package Price</span>
-                                <span id="summaryPrice">$0</span>
-                            </div>
-                            <div class="summary-row">
-                                <span class="summary-label">Rooms</span>
-                                <span id="summaryRooms">1</span>
-                            </div>
-                            <div class="summary-row">
-                                <span class="summary-label">Subtotal</span>
-                                <span id="summarySubtotal">$0</span>
-                            </div>
-                            <div class="summary-row">
-                                <span class="summary-label">Taxes & Fees</span>
-                                <span id="summaryTax">$0</span>
-                            </div>
-                            <div class="summary-row total">
-                                <span>Total</span>
-                                <span id="summaryTotal">$0</span>
-                            </div>
 
-                            <button class="btn btn-success btn-lg btn-block" id="payBtn" onclick="processPayment()" style="margin-top: var(--space-5);">
-                                <i class="fas fa-lock"></i> Pay Now
-                            </button>
+                        <div class="form-group">
+                            <label class="form-label">Cardholder Name</label>
+                            <input type="text" id="cardName" class="form-control" placeholder="John Doe">
+                        </div>
 
-                            <p style="text-align: center; margin-top: var(--space-4); font-size: 0.8125rem; color: var(--color-silver);">
-                                By clicking Pay Now, you agree to our Terms of Service
-                            </p>
+                        <div class="form-group">
+                            <label class="form-label">Card Number</label>
+                            <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Expiry Date</label>
+                                <input type="text" id="cardExpiry" class="form-control" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CVV</label>
+                                <input type="password" id="cardCvv" class="form-control" placeholder="•••" maxlength="4">
+                            </div>
+                        </div>
+
+                        <div class="security-notice">
+                            <i class="fas fa-shield-halved"></i>
+                            <div>
+                                <strong>Your payment is secure.</strong>
+                                <span>Card details are not stored. SSL encrypted.</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
+            <!-- Right Column - Order Summary -->
+            <div class="card order-summary">
+                <div class="card-header">
+                    <i class="fas fa-receipt"></i>
+                    <h3>Order Summary</h3>
+                </div>
+                <div class="card-body">
+                    <div class="summary-row">
+                        <span>Package Price</span>
+                        <span id="summaryPrice">$0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Rooms</span>
+                        <span>× <span id="summaryRooms">1</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal">$0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Taxes & Fees (10%)</span>
+                        <span id="summaryTax">$0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="summaryTotal">$0</span>
+                    </div>
+
+                    <button id="payBtn" class="btn btn-primary" style="margin-top: var(--space-5);" onclick="processPayment()">
+                        <i class="fas fa-lock"></i> Pay Now
+                    </button>
+
+                    <p style="text-align: center; font-size: 0.75rem; color: var(--color-silver); margin-top: var(--space-4);">
+                        By completing this purchase, you agree to our <a href="#" style="color: var(--color-gold);">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
 
     <script>
         var packageData = null;
@@ -456,12 +752,19 @@
             toast.className = 'toast ' + (type || 'success');
             toast.querySelector('i').className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
             toast.classList.add('show');
-            setTimeout(function() { toast.classList.remove('show'); }, 3000);
+            setTimeout(function () { toast.classList.remove('show'); }, 3000);
+        }
+
+        function showAlert(message, type) {
+            var alertBox = document.getElementById('alertBox');
+            document.getElementById('alertMessage').textContent = message;
+            alertBox.className = 'alert alert-' + (type || 'danger');
+            alertBox.classList.remove('d-none');
         }
 
         function getPackageId() {
             var path = window.location.pathname;
-            var match = path.match(/\/booking\/buynow\/(\d+)/);
+            var match = path.match(/\/booking\/buynow\/(\d+)/i);
             return match ? parseInt(match[1]) : null;
         }
 
@@ -478,7 +781,8 @@
         async function loadPackage() {
             var packageId = getPackageId();
             if (!packageId) {
-                showToast('Invalid package', 'error');
+                showAlert('Invalid package', 'danger');
+                document.getElementById('loadingState').style.display = 'none';
                 return;
             }
 
@@ -486,7 +790,7 @@
             var token = localStorage.getItem('token');
             if (!token) {
                 showToast('Please login to continue', 'error');
-                setTimeout(function() { window.location.href = '/account/login?returnUrl=/booking/buynow/' + packageId; }, 1500);
+                setTimeout(function () { window.location.href = '/account/login?returnUrl=/booking/buynow/' + packageId; }, 1500);
                 return;
             }
 
@@ -499,8 +803,8 @@
 
                 // Check availability
                 if (packageData.availableRooms <= 0) {
-                    showToast('This package is sold out', 'error');
-                    setTimeout(function() { window.location.href = '/packages/' + packageId; }, 1500);
+                    showAlert('This package is sold out. You can join the waiting list.', 'warning');
+                    document.getElementById('loadingState').style.display = 'none';
                     return;
                 }
 
@@ -509,6 +813,9 @@
 
                 // Populate UI
                 document.getElementById('packageImage').src = packageData.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400';
+                document.getElementById('packageImage').onerror = function () {
+                    this.src = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400';
+                };
                 document.getElementById('packageTitle').textContent = packageData.destination || 'Travel Package';
                 document.getElementById('packageLocation').textContent = packageData.country || 'Unknown';
                 document.getElementById('packageDates').textContent = formatDate(packageData.startDate) + ' - ' + formatDate(packageData.endDate);
@@ -533,37 +840,54 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                showToast('Failed to load package', 'error');
+                showAlert('Failed to load package details', 'danger');
+                document.getElementById('loadingState').style.display = 'none';
             }
         }
 
         function updateTotal() {
             var rooms = parseInt(document.getElementById('numRooms').value) || 1;
             var subtotal = unitPrice * rooms;
-            var tax = subtotal * 0.1; // 10% tax
+            var tax = subtotal * 0.1;
             var total = subtotal + tax;
 
             document.getElementById('summaryPrice').textContent = '$' + unitPrice.toLocaleString();
             document.getElementById('summaryRooms').textContent = rooms;
             document.getElementById('summarySubtotal').textContent = '$' + subtotal.toLocaleString();
-            document.getElementById('summaryTax').textContent = '$' + tax.toLocaleString();
-            document.getElementById('summaryTotal').textContent = '$' + total.toLocaleString();
+            document.getElementById('summaryTax').textContent = '$' + Math.round(tax).toLocaleString();
+            document.getElementById('summaryTotal').textContent = '$' + Math.round(total).toLocaleString();
         }
 
+        // Card name preview
+        document.getElementById('cardName').addEventListener('input', function (e) {
+            document.getElementById('cardPreviewName').textContent = e.target.value.toUpperCase() || 'YOUR NAME';
+        });
+
         // Format card number with spaces
-        document.getElementById('cardNumber').addEventListener('input', function(e) {
+        document.getElementById('cardNumber').addEventListener('input', function (e) {
             var value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
             var formatted = value.match(/.{1,4}/g)?.join(' ') || value;
             e.target.value = formatted;
+
+            // Update preview
+            document.getElementById('cardPreviewNumber').textContent = formatted ? formatted.replace(/\d(?=\d{4})/g, '•') : '•••• •••• •••• ••••';
         });
 
         // Format expiry date
-        document.getElementById('cardExpiry').addEventListener('input', function(e) {
+        document.getElementById('cardExpiry').addEventListener('input', function (e) {
             var value = e.target.value.replace(/\D/g, '');
             if (value.length >= 2) {
                 value = value.substring(0, 2) + '/' + value.substring(2, 4);
             }
             e.target.value = value;
+
+            // Update preview
+            document.getElementById('cardPreviewExpiry').textContent = value || 'MM/YY';
+        });
+
+        // CVV validation
+        document.getElementById('cardCvv').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
         });
 
         async function processPayment() {
@@ -616,6 +940,7 @@
                 var bookingId = bookingResult.data?.bookingId || bookingResult.bookingId;
 
                 // Step 2: Process payment
+                var expiryParts = cardExpiry.split('/');
                 var paymentResponse = await fetch('/api/payment', {
                     method: 'POST',
                     headers: {
@@ -626,9 +951,10 @@
                         bookingId: bookingId,
                         cardNumber: cardNumber,
                         cardHolderName: cardName,
-                        expiryDate: cardExpiry,
+                        expiryMonth: parseInt(expiryParts[0]),
+                        expiryYear: parseInt('20' + expiryParts[1]),
                         cvv: cardCvv,
-                        paymentMethod: 0 // Credit Card
+                        paymentMethod: 1 // Credit Card
                     })
                 });
 
@@ -639,8 +965,8 @@
 
                 // Success!
                 showToast('Payment successful! Redirecting...', 'success');
-                setTimeout(function() {
-                    window.location.href = '/booking/' + bookingId;
+                setTimeout(function () {
+                    window.location.href = '/?payment=success&ref=BK' + bookingId;
                 }, 2000);
 
             } catch (error) {

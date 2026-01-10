@@ -9,25 +9,32 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Packages - TRAVIL Admin</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <style>
         :root {
             --color-midnight: #0d1117;
             --color-navy: #161b22;
             --color-slate: #21262d;
+            --color-charcoal: #30363d;
             --color-steel: #484f58;
             --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
             --color-white: #ffffff;
             --color-gold: #d4a853;
             --color-gold-dark: #b8943f;
             --color-gold-muted: rgba(212, 168, 83, 0.15);
             --color-success: #3fb950;
-            --color-error: #f85149;
+            --color-success-muted: rgba(63, 185, 80, 0.15);
             --color-warning: #d29922;
-            --sidebar-width: 260px;
+            --color-warning-muted: rgba(210, 153, 34, 0.15);
+            --color-error: #f85149;
+            --color-error-muted: rgba(248, 81, 73, 0.15);
+            --sidebar-width: 280px;
             --space-1: 4px;
             --space-2: 8px;
             --space-3: 12px;
@@ -35,11 +42,14 @@
             --space-5: 24px;
             --space-6: 32px;
             --radius-sm: 6px;
-            --radius-md: 10px;
+            --radius-md: 12px;
             --radius-lg: 16px;
+            --radius-full: 9999px;
             --transition-fast: 0.15s ease;
             --transition-normal: 0.3s ease;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --shadow-gold: 0 4px 20px rgba(212, 168, 83, 0.3);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
         }
 
         * {
@@ -49,9 +59,10 @@
         }
 
         body {
-            font-family: var(--font-main);
+            font-family: var(--font-body);
             background: var(--color-midnight);
             color: var(--color-white);
+            line-height: 1.6;
             min-height: 100vh;
         }
 
@@ -65,7 +76,7 @@
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all var(--transition-normal);
         }
 
             .page-transition.active {
@@ -74,8 +85,8 @@
             }
 
         .loader {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border: 3px solid var(--color-slate);
             border-top-color: var(--color-gold);
             border-radius: 50%;
@@ -93,6 +104,7 @@
             min-height: 100vh;
         }
 
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--color-navy);
@@ -101,50 +113,73 @@
             top: 0;
             left: 0;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
             z-index: 100;
+            transition: transform var(--transition-normal);
         }
 
         .sidebar-header {
             padding: var(--space-5);
             border-bottom: 1px solid var(--color-slate);
+        }
+
+        .sidebar-logo {
             display: flex;
             align-items: center;
             gap: var(--space-3);
+            text-decoration: none;
         }
 
-        .logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
+            .sidebar-logo .logo-icon {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
 
-        .sidebar-header h1 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--color-gold);
-        }
+            .sidebar-logo .logo-text {
+                display: flex;
+                flex-direction: column;
+            }
 
-        .sidebar-header span {
-            font-size: 0.75rem;
-            color: var(--color-silver);
+                .sidebar-logo .logo-text span:first-child {
+                    font-family: var(--font-display);
+                    font-size: 1.5rem;
+                    font-weight: 500;
+                    color: var(--color-white);
+                    letter-spacing: 0.1em;
+                }
+
+                .sidebar-logo .logo-text span:last-child {
+                    font-size: 0.75rem;
+                    color: var(--color-gold);
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-4);
+            overflow-y: auto;
         }
 
         .nav-section {
-            padding: var(--space-4);
+            margin-bottom: var(--space-5);
         }
 
         .nav-section-title {
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--color-silver);
-            margin-bottom: var(--space-3);
-            padding-left: var(--space-3);
+            letter-spacing: 0.1em;
+            color: var(--color-steel);
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-2);
         }
 
         .nav-item {
@@ -152,9 +187,9 @@
             align-items: center;
             gap: var(--space-3);
             padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
             color: var(--color-silver);
             text-decoration: none;
+            border-radius: var(--radius-md);
             transition: all var(--transition-fast);
             margin-bottom: var(--space-1);
         }
@@ -172,83 +207,100 @@
             .nav-item i {
                 width: 20px;
                 text-align: center;
+                font-size: 0.9375rem;
             }
 
+        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
             padding: var(--space-6);
+            min-height: 100vh;
         }
 
-        .header {
+        .page-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: var(--space-5);
+            flex-wrap: wrap;
+            gap: var(--space-4);
         }
 
-            .header h2 {
-                font-size: 1.5rem;
-                font-weight: 600;
+            .page-header h1 {
+                font-family: var(--font-display);
+                font-size: 2rem;
+                font-weight: 500;
+                margin-bottom: var(--space-1);
                 display: flex;
                 align-items: center;
                 gap: var(--space-3);
             }
 
-        .subtitle {
-            color: var(--color-silver);
-            font-size: 0.875rem;
-            margin-top: var(--space-1);
-        }
+                .page-header h1 i {
+                    color: var(--color-gold);
+                }
 
+            .page-header p {
+                color: var(--color-silver);
+            }
+
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
+            padding: var(--space-3) var(--space-5);
+            font-family: var(--font-body);
             font-size: 0.875rem;
             font-weight: 500;
-            cursor: pointer;
-            transition: all var(--transition-fast);
             border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
             text-decoration: none;
         }
 
         .btn-primary {
-            background: var(--color-gold);
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
             color: var(--color-midnight);
+            box-shadow: var(--shadow-gold);
         }
 
             .btn-primary:hover {
-                background: var(--color-gold-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 24px rgba(212, 168, 83, 0.4);
             }
 
         .btn-secondary {
             background: var(--color-slate);
-            color: var(--color-white);
+            color: var(--color-mist);
+            border: 1px solid var(--color-charcoal);
         }
 
             .btn-secondary:hover {
-                background: var(--color-steel);
+                background: var(--color-charcoal);
+            }
+
+        .btn-danger {
+            background: var(--color-error-muted);
+            color: var(--color-error);
+            border: 1px solid transparent;
+        }
+
+            .btn-danger:hover {
+                background: var(--color-error);
+                color: var(--color-white);
             }
 
         .btn-icon {
             padding: var(--space-2);
             width: 36px;
             height: 36px;
-            justify-content: center;
         }
 
-        .btn-danger {
-            background: rgba(248, 81, 73, 0.15);
-            color: var(--color-error);
-        }
-
-            .btn-danger:hover {
-                background: rgba(248, 81, 73, 0.25);
-            }
-
+        /* Toolbar */
         .toolbar {
             display: flex;
             gap: var(--space-4);
@@ -258,19 +310,27 @@
 
         .search-box {
             flex: 1;
-            min-width: 200px;
+            min-width: 280px;
             position: relative;
         }
 
+            .search-box i {
+                position: absolute;
+                left: var(--space-4);
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--color-steel);
+            }
+
             .search-box input {
                 width: 100%;
-                padding: var(--space-3) var(--space-4);
-                padding-left: 40px;
+                padding: var(--space-3) var(--space-4) var(--space-3) 44px;
                 background: var(--color-navy);
                 border: 1px solid var(--color-slate);
                 border-radius: var(--radius-md);
                 color: var(--color-white);
-                font-size: 0.875rem;
+                font-family: var(--font-body);
+                font-size: 0.9375rem;
             }
 
                 .search-box input:focus {
@@ -278,13 +338,9 @@
                     border-color: var(--color-gold);
                 }
 
-            .search-box i {
-                position: absolute;
-                left: 14px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: var(--color-silver);
-            }
+                .search-box input::placeholder {
+                    color: var(--color-steel);
+                }
 
         .filter-select {
             padding: var(--space-3) var(--space-4);
@@ -292,8 +348,10 @@
             border: 1px solid var(--color-slate);
             border-radius: var(--radius-md);
             color: var(--color-white);
+            font-family: var(--font-body);
             font-size: 0.875rem;
-            min-width: 150px;
+            cursor: pointer;
+            min-width: 140px;
         }
 
             .filter-select:focus {
@@ -301,6 +359,7 @@
                 border-color: var(--color-gold);
             }
 
+        /* Card & Table */
         .card {
             background: var(--color-navy);
             border: 1px solid var(--color-slate);
@@ -322,7 +381,7 @@
             .data-table th {
                 font-size: 0.75rem;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
+                letter-spacing: 0.05em;
                 color: var(--color-silver);
                 font-weight: 500;
                 background: var(--color-slate);
@@ -332,8 +391,12 @@
                 font-size: 0.875rem;
             }
 
+            .data-table tr:last-child td {
+                border-bottom: none;
+            }
+
             .data-table tr:hover td {
-                background: rgba(255,255,255,0.02);
+                background: rgba(255, 255, 255, 0.02);
             }
 
         .package-info {
@@ -347,15 +410,15 @@
             height: 48px;
             border-radius: var(--radius-sm);
             object-fit: cover;
-            background: var(--color-slate);
         }
 
         .package-name {
             font-weight: 500;
+            margin-bottom: 2px;
         }
 
         .package-country {
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             color: var(--color-silver);
         }
 
@@ -363,18 +426,18 @@
             display: inline-flex;
             align-items: center;
             padding: var(--space-1) var(--space-3);
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 500;
         }
 
             .status-badge.active {
-                background: rgba(63, 185, 80, 0.15);
+                background: var(--color-success-muted);
                 color: var(--color-success);
             }
 
             .status-badge.inactive {
-                background: rgba(248, 81, 73, 0.15);
+                background: var(--color-error-muted);
                 color: var(--color-error);
             }
 
@@ -383,11 +446,12 @@
             gap: var(--space-2);
         }
 
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--space-4);
+            padding: var(--space-4) var(--space-5);
             border-top: 1px solid var(--color-slate);
         }
 
@@ -406,6 +470,7 @@
                 cursor: not-allowed;
             }
 
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: var(--space-6);
@@ -423,79 +488,100 @@
                 margin-bottom: var(--space-4);
             }
 
-        .toast {
-            position: fixed;
-            bottom: var(--space-5);
-            right: var(--space-5);
-            background: var(--color-navy);
-            border: 1px solid var(--color-slate);
-            border-radius: var(--radius-md);
-            padding: var(--space-4);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-            .toast.show {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .toast.success i {
-                color: var(--color-success);
-            }
-
-            .toast.error i {
-                color: var(--color-error);
-            }
-
+        /* Mobile */
         .mobile-menu-btn {
             display: none;
-            background: none;
-            border: none;
+            width: 40px;
+            height: 40px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md);
             color: var(--color-white);
-            font-size: 1.5rem;
+            font-size: 1.125rem;
             cursor: pointer;
+            align-items: center;
+            justify-content: center;
         }
 
         .sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 99;
         }
 
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-md);
+            padding: var(--space-4) var(--space-5);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            transform: translateX(calc(100% + var(--space-6)));
+            transition: transform var(--transition-normal);
+            z-index: 2000;
+        }
+
+            .toast.show {
+                transform: translateX(0);
+            }
+
+            .toast.success {
+                border-color: var(--color-success);
+            }
+
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
+            }
+
+                .toast.error i {
+                    color: var(--color-error);
+                }
+
+        /* Responsive */
         @@media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
             }
 
-                .sidebar.open {
+                .sidebar.active {
                     transform: translateX(0);
                 }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
 
             .main-content {
                 margin-left: 0;
             }
 
             .mobile-menu-btn {
-                display: block;
+                display: flex;
             }
         }
 
         @@media (max-width: 768px) {
+            .main-content {
+                padding: var(--space-4);
+            }
+
             .toolbar {
                 flex-direction: column;
             }
 
             .search-box {
-                width: 100%;
+                min-width: 100%;
             }
 
             .data-table {
@@ -514,43 +600,41 @@
     <div class="admin-layout">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="logo"><i class="fas fa-compass"></i></div>
-                <div>
-                    <h1>TRAVIL</h1>
-                    <span>Admin Panel</span>
-                </div>
+                <a href="/admin/dashboard" class="sidebar-logo">
+                    <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                    <div class="logo-text"><span>TRAVIL</span><span>Admin Panel</span></div>
+                </a>
             </div>
 
-            <nav class="nav-section">
-                <div class="nav-section-title">Main</div>
-                <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="/admin/packages" class="nav-item active"><i class="fas fa-suitcase"></i><span>Packages</span></a>
-                <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
-            </nav>
-
-            <nav class="nav-section">
-                <div class="nav-section-title">Management</div>
-                <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
-                <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
-                <a href="/admin/prices" class="nav-item"><i class="fas fa-tags"></i><span>Discounts</span></a>
-            </nav>
-
-            <nav class="nav-section">
-                <div class="nav-section-title">Settings</div>
-                <a href="/admin/profile" class="nav-item"><i class="fas fa-user-cog"></i><span>Profile</span></a>
-                <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
-                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                    <a href="/admin/packages" class="nav-item active"><i class="fas fa-suitcase-rolling"></i><span>Packages</span></a>
+                    <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+                    <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
+                    <a href="/admin/prices" class="nav-item"><i class="fas fa-tags"></i><span>Discounts</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
+                    <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+                </div>
             </nav>
         </aside>
 
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <main class="main-content">
-            <div class="header">
+            <div class="page-header">
                 <div>
                     <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
-                    <h2><i class="fas fa-suitcase" style="color: var(--color-gold);"></i>Manage Packages</h2>
-                    <p class="subtitle">Create, edit and manage travel packages</p>
+                    <h1><i class="fas fa-suitcase-rolling"></i> Manage Packages</h1>
+                    <p>Create, edit and manage travel packages</p>
                 </div>
                 <a href="/admin/packages/create" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add Package
@@ -626,7 +710,6 @@
         var filteredPackages = [];
         var currentPage = 1;
         var itemsPerPage = 10;
-
         var packageTypes = ['Adventure', 'Beach', 'Cultural', 'Cruise', 'Safari', 'Ski', 'City Break', 'Honeymoon', 'Family', 'Luxury'];
 
         function navigateTo(url, event) {
@@ -646,27 +729,23 @@
             type = type || 'success';
             var toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
-            toast.className = 'toast ' + type;
             toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            toast.classList.add('show');
+            toast.className = 'toast ' + type + ' show';
             setTimeout(function() { toast.classList.remove('show'); }, 3000);
         }
 
-        // Mobile menu
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('sidebarOverlay').classList.toggle('active');
         });
 
         document.getElementById('sidebarOverlay').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebar').classList.remove('active');
             this.classList.remove('active');
         });
 
-        // Load packages
         async function loadPackages() {
             var token = localStorage.getItem('token');
-
             try {
                 var response = await fetch('/api/packages/all', {
                     headers: { 'Authorization': 'Bearer ' + token }
@@ -754,26 +833,16 @@
             renderPackages();
         }
 
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderPackages();
-            }
-        }
-
+        function prevPage() { if (currentPage > 1) { currentPage--; renderPackages(); } }
         function nextPage() {
             var totalPages = Math.ceil(filteredPackages.length / itemsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderPackages();
-            }
+            if (currentPage < totalPages) { currentPage++; renderPackages(); }
         }
 
         async function deletePackage(id) {
             if (!confirm('Are you sure you want to delete this package?')) return;
 
             var token = localStorage.getItem('token');
-
             try {
                 var response = await fetch('/api/packages/' + id, {
                     method: 'DELETE',
@@ -793,15 +862,11 @@
             }
         }
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             var token = localStorage.getItem('token');
             var user = localStorage.getItem('user');
 
-            if (!token || !user) {
-                navigateTo('/account/login');
-                return;
-            }
+            if (!token || !user) { navigateTo('/account/login'); return; }
 
             try {
                 var userData = JSON.parse(user);
@@ -810,11 +875,13 @@
                     setTimeout(function() { navigateTo('/'); }, 2000);
                     return;
                 }
-            } catch (e) {
-                console.error('Error:', e);
-            }
+            } catch (e) { console.error('Error:', e); }
 
             loadPackages();
+        });
+
+        window.addEventListener('pageshow', function() {
+            document.getElementById('pageTransition').classList.remove('active');
         });
     </script>
 </body>

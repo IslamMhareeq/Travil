@@ -2,7 +2,6 @@
     ViewData["Title"] = "Edit Package";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,25 +10,39 @@
     <title>Edit Package - TRAVIL Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         :root {
-            --color-bg: #0a0a0f;
-            --color-surface: #12121a;
-            --color-surface-2: #1a1a24;
-            --color-border: #2a2a3a;
-            --color-gold: #d4a853;
-            --color-gold-hover: #e4b863;
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
             --color-white: #ffffff;
-            --color-silver: #a0a0b0;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
             --color-success: #3fb950;
-            --color-danger: #f85149;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --sidebar-width: 260px;
+            --color-success-muted: rgba(63, 185, 80, 0.15);
+            --color-error: #f85149;
+            --color-error-muted: rgba(248, 81, 73, 0.15);
+            --sidebar-width: 280px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
             --radius-sm: 6px;
-            --radius-md: 10px;
+            --radius-md: 12px;
             --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
         }
 
         * {
@@ -39,9 +52,10 @@
         }
 
         body {
-            font-family: var(--font-main);
-            background: var(--color-bg);
+            font-family: var(--font-body);
+            background: var(--color-midnight);
             color: var(--color-white);
+            line-height: 1.6;
             min-height: 100vh;
         }
 
@@ -52,171 +66,233 @@
 
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--color-surface);
-            border-right: 1px solid var(--color-border);
+            background: var(--color-navy);
+            border-right: 1px solid var(--color-slate);
             position: fixed;
             top: 0;
             left: 0;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
             z-index: 100;
+            transition: transform var(--transition-normal);
         }
 
         .sidebar-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--color-border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
         }
 
-            .sidebar-header .logo {
-                width: 40px;
-                height: 40px;
-                background: linear-gradient(135deg, var(--color-gold), #b8943f);
-                border-radius: 10px;
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            text-decoration: none;
+        }
+
+            .sidebar-logo .logo-icon {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+                border-radius: var(--radius-md);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-size: 1.25rem;
+                color: var(--color-midnight);
             }
 
-            .sidebar-header h1 {
-                font-size: 1.25rem;
-                font-weight: 700;
-                color: var(--color-gold);
+            .sidebar-logo .logo-text {
+                display: flex;
+                flex-direction: column;
             }
 
-            .sidebar-header span {
-                font-size: 0.75rem;
-                color: var(--color-silver);
-            }
+                .sidebar-logo .logo-text span:first-child {
+                    font-family: var(--font-display);
+                    font-size: 1.5rem;
+                    font-weight: 500;
+                    color: var(--color-white);
+                    letter-spacing: 0.1em;
+                }
+
+                .sidebar-logo .logo-text span:last-child {
+                    font-size: 0.75rem;
+                    color: var(--color-gold);
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-4);
+            overflow-y: auto;
+        }
 
         .nav-section {
-            padding: 16px;
+            margin-bottom: var(--space-5);
         }
 
         .nav-section-title {
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--color-silver);
-            margin-bottom: 12px;
-            padding-left: 12px;
+            letter-spacing: 0.1em;
+            color: var(--color-steel);
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-2);
         }
 
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
             color: var(--color-silver);
             text-decoration: none;
-            transition: all 0.2s;
-            margin-bottom: 4px;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
         }
 
             .nav-item:hover {
-                background: var(--color-surface-2);
+                background: var(--color-slate);
                 color: var(--color-white);
             }
 
             .nav-item.active {
-                background: rgba(212, 168, 83, 0.15);
+                background: var(--color-gold-muted);
                 color: var(--color-gold);
             }
 
             .nav-item i {
                 width: 20px;
                 text-align: center;
+                font-size: 0.9375rem;
             }
 
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
+            padding: var(--space-6);
             min-height: 100vh;
         }
 
-        .header {
-            padding: 24px 32px;
-            border-bottom: 1px solid var(--color-border);
+        .page-header {
+            margin-bottom: var(--space-5);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: var(--space-4);
         }
 
-            .header h2 {
-                font-size: 1.5rem;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-        .subtitle {
-            color: var(--color-silver);
-            font-size: 0.875rem;
-            margin-top: 4px;
-        }
-
-        .content {
-            padding: 32px;
-            max-width: 900px;
-        }
-
-        .loading-container {
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md);
+            color: var(--color-mist);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 60px;
+            text-decoration: none;
+            transition: all var(--transition-fast);
         }
 
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--color-border);
-            border-top-color: var(--color-gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @@keyframes spin {
-            to {
-                transform: rotate(360deg);
+            .back-btn:hover {
+                background: var(--color-charcoal);
+                color: var(--color-gold);
             }
+
+        .page-header-content h1 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
         }
 
-        .loading-text {
-            margin-top: 16px;
+            .page-header-content h1 i {
+                color: var(--color-gold);
+            }
+
+        .page-header-content p {
             color: var(--color-silver);
+            font-size: 0.875rem;
+        }
+
+        .loading-state, .error-state {
+            text-align: center;
+            padding: var(--space-6);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+        }
+
+            .loading-state i, .error-state i {
+                font-size: 3rem;
+                margin-bottom: var(--space-4);
+            }
+
+            .loading-state i {
+                color: var(--color-gold);
+                animation: spin 1s linear infinite;
+            }
+
+            .error-state i {
+                color: var(--color-error);
+            }
+
+            .loading-state h3, .error-state h3 {
+                font-family: var(--font-display);
+                font-size: 1.25rem;
+                margin-bottom: var(--space-2);
+            }
+
+            .loading-state p, .error-state p {
+                color: var(--color-silver);
+                margin-bottom: var(--space-4);
+            }
+
+        .form-card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
         }
 
         .form-section {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 24px;
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
         }
 
+            .form-section:last-of-type {
+                border-bottom: none;
+            }
+
         .form-section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: var(--space-4);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-2);
         }
+
+            .form-section-title i {
+                color: var(--color-gold);
+            }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: var(--space-4);
         }
 
         .form-group {
-            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
         }
 
             .form-group.full-width {
@@ -224,29 +300,29 @@
             }
 
             .form-group label {
-                display: block;
                 font-size: 0.875rem;
                 font-weight: 500;
-                color: var(--color-silver);
-                margin-bottom: 8px;
+                color: var(--color-mist);
             }
 
         .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--color-surface-2);
-            border: 1px solid var(--color-border);
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
             border-radius: var(--radius-md);
             color: var(--color-white);
-            font-size: 0.9rem;
-            font-family: var(--font-main);
-            transition: all 0.2s;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            transition: border-color var(--transition-fast);
         }
 
             .form-control:focus {
                 outline: none;
                 border-color: var(--color-gold);
-                box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.15);
+            }
+
+            .form-control::placeholder {
+                color: var(--color-steel);
             }
 
         textarea.form-control {
@@ -261,75 +337,92 @@
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
         }
 
             .checkbox-group input[type="checkbox"] {
                 width: 20px;
                 height: 20px;
                 accent-color: var(--color-gold);
+                cursor: pointer;
+            }
+
+            .checkbox-group label {
+                cursor: pointer;
+                color: var(--color-mist);
             }
 
         .image-upload-area {
-            border: 2px dashed var(--color-border);
+            border: 2px dashed var(--color-charcoal);
             border-radius: var(--radius-md);
-            padding: 40px;
+            padding: var(--space-6);
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
-            .image-upload-area:hover {
+            .image-upload-area:hover, .image-upload-area.dragover {
                 border-color: var(--color-gold);
-                background: rgba(212, 168, 83, 0.05);
-            }
-
-            .image-upload-area.dragover {
-                border-color: var(--color-gold);
-                background: rgba(212, 168, 83, 0.1);
+                background: var(--color-gold-muted);
             }
 
             .image-upload-area i {
                 font-size: 2.5rem;
-                color: var(--color-silver);
-                margin-bottom: 12px;
+                color: var(--color-gold);
+                margin-bottom: var(--space-3);
             }
 
             .image-upload-area p {
-                color: var(--color-silver);
-                font-size: 0.875rem;
+                color: var(--color-mist);
+                margin-bottom: var(--space-2);
             }
 
             .image-upload-area .supported {
                 font-size: 0.75rem;
-                color: var(--color-silver);
-                opacity: 0.7;
-                margin-top: 8px;
+                color: var(--color-steel);
             }
 
-        .image-preview-container {
-            margin-top: 20px;
+        .uploading-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--color-slate);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-4);
         }
 
-        .current-images-title {
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--color-charcoal);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .images-title {
             font-size: 0.875rem;
-            color: var(--color-silver);
-            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--color-mist);
+            margin-top: var(--space-4);
+            margin-bottom: var(--space-3);
         }
 
         .uploaded-images {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--space-3);
         }
 
         .image-preview-item {
             position: relative;
-            width: 120px;
-            height: 120px;
+            aspect-ratio: 1;
             border-radius: var(--radius-md);
             overflow: hidden;
-            border: 1px solid var(--color-border);
+            border: 2px solid var(--color-charcoal);
         }
 
             .image-preview-item img {
@@ -340,14 +433,14 @@
 
             .image-preview-item .remove-btn {
                 position: absolute;
-                top: 4px;
-                right: 4px;
+                top: var(--space-2);
+                right: var(--space-2);
                 width: 24px;
                 height: 24px;
-                background: rgba(248, 81, 73, 0.9);
+                background: var(--color-error);
                 border: none;
                 border-radius: 50%;
-                color: white;
+                color: var(--color-white);
                 cursor: pointer;
                 display: flex;
                 align-items: center;
@@ -357,357 +450,291 @@
 
             .image-preview-item .primary-badge {
                 position: absolute;
-                bottom: 4px;
-                left: 4px;
-                padding: 2px 8px;
+                bottom: var(--space-2);
+                left: var(--space-2);
                 background: var(--color-gold);
-                color: var(--color-bg);
-                font-size: 0.65rem;
+                color: var(--color-midnight);
+                padding: 2px var(--space-2);
+                border-radius: var(--radius-sm);
+                font-size: 0.625rem;
                 font-weight: 600;
-                border-radius: 4px;
-            }
-
-        .uploading-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px;
-            background: rgba(212, 168, 83, 0.1);
-            border-radius: var(--radius-md);
-            margin-top: 12px;
-        }
-
-            .uploading-indicator .spinner {
-                width: 16px;
-                height: 16px;
-                border: 2px solid var(--color-border);
-                border-top-color: var(--color-gold);
+                text-transform: uppercase;
             }
 
         .form-actions {
             display: flex;
-            gap: 12px;
             justify-content: flex-end;
-            padding-top: 20px;
-            border-top: 1px solid var(--color-border);
-            margin-top: 20px;
+            gap: var(--space-3);
+            padding: var(--space-5);
+            background: var(--color-slate);
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
             font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
             border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
             text-decoration: none;
+            transition: all var(--transition-fast);
         }
 
         .btn-primary {
-            background: var(--color-gold);
-            color: var(--color-bg);
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            color: var(--color-midnight);
         }
 
             .btn-primary:hover {
-                background: var(--color-gold-hover);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.3);
             }
 
             .btn-primary:disabled {
                 opacity: 0.5;
                 cursor: not-allowed;
+                transform: none;
             }
 
         .btn-secondary {
-            background: var(--color-surface-2);
-            color: var(--color-silver);
-            border: 1px solid var(--color-border);
+            background: var(--color-charcoal);
+            color: var(--color-mist);
         }
 
             .btn-secondary:hover {
-                border-color: var(--color-gold);
-                color: var(--color-gold);
-            }
-
-        .error-container {
-            text-align: center;
-            padding: 60px;
-        }
-
-            .error-container i {
-                font-size: 3rem;
-                color: var(--color-danger);
-                margin-bottom: 16px;
-            }
-
-            .error-container h3 {
-                font-size: 1.25rem;
-                margin-bottom: 8px;
-            }
-
-            .error-container p {
-                color: var(--color-silver);
-                margin-bottom: 20px;
+                background: var(--color-steel);
             }
 
         .toast {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--color-surface-2);
-            border: 1px solid var(--color-border);
+            bottom: var(--space-6);
+            right: var(--space-6);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
             border-radius: var(--radius-md);
-            padding: 16px 20px;
+            padding: var(--space-4) var(--space-5);
             display: flex;
             align-items: center;
-            gap: 12px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
+            gap: var(--space-3);
+            transform: translateX(calc(100% + var(--space-6)));
+            transition: transform var(--transition-normal);
             z-index: 2000;
         }
 
             .toast.show {
-                transform: translateY(0);
-                opacity: 1;
+                transform: translateX(0);
             }
 
-            .toast.success i {
-                color: var(--color-success);
+            .toast.success {
+                border-color: var(--color-success);
             }
 
-            .toast.error i {
-                color: var(--color-danger);
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
             }
 
-        @@media (max-width: 768px) {
+                .toast.error i {
+                    color: var(--color-error);
+                }
+
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-size: 1.125rem;
+            cursor: pointer;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
+            }
+
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+
+            .sidebar-overlay.active {
+                display: block;
             }
 
             .main-content {
                 margin-left: 0;
             }
 
-            .content {
-                padding: 16px;
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .main-content {
+                padding: var(--space-4);
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .page-header-content h1 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="admin-layout">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="logo"><i class="fas fa-compass"></i></div>
-                <div>
-                    <h1>TRAVIL</h1>
-                    <span>Admin Panel</span>
-                </div>
+                <a href="/admin/dashboard" class="sidebar-logo">
+                    <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                    <div class="logo-text"><span>TRAVIL</span><span>Admin Panel</span></div>
+                </a>
             </div>
-
-            <nav class="nav-section">
-                <div class="nav-section-title">Main</div>
-                <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="/admin/packages" class="nav-item active"><i class="fas fa-suitcase"></i><span>Packages</span></a>
-                <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
-            </nav>
-
-            <nav class="nav-section">
-                <div class="nav-section-title">Management</div>
-                <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
-                <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
-            </nav>
-
-            <nav class="nav-section">
-                <div class="nav-section-title">Settings</div>
-                <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
-                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/admin/dashboard" class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                    <a href="/admin/packages" class="nav-item active"><i class="fas fa-suitcase-rolling"></i><span>Packages</span></a>
+                    <a href="/admin/bookings" class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+                    <a href="/admin/reviews" class="nav-item"><i class="fas fa-star"></i><span>Reviews</span></a>
+                    <a href="/admin/prices" class="nav-item"><i class="fas fa-tags"></i><span>Discounts</span></a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a href="/" class="nav-item"><i class="fas fa-globe"></i><span>View Site</span></a>
+                    <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+                </div>
             </nav>
         </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <main class="main-content">
-            <div class="header">
-                <div>
-                    <h2><i class="fas fa-edit" style="color: var(--color-gold);"></i><span id="pageTitle">Edit Package</span></h2>
-                    <p class="subtitle" id="pageSubtitle">Update package details</p>
-                </div>
-                <div>
-                    <a href="/admin/packages" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Back to Packages
-                    </a>
+            <div class="page-header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                <a href="/admin/packages" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <div class="page-header-content">
+                    <h1 id="pageTitle"><i class="fas fa-edit"></i> Edit Package</h1>
+                    <p id="pageSubtitle">Update package details</p>
                 </div>
             </div>
 
-            <div class="content">
-                <div class="loading-container" id="loadingState">
-                    <div class="spinner"></div>
-                    <p class="loading-text">Loading package data...</p>
+            <div class="loading-state" id="loadingState"><i class="fas fa-spinner"></i><h3>Loading Package</h3><p>Please wait...</p></div>
+            <div class="error-state" id="errorState" style="display: none;"><i class="fas fa-exclamation-triangle"></i><h3>Package Not Found</h3><p>The requested package could not be found.</p><a href="/admin/packages" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Packages</a></div>
+
+            <form id="packageForm" class="form-card" style="display: none;">
+                <input type="hidden" id="packageId" />
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="destination">Destination *</label><input type="text" id="destination" class="form-control" placeholder="e.g., Paris" required /></div>
+                        <div class="form-group"><label for="country">Country *</label><input type="text" id="country" class="form-control" placeholder="e.g., France" required /></div>
+                        <div class="form-group full-width"><label for="description">Description *</label><textarea id="description" class="form-control" placeholder="Describe the travel package..." required></textarea></div>
+                    </div>
                 </div>
 
-                <div class="error-container" id="errorState" style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Package Not Found</h3>
-                    <p>The package you're looking for doesn't exist or has been deleted.</p>
-                    <a href="/admin/packages" class="btn btn-primary">Back to Packages</a>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-calendar-alt"></i> Dates & Pricing</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="startDate">Start Date *</label><input type="date" id="startDate" class="form-control" required /></div>
+                        <div class="form-group"><label for="endDate">End Date *</label><input type="date" id="endDate" class="form-control" required /></div>
+                        <div class="form-group"><label for="price">Price (USD) *</label><input type="number" id="price" class="form-control" placeholder="1299" min="1" step="0.01" required /></div>
+                        <div class="form-group"><label for="availableRooms">Available Rooms *</label><input type="number" id="availableRooms" class="form-control" placeholder="10" min="0" required /></div>
+                    </div>
                 </div>
 
-                <form id="packageForm" style="display: none;">
-                    <input type="hidden" id="packageId" />
-
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-info-circle" style="color: var(--color-gold);"></i>Basic Information</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="destination">Destination *</label>
-                                <input type="text" id="destination" class="form-control" placeholder="e.g., Paris" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="country">Country *</label>
-                                <input type="text" id="country" class="form-control" placeholder="e.g., France" required />
-                            </div>
-                            <div class="form-group full-width">
-                                <label for="description">Description *</label>
-                                <textarea id="description" class="form-control" placeholder="Describe the travel package..." required></textarea>
-                            </div>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-cog"></i> Package Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="packageType">Package Type</label>
+                            <select id="packageType" class="form-control">
+                                <option value="0">Adventure</option>
+                                <option value="1">Beach</option>
+                                <option value="2">Cultural</option>
+                                <option value="3">Cruise</option>
+                                <option value="4">Safari</option>
+                                <option value="5">Ski</option>
+                                <option value="6">City Break</option>
+                                <option value="7">Honeymoon</option>
+                                <option value="8">Family</option>
+                                <option value="9">Luxury</option>
+                            </select>
                         </div>
+                        <div class="form-group"><label for="minimumAge">Minimum Age</label><input type="number" id="minimumAge" class="form-control" placeholder="0" min="0" /></div>
+                        <div class="form-group"><label for="maximumAge">Maximum Age</label><input type="number" id="maximumAge" class="form-control" placeholder="100" min="0" /></div>
+                        <div class="form-group"><label>&nbsp;</label><div class="checkbox-group"><input type="checkbox" id="isActive" checked /><label for="isActive">Package is Active</label></div></div>
                     </div>
+                </div>
 
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-calendar-alt" style="color: var(--color-gold);"></i>Dates & Pricing</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="startDate">Start Date *</label>
-                                <input type="date" id="startDate" class="form-control" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="endDate">End Date *</label>
-                                <input type="date" id="endDate" class="form-control" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="price">Price (USD) *</label>
-                                <input type="number" id="price" class="form-control" placeholder="1299" min="1" step="0.01" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="availableRooms">Available Rooms *</label>
-                                <input type="number" id="availableRooms" class="form-control" placeholder="10" min="0" required />
-                            </div>
-                        </div>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-images"></i> Package Images</h3>
+                    <div class="image-upload-area" id="dropZone" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click or drag images here to upload</p>
+                        <span class="supported">Supported: JPG, PNG, GIF, WEBP (Max 10MB each)</span>
                     </div>
+                    <input type="file" id="imageInput" multiple accept="image/*" style="display: none;" />
+                    <div id="uploadingIndicator" class="uploading-indicator" style="display: none;"><div class="spinner"></div><span>Uploading images...</span></div>
+                    <div class="images-title" id="imagesTitle" style="display: none;">Current Images</div>
+                    <div class="uploaded-images" id="uploadedImages"></div>
+                    <input type="hidden" id="imageUrl" /><input type="hidden" id="imageUrls" />
+                </div>
 
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-cog" style="color: var(--color-gold);"></i>Package Details</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="packageType">Package Type</label>
-                                <select id="packageType" class="form-control">
-                                    <option value="0">Adventure</option>
-                                    <option value="1">Beach</option>
-                                    <option value="2">Cultural</option>
-                                    <option value="3">Cruise</option>
-                                    <option value="4">Safari</option>
-                                    <option value="5">Ski</option>
-                                    <option value="6">City Break</option>
-                                    <option value="7">Honeymoon</option>
-                                    <option value="8">Family</option>
-                                    <option value="9">Luxury</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="minimumAge">Minimum Age</label>
-                                <input type="number" id="minimumAge" class="form-control" placeholder="0" min="0" />
-                            </div>
-                            <div class="form-group">
-                                <label for="maximumAge">Maximum Age</label>
-                                <input type="number" id="maximumAge" class="form-control" placeholder="100" min="0" />
-                            </div>
-                            <div class="form-group">
-                                <label>&nbsp;</label>
-                                <div class="checkbox-group">
-                                    <input type="checkbox" id="isActive" checked />
-                                    <label for="isActive" style="margin-bottom: 0;">Package is Active</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="fas fa-route"></i> Itinerary</h3>
+                    <div class="form-group full-width"><label for="itinerary">Travel Itinerary</label><textarea id="itinerary" class="form-control" placeholder="Day 1: Arrival...&#10;Day 2: City tour...&#10;Day 3: Free time..." rows="6"></textarea></div>
+                </div>
 
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-images" style="color: var(--color-gold);"></i>Package Images</h3>
-
-                        <div class="image-upload-area" id="dropZone" onclick="document.getElementById('imageInput').click()">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click or drag images here to upload</p>
-                            <span class="supported">Supported: JPG, PNG, GIF, WEBP (Max 10MB)</span>
-                        </div>
-                        <input type="file" id="imageInput" multiple accept="image/*" style="display: none;" />
-
-                        <div id="uploadingIndicator" class="uploading-indicator" style="display: none;">
-                            <div class="spinner"></div>
-                            <span>Uploading...</span>
-                        </div>
-
-                        <div class="image-preview-container">
-                            <p class="current-images-title" id="imagesTitle" style="display: none;">Current Images:</p>
-                            <div class="uploaded-images" id="uploadedImages"></div>
-                        </div>
-
-                        <input type="hidden" id="imageUrl" />
-                        <input type="hidden" id="imageUrls" />
-                    </div>
-
-                    <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-route" style="color: var(--color-gold);"></i>Itinerary</h3>
-                        <div class="form-group full-width">
-                            <label for="itinerary">Travel Itinerary</label>
-                            <textarea id="itinerary" class="form-control" placeholder="Day 1: Arrival...&#10;Day 2: City tour..." rows="6"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <a href="/admin/packages" class="btn btn-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
-                            <i class="fas fa-save"></i> Update Package
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div class="form-actions">
+                    <a href="/admin/packages" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn"><i class="fas fa-save"></i> Update Package</button>
+                </div>
+            </form>
         </main>
     </div>
 
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Success</span>
-    </div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Success</span></div>
 
     <script>
-        var packageId = null;
-        var uploadedImageUrls = [];
+        var uploadedImageUrls = [], packageId = null;
 
-        function logout(event) {
-            if (event) event.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/account/login';
-        }
+        function logout(event) { if (event) event.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = '/account/login'; }
+        function showToast(message, type) { type = type || 'success'; var toast = document.getElementById('toast'); document.getElementById('toastMessage').textContent = message; toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'; toast.className = 'toast ' + type + ' show'; setTimeout(function() { toast.classList.remove('show'); }, 3000); }
 
-        function showToast(message, type) {
-            type = type || 'success';
-            var toast = document.getElementById('toast');
-            var icon = toast.querySelector('i');
-            document.getElementById('toastMessage').textContent = message;
-            toast.className = 'toast ' + type;
-            icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            toast.classList.add('show');
-            setTimeout(function() { toast.classList.remove('show'); }, 3000);
-        }
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); });
+        document.getElementById('sidebarOverlay').addEventListener('click', function() { document.getElementById('sidebar').classList.remove('active'); this.classList.remove('active'); });
 
         function getPackageIdFromUrl() {
             var path = window.location.pathname;
@@ -720,22 +747,12 @@
 
         async function loadPackageData() {
             packageId = getPackageIdFromUrl();
-
-            if (!packageId) {
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('errorState').style.display = 'block';
-                return;
-            }
+            if (!packageId) { document.getElementById('loadingState').style.display = 'none'; document.getElementById('errorState').style.display = 'block'; return; }
 
             var token = localStorage.getItem('token');
-
             try {
-                var response = await fetch('/api/packages/' + packageId, {
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-
+                var response = await fetch('/api/packages/' + packageId, { headers: { 'Authorization': 'Bearer ' + token } });
                 if (!response.ok) throw new Error('Package not found');
-
                 var result = await response.json();
                 var pkg = result.data || result;
 
@@ -753,59 +770,28 @@
                 document.getElementById('itinerary').value = pkg.itinerary || '';
                 document.getElementById('isActive').checked = pkg.isActive !== false;
 
-                if (pkg.imageUrl) {
-                    uploadedImageUrls.push(pkg.imageUrl);
-                    addImagePreview(pkg.imageUrl, 'Primary Image');
-                }
-
+                if (pkg.imageUrl) { uploadedImageUrls.push(pkg.imageUrl); addImagePreview(pkg.imageUrl, 'Primary Image'); }
                 if (pkg.images && pkg.images.length > 0) {
                     for (var i = 0; i < pkg.images.length; i++) {
-                        var img = pkg.images[i];
-                        var imgUrl = img.imageUrl || img;
-                        if (uploadedImageUrls.indexOf(imgUrl) === -1) {
-                            uploadedImageUrls.push(imgUrl);
-                            addImagePreview(imgUrl, 'Image ' + (i + 1));
-                        }
+                        var imgUrl = pkg.images[i].imageUrl || pkg.images[i];
+                        if (uploadedImageUrls.indexOf(imgUrl) === -1) { uploadedImageUrls.push(imgUrl); addImagePreview(imgUrl, 'Image ' + (i + 1)); }
                     }
                 }
-
                 updateHiddenFields();
 
-                document.getElementById('pageTitle').textContent = 'Edit: ' + pkg.destination;
+                document.getElementById('pageTitle').innerHTML = '<i class="fas fa-edit"></i> Edit: ' + pkg.destination;
                 document.getElementById('pageSubtitle').textContent = 'Update package details for ' + pkg.destination + ', ' + pkg.country;
-
                 document.getElementById('loadingState').style.display = 'none';
                 document.getElementById('packageForm').style.display = 'block';
-
-            } catch (error) {
-                console.error('Error loading package:', error);
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('errorState').style.display = 'block';
-            }
+            } catch (error) { console.error('Error:', error); document.getElementById('loadingState').style.display = 'none'; document.getElementById('errorState').style.display = 'block'; }
         }
 
         var dropZone = document.getElementById('dropZone');
         var imageInput = document.getElementById('imageInput');
-
-        dropZone.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        });
-
-        dropZone.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-        });
-
-        dropZone.addEventListener('drop', function(e) {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) uploadImages(e.dataTransfer.files);
-        });
-
-        imageInput.addEventListener('change', function(e) {
-            if (e.target.files.length > 0) uploadImages(e.target.files);
-        });
+        dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', function(e) { e.preventDefault(); dropZone.classList.remove('dragover'); });
+        dropZone.addEventListener('drop', function(e) { e.preventDefault(); dropZone.classList.remove('dragover'); if (e.dataTransfer.files.length > 0) uploadImages(e.dataTransfer.files); });
+        imageInput.addEventListener('change', function(e) { if (e.target.files.length > 0) uploadImages(e.target.files); });
 
         async function uploadImages(files) {
             var token = localStorage.getItem('token');
@@ -814,43 +800,18 @@
 
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
-
-                if (!file.type.startsWith('image/')) {
-                    showToast(file.name + ' is not an image', 'error');
-                    continue;
-                }
-
-                if (file.size > 10 * 1024 * 1024) {
-                    showToast(file.name + ' exceeds 10MB', 'error');
-                    continue;
-                }
+                if (!file.type.startsWith('image/')) { showToast(file.name + ' is not an image', 'error'); continue; }
+                if (file.size > 10 * 1024 * 1024) { showToast(file.name + ' exceeds 10MB', 'error'); continue; }
 
                 try {
                     var formData = new FormData();
                     formData.append('file', file);
-
-                    var response = await fetch('/api/images/upload', {
-                        method: 'POST',
-                        headers: { 'Authorization': 'Bearer ' + token },
-                        body: formData
-                    });
-
+                    var response = await fetch('/api/images/upload', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: formData });
                     var result = await response.json();
-
-                    if (result.success) {
-                        uploadedImageUrls.push(result.data.imageUrl);
-                        addImagePreview(result.data.imageUrl, result.data.fileName);
-                        updateHiddenFields();
-                        showToast('Image uploaded!', 'success');
-                    } else {
-                        showToast(result.message || 'Upload failed', 'error');
-                    }
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    showToast('Error uploading ' + file.name, 'error');
-                }
+                    if (result.success) { uploadedImageUrls.push(result.data.imageUrl); addImagePreview(result.data.imageUrl, result.data.fileName); updateHiddenFields(); showToast('Image uploaded!'); }
+                    else { showToast(result.message || 'Upload failed', 'error'); }
+                } catch (error) { showToast('Error uploading ' + file.name, 'error'); }
             }
-
             indicator.style.display = 'none';
             imageInput.value = '';
         }
@@ -858,49 +819,31 @@
         function addImagePreview(imageUrl, fileName) {
             var container = document.getElementById('uploadedImages');
             document.getElementById('imagesTitle').style.display = 'block';
-
             var div = document.createElement('div');
             div.className = 'image-preview-item';
             div.dataset.url = imageUrl;
-
             var isPrimary = uploadedImageUrls.length === 1 || uploadedImageUrls[0] === imageUrl;
-
-            div.innerHTML =
-                '<img src="' + imageUrl + '" alt="' + fileName + '" onerror="this.src=\'https://via.placeholder.com/120?text=Image\'" />' +
-                '<button type="button" class="remove-btn" onclick="removeImage(this)"><i class="fas fa-times"></i></button>' +
-                (isPrimary ? '<span class="primary-badge">Primary</span>' : '');
-
+            div.innerHTML = '<img src="' + imageUrl + '" alt="' + fileName + '" onerror="this.src=\'https://via.placeholder.com/120?text=Image\'" /><button type="button" class="remove-btn" onclick="removeImage(this)"><i class="fas fa-times"></i></button>' + (isPrimary ? '<span class="primary-badge">Primary</span>' : '');
             container.appendChild(div);
         }
 
         function removeImage(btn) {
             var item = btn.closest('.image-preview-item');
             var url = item.dataset.url;
-
             var index = uploadedImageUrls.indexOf(url);
             if (index > -1) uploadedImageUrls.splice(index, 1);
-
             item.remove();
             updateHiddenFields();
             updatePrimaryBadge();
-
-            if (uploadedImageUrls.length === 0) {
-                document.getElementById('imagesTitle').style.display = 'none';
-            }
+            if (uploadedImageUrls.length === 0) document.getElementById('imagesTitle').style.display = 'none';
         }
 
         function updatePrimaryBadge() {
             var items = document.querySelectorAll('.image-preview-item');
             items.forEach(function(item, idx) {
                 var badge = item.querySelector('.primary-badge');
-                if (idx === 0 && !badge) {
-                    var span = document.createElement('span');
-                    span.className = 'primary-badge';
-                    span.textContent = 'Primary';
-                    item.appendChild(span);
-                } else if (idx !== 0 && badge) {
-                    badge.remove();
-                }
+                if (idx === 0 && !badge) { var span = document.createElement('span'); span.className = 'primary-badge'; span.textContent = 'Primary'; item.appendChild(span); }
+                else if (idx !== 0 && badge) { badge.remove(); }
             });
         }
 
@@ -911,10 +854,8 @@
 
         document.getElementById('packageForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             var token = localStorage.getItem('token');
             var submitBtn = document.getElementById('submitBtn');
-
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
 
@@ -936,51 +877,18 @@
                     isActive: document.getElementById('isActive').checked
                 };
 
-                var response = await fetch('/api/packages/' + packageId, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify(packageData)
-                });
-
+                var response = await fetch('/api/packages/' + packageId, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(packageData) });
                 var result = await response.json();
 
-                if (response.ok && result.success) {
-                    showToast('Package updated!', 'success');
-                    setTimeout(function() { window.location.href = '/admin/packages'; }, 1500);
-                } else {
-                    showToast(result.message || 'Update failed', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Package';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('An error occurred', 'error');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Package';
-            }
+                if (response.ok && result.success) { showToast('Package updated!'); setTimeout(function() { window.location.href = '/admin/packages'; }, 1500); }
+                else { showToast(result.message || 'Update failed', 'error'); submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Package'; }
+            } catch (error) { showToast('An error occurred', 'error'); submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Package'; }
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            var token = localStorage.getItem('token');
-            var user = localStorage.getItem('user');
-
-            if (!token || !user) {
-                window.location.href = '/account/login';
-                return;
-            }
-
-            try {
-                var userData = JSON.parse(user);
-                if (userData.role !== 0 && userData.role !== 'Admin') {
-                    showToast('Access denied', 'error');
-                    setTimeout(function() { window.location.href = '/'; }, 1500);
-                    return;
-                }
-            } catch (e) { console.error('Error:', e); }
-
+            var token = localStorage.getItem('token'), user = localStorage.getItem('user');
+            if (!token || !user) { window.location.href = '/account/login'; return; }
+            try { var userData = JSON.parse(user); if (userData.role !== 0 && userData.role !== 'Admin') { showToast('Access denied', 'error'); setTimeout(function() { window.location.href = '/'; }, 1500); return; } } catch (e) {}
             loadPackageData();
         });
     </script>

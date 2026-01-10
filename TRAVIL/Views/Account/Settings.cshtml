@@ -2,145 +2,896 @@
     ViewData["Title"] = "Settings";
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings - TRAVIL</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <style>
-        :root{--color-midnight:#0d1117;--color-navy:#161b22;--color-slate:#21262d;--color-charcoal:#30363d;--color-gold:#d4a853;--color-gold-dark:#b8923f;--color-gold-muted:rgba(212,168,83,0.15);--color-white:#fff;--color-silver:#8b949e;--color-mist:#c9d1d9;--font-display:'Cormorant Garamond',serif;--font-body:'Outfit',sans-serif;--radius-md:10px;--radius-lg:16px;--sidebar-width:280px}
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:var(--font-body);background:var(--color-midnight);color:var(--color-mist);line-height:1.6}
-        .page-transition{position:fixed;inset:0;background:var(--color-midnight);z-index:10000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .4s}
-        .page-transition.active{opacity:1;visibility:visible}
-        .loader{width:48px;height:48px;border:3px solid var(--color-slate);border-top-color:var(--color-gold);border-radius:50%;animation:spin .8s linear infinite}
-        .dashboard-layout{display:flex;min-height:100vh}
-        .sidebar{width:var(--sidebar-width);background:var(--color-navy);border-right:1px solid var(--color-slate);position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column}
-        .sidebar-header{padding:24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--color-slate)}
-        .sidebar-header .logo{width:42px;height:42px;background:linear-gradient(135deg,var(--color-gold),var(--color-gold-dark));border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.125rem;color:var(--color-midnight)}
-        .sidebar-header h1{font-family:var(--font-display);font-size:1.5rem;font-weight:500;color:var(--color-white);letter-spacing:.1em}
-        .nav-section{padding:16px}
-        .nav-section-title{font-size:.6875rem;font-weight:600;color:#484f58;text-transform:uppercase;letter-spacing:.1em;padding:8px 12px;margin-bottom:8px}
-        .nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius-md);color:var(--color-silver);text-decoration:none;font-size:.9375rem;font-weight:500;transition:all .15s;margin-bottom:4px;border-left:3px solid transparent}
-        .nav-item:hover{background:var(--color-slate);color:var(--color-white)}
-        .nav-item.active{background:var(--color-gold-muted);color:var(--color-gold);border-left-color:var(--color-gold)}
-        .nav-item i{width:20px;text-align:center}
-        .main-content{flex:1;margin-left:var(--sidebar-width);padding:24px;min-height:100vh}
-        .header{margin-bottom:32px}
-        .header h2{font-family:var(--font-display);font-size:1.75rem;font-weight:500;color:var(--color-white);margin-bottom:4px}
-        .header .subtitle{font-size:.875rem;color:var(--color-silver)}
-        .mobile-menu-btn{display:none;background:var(--color-slate);border:none;color:var(--color-white);padding:12px;border-radius:var(--radius-md);cursor:pointer;font-size:1.125rem}
-        .settings-section{background:var(--color-navy);border:1px solid var(--color-slate);border-radius:var(--radius-lg);margin-bottom:24px;overflow:hidden}
-        .settings-header{padding:24px;border-bottom:1px solid var(--color-slate)}
-        .settings-header h3{font-family:var(--font-display);font-size:1.25rem;font-weight:500;color:var(--color-white);margin-bottom:4px}
-        .settings-header p{font-size:.875rem;color:var(--color-silver);margin:0}
-        .settings-body{padding:24px}
-        .setting-item{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--color-slate)}
-        .setting-item:last-child{border-bottom:none}
-        .setting-info h4{font-size:.9375rem;font-weight:600;color:var(--color-white);margin-bottom:4px}
-        .setting-info p{font-size:.8125rem;color:var(--color-silver);margin:0}
-        .toggle{width:48px;height:26px;background:var(--color-slate);border-radius:13px;position:relative;cursor:pointer;transition:background .3s}
-        .toggle.active{background:var(--color-gold)}
-        .toggle::after{content:'';position:absolute;width:20px;height:20px;background:var(--color-white);border-radius:50%;top:3px;left:3px;transition:transform .3s}
-        .toggle.active::after{transform:translateX(22px)}
-        @@media(max-width:1024px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-content{margin-left:0}.mobile-menu-btn{display:flex}}
-        @@keyframes spin{to{transform:rotate(360deg)}}
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8943f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-success: #3fb950;
+            --color-error: #f85149;
+            --color-error-muted: rgba(248, 81, 73, 0.15);
+            --sidebar-width: 280px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --shadow-gold: 0 4px 20px rgba(212, 168, 83, 0.3);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--color-navy);
+            border-right: 1px solid var(--color-slate);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform var(--transition-normal);
+        }
+
+        .sidebar-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            text-decoration: none;
+        }
+
+            .sidebar-logo .logo-icon {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                color: var(--color-midnight);
+            }
+
+            .sidebar-logo span {
+                font-family: var(--font-display);
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: var(--color-white);
+                letter-spacing: 0.1em;
+            }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-4);
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: var(--space-5);
+        }
+
+        .nav-section-title {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-steel);
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-2);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            color: var(--color-silver);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
+        }
+
+            .nav-item:hover {
+                background: var(--color-slate);
+                color: var(--color-white);
+            }
+
+            .nav-item.active {
+                background: var(--color-gold-muted);
+                color: var(--color-gold);
+            }
+
+            .nav-item i {
+                width: 20px;
+                text-align: center;
+                font-size: 0.9375rem;
+            }
+
+        .sidebar-footer {
+            padding: var(--space-4);
+            border-top: 1px solid var(--color-slate);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            background: var(--color-slate);
+            border-radius: var(--radius-md);
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--color-midnight);
+        }
+
+        .user-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 500;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-email {
+            font-size: 0.75rem;
+            color: var(--color-silver);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: var(--space-6);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: var(--space-6);
+        }
+
+            .page-header h1 {
+                font-family: var(--font-display);
+                font-size: 2rem;
+                font-weight: 500;
+                margin-bottom: var(--space-1);
+            }
+
+            .page-header p {
+                color: var(--color-silver);
+            }
+
+        /* Settings Sections */
+        .settings-section {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-5);
+            overflow: hidden;
+        }
+
+        .settings-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .settings-header h3 {
+                font-family: var(--font-display);
+                font-size: 1.25rem;
+                font-weight: 500;
+                margin-bottom: var(--space-1);
+                display: flex;
+                align-items: center;
+                gap: var(--space-3);
+            }
+
+                .settings-header h3 i {
+                    color: var(--color-gold);
+                }
+
+            .settings-header p {
+                font-size: 0.875rem;
+                color: var(--color-silver);
+            }
+
+        .settings-body {
+            padding: var(--space-5);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--color-slate);
+        }
+
+            .setting-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            .setting-item:first-child {
+                padding-top: 0;
+            }
+
+        .setting-info h4 {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--color-white);
+            margin-bottom: var(--space-1);
+        }
+
+        .setting-info p {
+            font-size: 0.8125rem;
+            color: var(--color-silver);
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            width: 52px;
+            height: 28px;
+            background: var(--color-slate);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: background var(--transition-normal);
+            flex-shrink: 0;
+        }
+
+            .toggle::after {
+                content: '';
+                position: absolute;
+                width: 22px;
+                height: 22px;
+                background: var(--color-white);
+                border-radius: 50%;
+                top: 3px;
+                left: 3px;
+                transition: transform var(--transition-normal);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .toggle.active {
+                background: var(--color-gold);
+            }
+
+                .toggle.active::after {
+                    transform: translateX(24px);
+                }
+
+        /* Password Change Section */
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-mist);
+            margin-bottom: var(--space-2);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            color: var(--color-white);
+            transition: all var(--transition-fast);
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--color-gold);
+                box-shadow: 0 0 0 3px var(--color-gold-muted);
+            }
+
+            .form-control::placeholder {
+                color: var(--color-steel);
+            }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+            color: var(--color-midnight);
+            box-shadow: var(--shadow-gold);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 24px rgba(212, 168, 83, 0.4);
+            }
+
+        .btn-danger {
+            background: var(--color-error-muted);
+            color: var(--color-error);
+            border: 1px solid var(--color-error);
+        }
+
+            .btn-danger:hover {
+                background: var(--color-error);
+                color: var(--color-white);
+            }
+
+        /* Danger Zone */
+        .danger-zone {
+            border-color: rgba(248, 81, 73, 0.3);
+        }
+
+            .danger-zone .settings-header {
+                border-bottom-color: rgba(248, 81, 73, 0.3);
+            }
+
+                .danger-zone .settings-header h3 {
+                    color: var(--color-error);
+                }
+
+                    .danger-zone .settings-header h3 i {
+                        color: var(--color-error);
+                    }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: var(--color-slate);
+            border: 1px solid var(--color-charcoal);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-size: 1.125rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-md);
+            padding: var(--space-4) var(--space-5);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            transform: translateX(calc(100% + var(--space-6)));
+            transition: transform var(--transition-normal);
+            z-index: 2000;
+        }
+
+            .toast.show {
+                transform: translateX(0);
+            }
+
+            .toast.success {
+                border-color: var(--color-success);
+            }
+
+                .toast.success i {
+                    color: var(--color-success);
+                }
+
+            .toast.error {
+                border-color: var(--color-error);
+            }
+
+                .toast.error i {
+                    color: var(--color-error);
+                }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: var(--space-4);
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .page-header {
+                display: flex;
+                align-items: center;
+                gap: var(--space-4);
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-3);
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="page-transition" id="pageTransition"><div class="loader"></div></div>
     <div class="dashboard-layout">
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="/" onclick="navigateTo('/',event)" style="display:flex;align-items:center;gap:12px;text-decoration:none">
-                    <div class="logo"><i class="fas fa-compass"></i></div>
-                    <h1>TRAVIL</h1>
+                <a href="/" class="sidebar-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <span>TRAVIL</span>
                 </a>
             </div>
-            <nav class="nav-section">
-                <div class="nav-section-title">Main Menu</div>
-                <a href="/account/dashboard" class="nav-item" onclick="navigateTo('/account/dashboard',event)"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="/account/bookings" class="nav-item" onclick="navigateTo('/account/bookings',event)"><i class="fas fa-suitcase"></i><span>My Bookings</span></a>
-                <a href="/account/wishlist" class="nav-item" onclick="navigateTo('/account/wishlist',event)"><i class="fas fa-heart"></i><span>Wishlist</span></a>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main Menu</div>
+                    <a href="/account/dashboard" class="nav-item" onclick="navigateTo('/account/dashboard', event)">
+                        <i class="fas fa-th-large"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="/account/mybookings" class="nav-item" onclick="navigateTo('/account/mybookings', event)">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>My Bookings</span>
+                    </a>
+                    <a href="/account/wishlist" class="nav-item" onclick="navigateTo('/account/wishlist', event)">
+                        <i class="fas fa-heart"></i>
+                        <span>Wishlist</span>
+                    </a>
+                    <a href="/cart" class="nav-item" onclick="navigateTo('/cart', event)">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Cart</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Explore</div>
+                    <a href="/packages" class="nav-item" onclick="navigateTo('/packages', event)">
+                        <i class="fas fa-suitcase-rolling"></i>
+                        <span>Browse Packages</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <a href="/account/profile" class="nav-item" onclick="navigateTo('/account/profile', event)">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="/account/settings" class="nav-item active">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="logout(event)">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
             </nav>
-            <nav class="nav-section">
-                <div class="nav-section-title">Account</div>
-                <a href="/account/profile" class="nav-item" onclick="navigateTo('/account/profile',event)"><i class="fas fa-user"></i><span>Profile</span></a>
-                <a href="/account/settings" class="nav-item active" onclick="navigateTo('/account/settings',event)"><i class="fas fa-cog"></i><span>Settings</span></a>
-                <a href="#" class="nav-item" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i><span>Sign Out</span></a>
-            </nav>
-        </aside>
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-        <main class="main-content">
-            <div class="header">
-                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
-                <h2>Settings</h2>
-                <p class="subtitle">Manage your preferences</p>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar-small" id="sidebarAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="sidebarName">User</div>
+                        <div class="user-email" id="sidebarEmail">user@example.com</div>
+                    </div>
+                </div>
             </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div>
+                    <h1>Settings</h1>
+                    <p>Manage your account preferences and notifications</p>
+                </div>
+            </div>
+
+            <!-- Notifications Settings -->
             <div class="settings-section">
                 <div class="settings-header">
-                    <h3>Notifications</h3>
-                    <p>Configure how you receive updates</p>
+                    <h3><i class="fas fa-bell"></i> Notifications</h3>
+                    <p>Configure how you receive updates and alerts</p>
                 </div>
                 <div class="settings-body">
                     <div class="setting-item">
                         <div class="setting-info">
                             <h4>Email Notifications</h4>
-                            <p>Receive booking confirmations and updates via email</p>
+                            <p>Receive booking confirmations and trip updates via email</p>
                         </div>
-                        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        <div class="toggle active" data-setting="emailNotifications" onclick="toggleSetting(this)"></div>
                     </div>
                     <div class="setting-item">
                         <div class="setting-info">
                             <h4>Price Alerts</h4>
-                            <p>Get notified when prices drop for your wishlist items</p>
+                            <p>Get notified when prices drop for packages in your wishlist</p>
                         </div>
-                        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        <div class="toggle active" data-setting="priceAlerts" onclick="toggleSetting(this)"></div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Trip Reminders</h4>
+                            <p>Receive reminders 5 days before your trip departure</p>
+                        </div>
+                        <div class="toggle active" data-setting="tripReminders" onclick="toggleSetting(this)"></div>
                     </div>
                     <div class="setting-item">
                         <div class="setting-info">
                             <h4>Newsletter</h4>
-                            <p>Receive travel tips and exclusive offers</p>
+                            <p>Receive travel tips, destination guides, and exclusive offers</p>
                         </div>
-                        <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                        <div class="toggle" data-setting="newsletter" onclick="toggleSetting(this)"></div>
                     </div>
                 </div>
             </div>
+
+            <!-- Privacy Settings -->
             <div class="settings-section">
                 <div class="settings-header">
-                    <h3>Privacy</h3>
-                    <p>Control your data and privacy settings</p>
+                    <h3><i class="fas fa-shield-halved"></i> Privacy</h3>
+                    <p>Control your data and privacy preferences</p>
                 </div>
                 <div class="settings-body">
                     <div class="setting-item">
                         <div class="setting-info">
                             <h4>Profile Visibility</h4>
-                            <p>Allow other travelers to see your profile</p>
+                            <p>Allow other travelers to see your profile and reviews</p>
                         </div>
-                        <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                        <div class="toggle" data-setting="profileVisibility" onclick="toggleSetting(this)"></div>
                     </div>
                     <div class="setting-item">
                         <div class="setting-info">
                             <h4>Activity Status</h4>
                             <p>Show when you're active on the platform</p>
                         </div>
-                        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        <div class="toggle active" data-setting="activityStatus" onclick="toggleSetting(this)"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Change Password -->
+            <div class="settings-section">
+                <div class="settings-header">
+                    <h3><i class="fas fa-lock"></i> Security</h3>
+                    <p>Update your password and security settings</p>
+                </div>
+                <div class="settings-body">
+                    <form id="passwordForm" onsubmit="changePassword(event)">
+                        <div class="form-group">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Update Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-section danger-zone">
+                <div class="settings-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+                    <p>Irreversible and destructive actions</p>
+                </div>
+                <div class="settings-body">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Delete Account</h4>
+                            <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="deleteAccount()">
+                            <i class="fas fa-trash"></i> Delete Account
+                        </button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Message</span>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded',function(){if(!localStorage.getItem('token'))navigateTo('/account/login')});
-        function navigateTo(url,event){if(event)event.preventDefault();document.getElementById('pageTransition').classList.add('active');setTimeout(()=>{window.location.href=url},400)}
-        function logout(event){if(event)event.preventDefault();localStorage.removeItem('token');localStorage.removeItem('user');navigateTo('/account/login')}
-        const mobileMenuBtn=document.getElementById('mobileMenuBtn'),sidebar=document.getElementById('sidebar'),sidebarOverlay=document.getElementById('sidebarOverlay');
-        if(mobileMenuBtn)mobileMenuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');sidebarOverlay.classList.toggle('active')});
-        if(sidebarOverlay)sidebarOverlay.addEventListener('click',()=>{sidebar.classList.remove('open');sidebarOverlay.classList.remove('active')});
-        window.addEventListener('pageshow',()=>document.getElementById('pageTransition').classList.remove('active'));
+        function navigateTo(url, event) {
+            if (event) event.preventDefault();
+            window.location.href = url;
+        }
+
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigateTo('/account/login');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Mobile menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+
+        document.getElementById('sidebarOverlay').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.remove('active');
+            this.classList.remove('active');
+        });
+
+        // Toggle settings
+        function toggleSetting(element) {
+            element.classList.toggle('active');
+            const setting = element.dataset.setting;
+            const isActive = element.classList.contains('active');
+
+            // Save to localStorage
+            const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            settings[setting] = isActive;
+            localStorage.setItem('userSettings', JSON.stringify(settings));
+
+            showToast('Setting updated');
+        }
+
+        // Load settings
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+
+            document.querySelectorAll('.toggle[data-setting]').forEach(toggle => {
+                const setting = toggle.dataset.setting;
+                if (settings[setting] !== undefined) {
+                    toggle.classList.toggle('active', settings[setting]);
+                }
+            });
+        }
+
+        // Change password
+        async function changePassword(event) {
+            event.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showToast('New passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/account/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword
+                    })
+                });
+
+                if (response.ok) {
+                    showToast('Password updated successfully');
+                    document.getElementById('passwordForm').reset();
+                } else {
+                    const error = await response.json();
+                    showToast(error.message || 'Failed to update password', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred', 'error');
+            }
+        }
+
+        // Delete account
+        async function deleteAccount() {
+            if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                return;
+            }
+
+            if (!confirm('This will permanently delete all your data including bookings and reviews. Are you absolutely sure?')) {
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/account/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    showToast('Account deleted successfully');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    setTimeout(() => navigateTo('/'), 2000);
+                } else {
+                    const error = await response.json();
+                    showToast(error.message || 'Failed to delete account', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred', 'error');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                navigateTo('/account/login');
+                return;
+            }
+
+            try {
+                const userData = JSON.parse(user);
+
+                // Check if admin and redirect
+                if (userData.role === 0 || userData.role === 'Admin') {
+                    navigateTo('/admin/dashboard');
+                    return;
+                }
+
+                const fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
+                document.getElementById('sidebarName').textContent = fullName || 'User';
+                document.getElementById('sidebarEmail').textContent = userData.email || '';
+                document.getElementById('sidebarAvatar').textContent = (userData.firstName || 'U').charAt(0).toUpperCase();
+            } catch (e) {
+                console.error('Error parsing user:', e);
+            }
+
+            loadSettings();
+        });
     </script>
 </body>
 </html>

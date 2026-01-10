@@ -1,25 +1,341 @@
 ﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error - TRAVIL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root {
+            --color-midnight: #0d1117;
+            --color-navy: #161b22;
+            --color-slate: #21262d;
+            --color-charcoal: #30363d;
+            --color-steel: #484f58;
+            --color-silver: #8b949e;
+            --color-mist: #c9d1d9;
+            --color-white: #ffffff;
+            --color-gold: #d4a853;
+            --color-gold-dark: #b8923f;
+            --color-gold-muted: rgba(212, 168, 83, 0.15);
+            --color-error: #f85149;
+            --color-error-muted: rgba(248, 81, 73, 0.15);
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+        }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+        body {
+            font-family: var(--font-body);
+            background: var(--color-midnight);
+            color: var(--color-mist);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+        .header {
+            background: var(--color-navy);
+            border-bottom: 1px solid var(--color-slate);
+            padding: var(--space-4) var(--space-6);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-midnight);
+            font-size: 1rem;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--color-white);
+            letter-spacing: 0.1em;
+        }
+
+        .error-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-7) var(--space-5);
+        }
+
+        .error-content {
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .error-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--color-error-muted);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-6);
+        }
+
+            .error-icon i {
+                font-size: 3rem;
+                color: var(--color-error);
+            }
+
+        .error-code {
+            font-family: var(--font-display);
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--color-error);
+            line-height: 1;
+            margin-bottom: var(--space-4);
+        }
+
+        .error-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--color-white);
+            margin-bottom: var(--space-4);
+        }
+
+        .error-message {
+            color: var(--color-silver);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-6);
+        }
+
+        .request-id {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-bottom: var(--space-6);
+            text-align: left;
+        }
+
+        .request-id-label {
+            font-size: 0.75rem;
+            color: var(--color-steel);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-2);
+        }
+
+        .request-id-value {
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: var(--color-mist);
+            word-break: break-all;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: var(--space-4);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: var(--space-4) var(--space-5);
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+            color: var(--color-midnight);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 168, 83, 0.3);
+            }
+
+        .btn-secondary {
+            background: var(--color-slate);
+            color: var(--color-mist);
+        }
+
+            .btn-secondary:hover {
+                background: var(--color-charcoal);
+            }
+
+        .dev-info {
+            margin-top: var(--space-7);
+            padding: var(--space-5);
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            text-align: left;
+        }
+
+        .dev-info-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+            .dev-info-header i {
+                color: var(--color-gold);
+            }
+
+            .dev-info-header h3 {
+                font-family: var(--font-display);
+                font-size: 1.125rem;
+                font-weight: 500;
+                color: var(--color-white);
+            }
+
+        .dev-info p {
+            font-size: 0.875rem;
+            color: var(--color-silver);
+            margin-bottom: var(--space-3);
+        }
+
+            .dev-info p:last-child {
+                margin-bottom: 0;
+            }
+
+        .dev-info strong {
+            color: var(--color-mist);
+        }
+
+        .footer {
+            text-align: center;
+            padding: var(--space-5);
+            border-top: 1px solid var(--color-slate);
+        }
+
+            .footer p {
+                color: var(--color-steel);
+                font-size: 0.8125rem;
+            }
+
+        @@media (max-width: 768px) {
+            .error-code {
+                font-size: 4rem;
+            }
+
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+                <span class="logo-text">TRAVIL</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="error-container">
+        <div class="error-content">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="error-code">Oops!</div>
+            <h1 class="error-title">Something went wrong</h1>
+            <p class="error-message">We apologize for the inconvenience. An unexpected error occurred while processing your request. Please try again or contact support if the problem persists.</p>
+
+            @if (Model?.ShowRequestId ?? false)
+            {
+                <div class="request-id">
+                    <div class="request-id-label">Request ID</div>
+                    <div class="request-id-value">@Model?.RequestId</div>
+                </div>
+            }
+
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary"><i class="fas fa-home"></i> Back to Home</a>
+                <button onclick="history.back()" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Go Back</button>
+            </div>
+
+            @if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                <div class="dev-info">
+                    <div class="dev-info-header">
+                        <i class="fas fa-code"></i>
+                        <h3>Development Mode</h3>
+                    </div>
+                    <p>You're seeing this detailed information because the app is running in <strong>Development</strong> environment.</p>
+                    <p>Switch to <strong>Production</strong> environment to hide sensitive error details from end users.</p>
+                    <p>Set <strong>ASPNETCORE_ENVIRONMENT</strong> to <strong>Production</strong> and restart the app.</p>
+                </div>
+            }
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 TRAVIL. All rights reserved.</p>
+    </footer>
+</body>
+</html>
