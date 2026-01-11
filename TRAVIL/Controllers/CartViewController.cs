@@ -2,13 +2,10 @@
 
 namespace TRAVEL.Controllers
 {
-    /// <summary>
-    /// Controller for Cart Views
-    /// </summary>
     public class CartViewController : Controller
     {
         /// <summary>
-        /// Cart page - shows all items in cart
+        /// Shopping Cart page - /cart
         /// </summary>
         [HttpGet]
         [Route("cart")]
@@ -18,25 +15,13 @@ namespace TRAVEL.Controllers
         }
 
         /// <summary>
-        /// Checkout page
+        /// Checkout page - /checkout
         /// </summary>
         [HttpGet]
-        [Route("cart/checkout")]
         [Route("checkout")]
         public IActionResult Checkout()
         {
             return View("~/Views/Cart/Checkout.cshtml");
-        }
-
-        /// <summary>
-        /// Order confirmation page
-        /// </summary>
-        [HttpGet]
-        [Route("cart/confirmation")]
-        [Route("order/confirmation")]
-        public IActionResult Confirmation()
-        {
-            return View("~/Views/Cart/Confirmation.cshtml");
         }
     }
 }

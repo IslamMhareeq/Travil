@@ -50,6 +50,7 @@
             line-height: 1.6;
         }
 
+        /* Navbar */
         .navbar {
             position: fixed;
             top: 0;
@@ -77,7 +78,7 @@
             text-decoration: none;
         }
 
-        .logo {
+        .nav-logo {
             width: 44px;
             height: 44px;
             background: linear-gradient(135deg, var(--color-gold), #b8943f);
@@ -178,6 +179,7 @@
             cursor: pointer;
         }
 
+        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -252,6 +254,7 @@
             color: var(--color-silver);
         }
 
+        /* Section */
         .section {
             padding: var(--space-8) var(--space-6);
         }
@@ -278,6 +281,7 @@
                 font-size: 1.125rem;
             }
 
+        /* Destinations Grid */
         .destinations-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -343,6 +347,7 @@
             z-index: 2;
         }
 
+        /* Packages Grid */
         .packages-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -453,6 +458,111 @@
                 margin-right: var(--space-2);
             }
 
+        /* Reviews Section */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-5);
+        }
+
+        .review-card {
+            background: var(--color-navy);
+            border: 1px solid var(--color-slate);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+            .review-card:hover {
+                border-color: var(--color-gold);
+                transform: translateY(-4px);
+            }
+
+            .review-card::before {
+                content: '"';
+                position: absolute;
+                top: 20px;
+                right: 24px;
+                font-family: var(--font-display);
+                font-size: 5rem;
+                color: var(--color-gold-muted);
+                line-height: 1;
+            }
+
+        .review-stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: var(--space-4);
+        }
+
+            .review-stars i {
+                color: var(--color-gold);
+                font-size: 1rem;
+            }
+
+                .review-stars i.empty {
+                    color: var(--color-slate);
+                }
+
+        .review-text {
+            color: var(--color-silver);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            margin-bottom: var(--space-5);
+            min-height: 80px;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--color-slate);
+        }
+
+        .review-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-gold), #b8943f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--color-midnight);
+            font-size: 1.125rem;
+            flex-shrink: 0;
+        }
+
+        .review-author-info h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .review-author-info p {
+            font-size: 0.8125rem;
+            color: var(--color-steel);
+        }
+
+        .review-destination {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--color-gold);
+            background: var(--color-gold-muted);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            margin-top: 8px;
+        }
+
+        /* Features Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -489,6 +599,7 @@
                 color: var(--color-silver);
             }
 
+        /* Footer */
         .footer {
             background: var(--color-navy);
             border-top: 1px solid var(--color-slate);
@@ -507,20 +618,44 @@
             margin-bottom: var(--space-6);
         }
 
-        .footer-brand .logo {
+        .footer-brand {
+        }
+
+        .footer-logo {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-2);
+            gap: 12px;
+            margin-bottom: var(--space-4);
+            text-decoration: none;
+        }
+
+        .footer-logo-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            background: linear-gradient(135deg, var(--color-gold), #b8943f);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-midnight);
+        }
+
+        .footer-logo-text {
             font-family: var(--font-display);
             font-size: 1.5rem;
+            font-weight: 500;
             color: var(--color-gold);
-            margin-bottom: var(--space-4);
+            letter-spacing: 0.1em;
+            white-space: nowrap;
         }
 
         .footer-brand p {
             color: var(--color-silver);
             font-size: 0.9375rem;
             line-height: 1.7;
+            margin-top: var(--space-3);
         }
 
         .footer-links h4 {
@@ -552,6 +687,7 @@
             font-size: 0.875rem;
         }
 
+        /* Loading */
         .loading {
             display: flex;
             justify-content: center;
@@ -588,8 +724,9 @@
                 color: var(--color-steel);
             }
 
+        /* Responsive */
         @@media (max-width: 1024px) {
-            .destinations-grid, .packages-grid {
+            .destinations-grid, .packages-grid, .reviews-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
@@ -616,7 +753,7 @@
                 gap: var(--space-4);
             }
 
-            .destinations-grid, .packages-grid, .features-grid, .footer-grid {
+            .destinations-grid, .packages-grid, .reviews-grid, .features-grid, .footer-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -626,7 +763,7 @@
     <nav class="navbar">
         <div class="container">
             <a href="/" class="nav-brand">
-                <div class="logo"><i class="fas fa-compass"></i></div>
+                <div class="nav-logo"><i class="fas fa-compass"></i></div>
                 <span>TRAVIL</span>
             </a>
             <div class="nav-links" id="navLinks">
@@ -655,7 +792,7 @@
             <div class="hero-stats">
                 <div class="hero-stat"><div class="hero-stat-value" id="totalPackages">--</div><div class="hero-stat-label">Travel Packages</div></div>
                 <div class="hero-stat"><div class="hero-stat-value" id="totalDestinations">--</div><div class="hero-stat-label">Destinations</div></div>
-                <div class="hero-stat"><div class="hero-stat-value">5K+</div><div class="hero-stat-label">Happy Travelers</div></div>
+                <div class="hero-stat"><div class="hero-stat-value" id="totalReviews">--</div><div class="hero-stat-label">Happy Travelers</div></div>
             </div>
         </div>
     </section>
@@ -686,7 +823,18 @@
         </div>
     </section>
 
-    <section class="section" id="about">
+    <!-- Reviews Section -->
+    <section class="section" id="reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2>What Our Travelers Say</h2>
+                <p>Real experiences from our valued customers</p>
+            </div>
+            <div class="reviews-grid" id="reviewsGrid"><div class="loading"><div class="spinner"></div></div></div>
+        </div>
+    </section>
+
+    <section class="section" style="background: var(--color-navy);" id="about">
         <div class="container">
             <div class="section-header">
                 <h2>Why Choose Us</h2>
@@ -705,7 +853,10 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo"><i class="fas fa-compass"></i><span>TRAVIL</span></div>
+                    <a href="/" class="footer-logo">
+                        <div class="footer-logo-icon"><i class="fas fa-compass"></i></div>
+                        <span class="footer-logo-text">TRAVIL</span>
+                    </a>
                     <p>Creating extraordinary travel experiences since 2020.</p>
                 </div>
                 <div class="footer-links">
@@ -732,6 +883,8 @@
     </footer>
 
     <script>
+        var allPackages = [];
+
         function updateNav() {
             var token = localStorage.getItem('token');
             var user = localStorage.getItem('user');
@@ -744,20 +897,118 @@
                 } catch(e) {}
             }
         }
+
         function logout(e) { e.preventDefault(); localStorage.removeItem('token'); localStorage.removeItem('user'); location.reload(); }
-        function getImg(i) { var imgs=['https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800','https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800','https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800','https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800']; return imgs[i%imgs.length]; }
-        async function load() {
+
+        function getImg(i) {
+            var imgs=['https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800','https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800','https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800','https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800'];
+            return imgs[i%imgs.length];
+        }
+
+        function renderStars(rating) {
+            var html = '';
+            for (var i = 1; i <= 5; i++) {
+                html += '<i class="fas fa-star ' + (i <= rating ? '' : 'empty') + '"></i>';
+            }
+            return html;
+        }
+
+        function getInitials(name) {
+            if (!name) return '?';
+            var parts = name.split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        function shuffleArray(array) {
+            var shuffled = array.slice();
+            for (var i = shuffled.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = shuffled[i];
+                shuffled[i] = shuffled[j];
+                shuffled[j] = temp;
+            }
+            return shuffled;
+        }
+
+        async function loadReviews() {
+            var reviewsGrid = document.getElementById('reviewsGrid');
+            var allReviews = [];
+
+            try {
+                for (var i = 0; i < Math.min(allPackages.length, 10); i++) {
+                    var pkg = allPackages[i];
+                    try {
+                        var response = await fetch('/api/review/package/' + pkg.packageId);
+                        if (response.ok) {
+                            var result = await response.json();
+                            var reviews = result.data || result || [];
+                            reviews.forEach(function(review) {
+                                review.packageName = pkg.destination;
+                                review.packageCountry = pkg.country;
+                                allReviews.push(review);
+                            });
+                        }
+                    } catch(e) {}
+                }
+
+                document.getElementById('totalReviews').textContent = (allReviews.length > 0 ? allReviews.length : '5K') + '+';
+
+                if (allReviews.length === 0) {
+                    reviewsGrid.innerHTML = getPlaceholderReviews();
+                    return;
+                }
+
+                var randomReviews = shuffleArray(allReviews).slice(0, 3);
+
+                var html = '';
+                randomReviews.forEach(function(review) {
+                    html += '<div class="review-card">';
+                    html += '<div class="review-stars">' + renderStars(review.rating || 5) + '</div>';
+                    html += '<p class="review-text">' + (review.comment || 'Amazing experience! Highly recommended.') + '</p>';
+                    html += '<div class="review-author">';
+                    html += '<div class="review-avatar">' + getInitials(review.userName || 'Guest') + '</div>';
+                    html += '<div class="review-author-info">';
+                    html += '<h4>' + (review.userName || 'Happy Traveler') + '</h4>';
+                    html += '<p>Verified Traveler</p>';
+                    if (review.packageName) {
+                        html += '<span class="review-destination"><i class="fas fa-map-marker-alt"></i> ' + review.packageName + '</span>';
+                    }
+                    html += '</div></div></div>';
+                });
+
+                reviewsGrid.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                reviewsGrid.innerHTML = getPlaceholderReviews();
+            }
+        }
+
+        function getPlaceholderReviews() {
+            return '<div class="review-card"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">An absolutely unforgettable experience! The attention to detail and personalized service made our honeymoon truly magical. Will definitely book again!</p><div class="review-author"><div class="review-avatar">JD</div><div class="review-author-info"><h4>John Davis</h4><p>Verified Traveler</p><span class="review-destination"><i class="fas fa-map-marker-alt"></i> Maldives</span></div></div></div><div class="review-card"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">TRAVIL made planning our family vacation so easy. The kids loved every moment and we created memories that will last a lifetime. Highly recommend!</p><div class="review-author"><div class="review-avatar">SM</div><div class="review-author-info"><h4>Sarah Mitchell</h4><p>Verified Traveler</p><span class="review-destination"><i class="fas fa-map-marker-alt"></i> Bali</span></div></div></div><div class="review-card"><div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star empty"></i></div><p class="review-text">The Swiss Alps adventure exceeded all expectations. Professional guides, stunning views, and seamless organization. Already planning my next trip!</p><div class="review-author"><div class="review-avatar">MR</div><div class="review-author-info"><h4>Michael Roberts</h4><p>Verified Traveler</p><span class="review-destination"><i class="fas fa-map-marker-alt"></i> Switzerland</span></div></div></div>';
+        }
+
+        async function loadPackages() {
+            var packagesGrid = document.getElementById('packagesGrid');
+            var destinationsGrid = document.getElementById('destinationsGrid');
+
             try {
                 var r = await fetch('/api/travelpackage');
                 if (r.ok) {
-                    var d = await r.json(), pkgs = d.data || d || [];
-                    document.getElementById('totalPackages').textContent = pkgs.length + '+';
+                    var d = await r.json();
+                    allPackages = d.data || d || [];
+
+                    document.getElementById('totalPackages').textContent = allPackages.length + '+';
                     var countries = {};
-                    pkgs.forEach(function(p) { if (p.country) countries[p.country] = true; });
+                    allPackages.forEach(function(p) { if (p.country) countries[p.country] = true; });
                     document.getElementById('totalDestinations').textContent = Object.keys(countries).length + '+';
-                    if (pkgs.length > 0) {
+
+                    if (allPackages.length > 0) {
                         var html = '';
-                        pkgs.slice(0, 6).forEach(function(p, i) {
+                        allPackages.slice(0, 6).forEach(function(p, i) {
                             var dur = p.startDate && p.endDate ? Math.ceil((new Date(p.endDate) - new Date(p.startDate)) / 86400000) : 7;
                             var disc = p.discountedPrice && p.discountedPrice < p.price;
                             var price = disc ? p.discountedPrice : p.price;
@@ -767,9 +1018,10 @@
                             if (disc) html += '<span class="old-price">$'+Math.round(p.price)+'</span>';
                             html += '$'+Math.round(price)+' <span>/ person</span></div><a href="/packages/'+p.packageId+'" class="btn btn-primary btn-sm">View</a></div></div></div>';
                         });
-                        document.getElementById('packagesGrid').innerHTML = html;
+                        packagesGrid.innerHTML = html;
+
                         var ctrs = {};
-                        pkgs.forEach(function(p, i) {
+                        allPackages.forEach(function(p, i) {
                             if (p.country && !ctrs[p.country]) ctrs[p.country] = { country: p.country, destination: p.destination, img: p.imageUrl||getImg(i), price: p.discountedPrice||p.price, count: 1 };
                             else if (p.country) { ctrs[p.country].count++; if ((p.discountedPrice||p.price) < ctrs[p.country].price) ctrs[p.country].price = p.discountedPrice||p.price; }
                         });
@@ -777,12 +1029,21 @@
                         Object.values(ctrs).slice(0,4).forEach(function(d, i) {
                             dh += '<div class="destination-card" onclick="location.href=\'/destinations\'"><img src="'+d.img+'" onerror="this.src=\''+getImg(i)+'\'"><span class="price">From $'+Math.round(d.price)+'</span><div class="destination-card-content"><h3>'+d.destination+', '+d.country+'</h3><p>'+d.count+' Package'+(d.count>1?'s':'')+'</p></div></div>';
                         });
-                        document.getElementById('destinationsGrid').innerHTML = dh || '<div class="empty-state"><i class="fas fa-globe"></i><p>Coming soon</p></div>';
+                        destinationsGrid.innerHTML = dh || '<div class="empty-state"><i class="fas fa-globe"></i><p>Coming soon</p></div>';
+
+                        loadReviews();
                     }
                 }
-            } catch(e) { console.error(e); }
+            } catch(e) {
+                console.error(e);
+                document.getElementById('reviewsGrid').innerHTML = getPlaceholderReviews();
+            }
         }
-        document.addEventListener('DOMContentLoaded', function() { updateNav(); load(); });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNav();
+            loadPackages();
+        });
     </script>
 </body>
 </html>

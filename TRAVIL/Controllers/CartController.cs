@@ -1,81 +1,110 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using TRAVEL.Services;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using TRAVEL.Data;
+using TRAVEL.Models;
 
 namespace TRAVEL.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    [Produces("application/json")]
+    [ApiController]
+    [Authorize]
     public class CartController : ControllerBase
     {
-        private readonly ICartService _cartService;
-        private readonly ILogger<CartController> _logger;
+        private readonly TravelDbContext _context;
 
-        public CartController(ICartService cartService, ILogger<CartController> logger)
+        public CartController(TravelDbContext context)
         {
-            _cartService = cartService;
-            _logger = logger;
+            _context = context;
         }
 
-        private int? GetUserId()
+        private int GetUserId()
         {
-            var userIdClaim = User.FindFirst("UserId")?.Value;
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-                return null;
-            return userId;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int userId) ? userId : 0;
         }
 
         /// <summary>
-        /// Get user's cart
+        /// Get or create user's cart
+        /// </summary>
+        private async Task<CartModels> GetOrCreateCart(int userId)
+        {
+            var cart = await _context.Carts
+                .Include(c => c.Items)
+                .ThenInclude(i => i.TravelPackage)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null)
+            {
+                cart = new CartModels
+                {
+                    UserId = userId,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.Carts.Add(cart);
+                await _context.SaveChangesAsync();
+            }
+
+            return cart;
+        }
+
+        /// <summary>
+        /// Get user's cart items
         /// </summary>
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetCart()
         {
+            var userId = GetUserId();
+            if (userId == 0) return Unauthorized(new { message = "User not authenticated" });
+
             try
             {
-                var userId = GetUserId();
-                if (userId == null)
-                    return Unauthorized(new { success = false, message = "User not authenticated" });
-
-                var cart = await _cartService.GetCartAsync(userId.Value);
+                var cart = await GetOrCreateCart(userId);
 
                 var items = cart.Items.Select(item => new
                 {
                     cartItemId = item.CartItemId,
                     cartId = item.CartId,
                     packageId = item.PackageId,
-                    destination = item.TravelPackage?.Destination ?? "Unknown",
-                    country = item.TravelPackage?.Country ?? "Unknown",
-                    imageUrl = item.TravelPackage?.ImageUrl,
-                    unitPrice = item.UnitPrice,
                     quantity = item.Quantity,
+                    numberOfRooms = item.Quantity, // Map quantity to numberOfRooms for frontend
                     numberOfGuests = item.NumberOfGuests,
+                    unitPrice = item.UnitPrice,
+                    price = item.UnitPrice,
                     subtotal = item.Subtotal,
                     specialRequests = item.SpecialRequests,
                     dateAdded = item.DateAdded,
-                    startDate = item.TravelPackage?.StartDate,
-                    endDate = item.TravelPackage?.EndDate,
-                    availableRooms = item.TravelPackage?.AvailableRooms ?? 0
+                    package = item.TravelPackage != null ? new
+                    {
+                        packageId = item.TravelPackage.PackageId,
+                        destination = item.TravelPackage.Destination,
+                        country = item.TravelPackage.Country,
+                        imageUrl = item.TravelPackage.ImageUrl,
+                        price = item.TravelPackage.Price,
+                        discountedPrice = item.TravelPackage.DiscountedPrice,
+                        startDate = item.TravelPackage.StartDate,
+                        endDate = item.TravelPackage.EndDate,
+                        availableRooms = item.TravelPackage.AvailableRooms,
+                        description = item.TravelPackage.Description
+                    } : null
                 }).ToList();
 
                 return Ok(new
                 {
                     success = true,
-                    data = items,
-                    total = cart.Total,
-                    itemCount = cart.ItemCount
+                    data = new
+                    {
+                        cartId = cart.CartId,
+                        items = items,
+                        totalItems = cart.ItemCount,
+                        totalPrice = cart.Total
+                    }
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting cart");
-                return StatusCode(500, new { success = false, message = "Error retrieving cart" });
+                return StatusCode(500, new { success = false, message = "Error fetching cart", error = ex.Message });
             }
         }
 
@@ -83,161 +112,183 @@ namespace TRAVEL.Controllers
         /// Add item to cart
         /// </summary>
         [HttpPost("add")]
-        [Authorize]
-        public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
+        public async Task<IActionResult> AddToCart([FromBody] AddToCartDto dto)
         {
+            var userId = GetUserId();
+            if (userId == 0) return Unauthorized(new { message = "User not authenticated" });
+
             try
             {
-                var userId = GetUserId();
-                if (userId == null)
-                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                // Check if package exists
+                var package = await _context.TravelPackages.FindAsync(dto.PackageId);
+                if (package == null)
+                    return NotFound(new { success = false, message = "Package not found" });
 
-                _logger.LogInformation($"AddToCart: User {userId} adding package {request?.PackageId}");
+                // Get or create cart
+                var cart = await GetOrCreateCart(userId);
 
-                if (request == null || request.PackageId <= 0)
-                    return BadRequest(new { success = false, message = "Invalid package ID" });
+                // Check if item already in cart
+                var existingItem = cart.Items.FirstOrDefault(i => i.PackageId == dto.PackageId);
 
-                var quantity = request.Quantity > 0 ? request.Quantity : 1;
-                var guests = request.NumberOfGuests > 0 ? request.NumberOfGuests : 1;
+                if (existingItem != null)
+                {
+                    // Update existing item
+                    existingItem.Quantity = dto.NumberOfRooms > 0 ? dto.NumberOfRooms : existingItem.Quantity;
+                    existingItem.NumberOfGuests = dto.NumberOfGuests > 0 ? dto.NumberOfGuests : existingItem.NumberOfGuests;
+                    existingItem.UnitPrice = package.DiscountedPrice ?? package.Price;
+                    existingItem.UpdatedAt = DateTime.UtcNow;
 
-                var cartItem = await _cartService.AddToCartAsync(
-                    userId.Value,
-                    request.PackageId,
-                    quantity,
-                    guests,
-                    request.SpecialRequests);
+                    await _context.SaveChangesAsync();
+                    return Ok(new { success = true, message = "Cart updated", cartItemId = existingItem.CartItemId });
+                }
 
-                if (cartItem == null)
-                    return BadRequest(new { success = false, message = "Failed to add item to cart. Package may not be available." });
+                // Add new item
+                var cartItem = new CartItem
+                {
+                    CartId = cart.CartId,
+                    PackageId = dto.PackageId,
+                    Quantity = dto.NumberOfRooms > 0 ? dto.NumberOfRooms : 1,
+                    NumberOfGuests = dto.NumberOfGuests > 0 ? dto.NumberOfGuests : 1,
+                    UnitPrice = package.DiscountedPrice ?? package.Price,
+                    DateAdded = DateTime.UtcNow
+                };
+
+                _context.CartItems.Add(cartItem);
+                await _context.SaveChangesAsync();
 
                 return Ok(new { success = true, message = "Added to cart", cartItemId = cartItem.CartItemId });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding to cart");
-                return StatusCode(500, new { success = false, message = "Error adding to cart" });
+                return StatusCode(500, new { success = false, message = "Error adding to cart", error = ex.Message });
             }
         }
 
         /// <summary>
         /// Update cart item
         /// </summary>
-        [HttpPut("{cartItemId}")]
-        [Authorize]
-        public async Task<IActionResult> UpdateCartItem(int cartItemId, [FromBody] UpdateCartItemRequest request)
+        [HttpPut("update/{cartItemId}")]
+        public async Task<IActionResult> UpdateCartItem(int cartItemId, [FromBody] UpdateCartDto dto)
         {
+            var userId = GetUserId();
+            if (userId == 0) return Unauthorized(new { message = "User not authenticated" });
+
             try
             {
-                var userId = GetUserId();
-                if (userId == null)
-                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                var cart = await GetOrCreateCart(userId);
+                var cartItem = cart.Items.FirstOrDefault(i => i.CartItemId == cartItemId);
 
-                var success = await _cartService.UpdateCartItemAsync(
-                    userId.Value,
-                    cartItemId,
-                    request.Quantity,
-                    request.NumberOfGuests);
+                if (cartItem == null)
+                    return NotFound(new { success = false, message = "Cart item not found" });
 
-                if (!success)
-                    return BadRequest(new { success = false, message = "Failed to update cart item" });
+                if (dto.NumberOfRooms > 0)
+                    cartItem.Quantity = dto.NumberOfRooms;
+                if (dto.NumberOfGuests > 0)
+                    cartItem.NumberOfGuests = dto.NumberOfGuests;
+                cartItem.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
 
                 return Ok(new { success = true, message = "Cart updated" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating cart item");
-                return StatusCode(500, new { success = false, message = "Error updating cart" });
+                return StatusCode(500, new { success = false, message = "Error updating cart", error = ex.Message });
             }
         }
 
         /// <summary>
         /// Remove item from cart
         /// </summary>
-        [HttpDelete("{cartItemId}")]
-        [Authorize]
+        [HttpDelete("remove/{cartItemId}")]
         public async Task<IActionResult> RemoveFromCart(int cartItemId)
         {
+            var userId = GetUserId();
+            if (userId == 0) return Unauthorized(new { message = "User not authenticated" });
+
             try
             {
-                var userId = GetUserId();
-                if (userId == null)
-                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                var cart = await GetOrCreateCart(userId);
+                var cartItem = cart.Items.FirstOrDefault(i => i.CartItemId == cartItemId);
 
-                var success = await _cartService.RemoveFromCartAsync(userId.Value, cartItemId);
-
-                if (!success)
+                if (cartItem == null)
                     return NotFound(new { success = false, message = "Cart item not found" });
 
-                return Ok(new { success = true, message = "Removed from cart" });
+                _context.CartItems.Remove(cartItem);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { success = true, message = "Item removed from cart" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error removing from cart");
-                return StatusCode(500, new { success = false, message = "Error removing from cart" });
+                return StatusCode(500, new { success = false, message = "Error removing from cart", error = ex.Message });
             }
         }
 
         /// <summary>
-        /// Clear cart
+        /// Clear entire cart
         /// </summary>
-        [HttpDelete]
-        [Authorize]
+        [HttpDelete("clear")]
         public async Task<IActionResult> ClearCart()
         {
+            var userId = GetUserId();
+            if (userId == 0) return Unauthorized(new { message = "User not authenticated" });
+
             try
             {
-                var userId = GetUserId();
-                if (userId == null)
-                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                var cart = await GetOrCreateCart(userId);
 
-                await _cartService.ClearCartAsync(userId.Value);
+                if (cart.Items.Any())
+                {
+                    _context.CartItems.RemoveRange(cart.Items);
+                    await _context.SaveChangesAsync();
+                }
 
                 return Ok(new { success = true, message = "Cart cleared" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error clearing cart");
-                return StatusCode(500, new { success = false, message = "Error clearing cart" });
+                return StatusCode(500, new { success = false, message = "Error clearing cart", error = ex.Message });
             }
         }
 
         /// <summary>
-        /// Get cart count
+        /// Get cart count for navbar badge
         /// </summary>
         [HttpGet("count")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCartCount()
         {
+            var userId = GetUserId();
+            if (userId == 0) return Ok(new { count = 0 });
+
             try
             {
-                var userId = GetUserId();
-                if (userId == null)
-                    return Unauthorized(new { success = false, message = "User not authenticated" });
+                var cart = await _context.Carts
+                    .Include(c => c.Items)
+                    .FirstOrDefaultAsync(c => c.UserId == userId);
 
-                var count = await _cartService.GetCartItemCountAsync(userId.Value);
-
-                return Ok(new { success = true, count = count });
+                return Ok(new { count = cart?.ItemCount ?? 0 });
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogError(ex, "Error getting cart count");
-                return StatusCode(500, new { success = false, message = "Error getting cart count" });
+                return Ok(new { count = 0 });
             }
         }
     }
 
-    // Request DTOs
-    public class AddToCartRequest
+    public class AddToCartDto
     {
         public int PackageId { get; set; }
-        public int Quantity { get; set; } = 1;
+        public int NumberOfRooms { get; set; } = 1;
         public int NumberOfGuests { get; set; } = 1;
         public string? SpecialRequests { get; set; }
     }
 
-    public class UpdateCartItemRequest
+    public class UpdateCartDto
     {
-        public int Quantity { get; set; }
-        public int? NumberOfGuests { get; set; }
+        public int NumberOfRooms { get; set; }
+        public int NumberOfGuests { get; set; }
+        public string? SpecialRequests { get; set; }
     }
 }
